@@ -1,0 +1,15 @@
+source 'https://github.com/CocoaPods/Specs.git'
+use_frameworks!
+
+target 'EggMobilePushNotification_Example', :exclusive => true do
+  pod "EggMobilePushNotification", :path => "../"
+end
+
+target 'EggMobilePushNotification_Tests', :exclusive => true do
+  pod "EggMobilePushNotification", :path => "../"
+
+  pod 'Specta'
+  pod 'Expecta'
+  pod 'FBSnapshotTestCase'
+  pod 'Expecta+Snapshots'
+end

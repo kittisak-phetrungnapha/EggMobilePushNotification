@@ -1,0 +1,6 @@
+framework module EggMobilePushNotification {
+  umbrella header "EggMobilePushNotification-umbrella.h"
+
+  export *
+  module * { export * }
+}

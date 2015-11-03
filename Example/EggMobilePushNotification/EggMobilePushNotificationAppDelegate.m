@@ -7,7 +7,6 @@
 //
 
 #import "EggMobilePushNotificationAppDelegate.h"
-#import "EggMobilePushNotification.h"
 
 @interface EggMobilePushNotificationAppDelegate() <EggMobilePushNotificationManagerDelegate>
 
@@ -23,7 +22,7 @@
     [EggMobilePushNotificationManager sharedInstance].isDebug = YES; // Default debug is NO.
     [EggMobilePushNotificationManager sharedInstance].deviceToken = @"b809e416b12e31276186f34d490651ef1ae9b7d9c04a8d1bb03f7fa2abd8dd76";
     [EggMobilePushNotificationManager sharedInstance].app_id = @"2";
-    [[EggMobilePushNotificationManager sharedInstance] subscribeForRefId:@"ref_id_test"];
+//    [[EggMobilePushNotificationManager sharedInstance] subscribeForRefId:@"ref_id_test"];
     
     return YES;
 }

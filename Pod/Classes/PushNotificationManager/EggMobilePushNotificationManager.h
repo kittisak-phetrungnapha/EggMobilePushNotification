@@ -27,12 +27,18 @@ typedef enum {
 @protocol EggMobilePushNotificationManagerDelegate <NSObject>
 
 @optional
-- (void)didSubscribeSuccess;                                            // Delegate when subscribe success.
-- (void)didSubscribeFailWithErrorMessage:(NSString *)error_msg;         // Delegate when subscribe fail.
-- (void)didUnsubscribeSuccess;                                          // Delegate when unsubscribe success.
-- (void)didUnsubscribeFailWithErrorMessage:(NSString *)error_msg;       // Delegate when unsubscribe fail.
-- (void)didAcceptNotificationSuccess;                                   // Delegate when accept success.
-- (void)didAcceptNotificationFailWithErrorMessage:(NSString *)error_msg; // Delegate when accept fail.
+// ANC Push notification handler result delegate method
+- (void)didSubscribeSuccess;
+- (void)didSubscribeFailWithErrorMessage:(NSString *)error_msg;
+- (void)didUnsubscribeSuccess;
+- (void)didUnsubscribeFailWithErrorMessage:(NSString *)error_msg;
+- (void)didAcceptNotificationSuccess;
+- (void)didAcceptNotificationFailWithErrorMessage:(NSString *)error_msg;
+
+// AlertView action delegate method
+- (void)didClickFirstButtonForAlertViewTag:(NSInteger)tag;
+- (void)didClickSecondButtonForAlertViewTag:(NSInteger)tag;
+- (void)didClickThirdButtonForAlertViewTag:(NSInteger)tag;
 
 @end
 
@@ -57,5 +63,8 @@ typedef enum {
 
 // Accept notification
 - (void)acceptNotificationForNotiRef:(NSString *)noti_ref;
+
+// Show native alert
+- (void)showAlertViewForTitle:(NSString *)title message:(NSString *)message firstButtonTitle:(NSString *)firstButtonTitle secondButtonTitle:(NSString *)secondButtonTitle thirdButtonTitle:(NSString *)thirdButtonTitle viewControllerToPresent:(UIViewController *)vc tag:(NSInteger)tag;
 
 @end

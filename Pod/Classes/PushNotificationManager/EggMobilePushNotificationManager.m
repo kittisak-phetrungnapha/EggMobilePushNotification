@@ -20,6 +20,10 @@ NSString *const MissingAppId            = @"Missing app id.";
 NSString *const MissingNotiRef          = @"Missing noti ref.";
 NSString *const DefaultErrorMsg         = @"The unknown error is occured.";
 
+@interface EggMobilePushNotificationManager () <UIAlertViewDelegate>
+
+@end
+
 @implementation EggMobilePushNotificationManager
 
 #pragma mark - Initialization
@@ -104,7 +108,7 @@ NSString *const DefaultErrorMsg         = @"The unknown error is occured.";
                 if (error == nil && data.length > 0) { // Success
                     NSDictionary *appData = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
                     if (self.isDebug) {
-                        NSLog(@"%@ JSON result = %@", NSLogPrefix, appData);
+                        NSLog(@"%@ Subscribe JSON result = %@", NSLogPrefix, appData);
                     }
                     
                     // Check response from server.
@@ -186,7 +190,7 @@ NSString *const DefaultErrorMsg         = @"The unknown error is occured.";
                 if (error == nil && data.length > 0) { // Success
                     NSDictionary *appData = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
                     if (self.isDebug) {
-                        NSLog(@"%@ JSON result = %@", NSLogPrefix, appData);
+                        NSLog(@"%@ Unsubscribe JSON result = %@", NSLogPrefix, appData);
                     }
                     
                     // Check response from server.
@@ -268,7 +272,7 @@ NSString *const DefaultErrorMsg         = @"The unknown error is occured.";
                 if (error == nil && data.length > 0) { // Success
                     NSDictionary *appData = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
                     if (self.isDebug) {
-                        NSLog(@"%@ JSON result = %@", NSLogPrefix, appData);
+                        NSLog(@"%@ Accept Notification JSON result = %@", NSLogPrefix, appData);
                     }
                     
                     // Check response from server.
@@ -309,6 +313,72 @@ NSString *const DefaultErrorMsg         = @"The unknown error is occured.";
     }];
     // Start task
     [task resume];
+}
+
+- (void)showAlertViewForTitle:(NSString *)title message:(NSString *)message firstButtonTitle:(NSString *)firstButtonTitle secondButtonTitle:(NSString *)secondButtonTitle thirdButtonTitle:(NSString *)thirdButtonTitle viewControllerToPresent:(UIViewController *)vc tag:(NSInteger)tag {
+    
+    if ([UIAlertController class]) {
+        // use UIAlertController
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
+        
+        // Add button action if need.
+        if (firstButtonTitle && ![@"" isEqualToString:firstButtonTitle]) {
+            UIAlertAction *alertFirstAction = [UIAlertAction actionWithTitle:firstButtonTitle style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                
+                if ([self.delegate respondsToSelector:@selector(didClickFirstButtonForAlertViewTag:)]) {
+                    [self.delegate didClickFirstButtonForAlertViewTag:tag];
+                }
+            }];
+            [alertController addAction:alertFirstAction];
+        }
+        
+        if (secondButtonTitle && ![@"" isEqualToString:secondButtonTitle]) {
+            UIAlertAction *alertSecondAction = [UIAlertAction actionWithTitle:secondButtonTitle style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                
+                if ([self.delegate respondsToSelector:@selector(didClickSecondButtonForAlertViewTag:)]) {
+                    [self.delegate didClickSecondButtonForAlertViewTag:tag];
+                }
+            }];
+            [alertController addAction:alertSecondAction];
+        }
+        
+        if (thirdButtonTitle && ![@"" isEqualToString:thirdButtonTitle]) {
+            UIAlertAction *alertThirdAction = [UIAlertAction actionWithTitle:thirdButtonTitle style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                
+                if ([self.delegate respondsToSelector:@selector(didClickThirdButtonForAlertViewTag:)]) {
+                    [self.delegate didClickThirdButtonForAlertViewTag:tag];
+                }
+            }];
+            [alertController addAction:alertThirdAction];
+        }
+        
+        // Show alert controller
+        [vc presentViewController:alertController animated:YES completion:nil];
+    } else {
+        // use UIAlertView
+        UIAlertView *alertView = [[UIAlertView alloc] init];
+        alertView.title = title;
+        alertView.message = message;
+        alertView.delegate = self;
+        alertView.tag = tag;
+        
+        // Add button action if need.
+        if (firstButtonTitle && ![@"" isEqualToString:firstButtonTitle]) {
+            [alertView addButtonWithTitle:firstButtonTitle];
+            [alertView setCancelButtonIndex:0];
+        }
+        
+        if (secondButtonTitle && ![@"" isEqualToString:secondButtonTitle]) {
+            [alertView addButtonWithTitle:secondButtonTitle];
+        }
+        
+        if (thirdButtonTitle && ![@"" isEqualToString:thirdButtonTitle]) {
+            [alertView addButtonWithTitle:thirdButtonTitle];
+        }
+        
+        // Show alert view
+        [alertView show];
+    }
 }
 
 #pragma mark - Private
@@ -418,6 +488,25 @@ NSString *const DefaultErrorMsg         = @"The unknown error is occured.";
 - (NSString *)currentVersion
 {
     return [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
+}
+
+#pragma mark - UIAlertView Delegate
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (buttonIndex == 0) {
+        if ([self.delegate respondsToSelector:@selector(didClickFirstButtonForAlertViewTag:)]) {
+            [self.delegate didClickFirstButtonForAlertViewTag:alertView.tag];
+        }
+    }
+    else if (buttonIndex == 1) {
+        if ([self.delegate respondsToSelector:@selector(didClickSecondButtonForAlertViewTag:)]) {
+            [self.delegate didClickSecondButtonForAlertViewTag:alertView.tag];
+        }
+    }
+    else if (buttonIndex == 2) {
+        if ([self.delegate respondsToSelector:@selector(didClickThirdButtonForAlertViewTag:)]) {
+            [self.delegate didClickThirdButtonForAlertViewTag:alertView.tag];
+        }
+    }
 }
 
 @end

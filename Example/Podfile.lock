@@ -1,32 +1,14 @@
 PODS:
   - EggMobilePushNotification (0.1.0)
-  - Expecta (1.0.3)
-  - Expecta+Snapshots (2.0.0):
-    - Expecta (~> 1.0)
-    - FBSnapshotTestCase/Core (~> 2.0.3)
-  - FBSnapshotTestCase (2.0.7):
-    - FBSnapshotTestCase/SwiftSupport (= 2.0.7)
-  - FBSnapshotTestCase/Core (2.0.7)
-  - FBSnapshotTestCase/SwiftSupport (2.0.7):
-    - FBSnapshotTestCase/Core
-  - Specta (1.0.4)
 
 DEPENDENCIES:
   - EggMobilePushNotification (from `../`)
-  - Expecta
-  - Expecta+Snapshots
-  - FBSnapshotTestCase
-  - Specta
 
 EXTERNAL SOURCES:
   EggMobilePushNotification:
     :path: ../
 
 SPEC CHECKSUMS:
-  EggMobilePushNotification: 39ee9e676d46f540cc405d9f0fc040dd66ccf671
-  Expecta: 9d1bff6c8b0eeee73a166a2ee898892478927a15
-  Expecta+Snapshots: 29b38dd695bc72a0ed2bea833937d78df41943ba
-  FBSnapshotTestCase: 7e85180d0d141a0cf472352edda7e80d7eaeb547
-  Specta: 69bb134672aae190a1379ff91df07dad8dd1f869
+  EggMobilePushNotification: d727396fad99428a6e45d91a5adf2c6762c3bc2c
 
 COCOAPODS: 0.39.0

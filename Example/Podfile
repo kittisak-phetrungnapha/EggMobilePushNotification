@@ -6,10 +6,5 @@ target 'EggMobilePushNotification_Example', :exclusive => true do
 end
 
 target 'EggMobilePushNotification_Tests', :exclusive => true do
-  pod "EggMobilePushNotification", :path => "../"
 
-  pod 'Specta'
-  pod 'Expecta'
-  pod 'FBSnapshotTestCase'
-  pod 'Expecta+Snapshots'
 end

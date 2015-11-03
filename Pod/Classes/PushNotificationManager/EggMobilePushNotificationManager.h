@@ -55,7 +55,6 @@ typedef enum {
 + (EggMobilePushNotificationManager *)sharedInstance;
 
 // Subscribe
-- (void)subscribeForRefId:(NSString *)ref_id;
 - (void)subscribeForRefId:(NSString *)ref_id pushAlert:(PushAlertType)push_alert pushSound:(PushSoundType)push_sound pushBadge:(PushBadgeType)push_badge;
 
 // Unsubscribe

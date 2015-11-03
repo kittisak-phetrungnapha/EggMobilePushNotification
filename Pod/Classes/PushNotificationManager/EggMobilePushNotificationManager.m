@@ -47,10 +47,6 @@ NSString *const DefaultErrorMsg         = @"The unknown error is occured.";
 }
 
 #pragma mark - Public
-- (void)subscribeForRefId:(NSString *)ref_id {
-    [self subscribeForRefId:ref_id pushAlert:PushAlertTypeAlert pushSound:PushSoundTypeSound pushBadge:PushBadgeTypeBadge];
-}
-
 - (void)subscribeForRefId:(NSString *)ref_id pushAlert:(PushAlertType)push_alert pushSound:(PushSoundType)push_sound pushBadge:(PushBadgeType)push_badge {
     // Check device token.
     if (!self.deviceToken) {

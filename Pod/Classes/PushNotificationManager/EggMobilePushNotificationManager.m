@@ -13,12 +13,14 @@ NSString *const MAIN_API_ANC            = @"http://api-anc.eggdigital.com";
 #define API_SUBSCRIPTION                [NSString stringWithFormat:@"%@/subscription", MAIN_API_ANC]
 #define API_UNSUBSCRIPTION              [NSString stringWithFormat:@"%@/subscription/unsubscribe", MAIN_API_ANC]
 #define API_ACCEPT_NOTIFICATION         [NSString stringWithFormat:@"%@/notificationlog/acceptNotification", MAIN_API_ANC]
+NSString *const GET_MSISDN_API   = @"http://www3.truecorp.co.th/api/services/get_header";
 
 NSString *const NSLogPrefix             = @"EggMobilePushNotification log:";
 NSString *const MissingDeviceToken      = @"Missing device token.";
 NSString *const MissingAppId            = @"Missing app id.";
 NSString *const MissingNotiRef          = @"Missing noti ref.";
 NSString *const DefaultErrorMsg         = @"The unknown error is occured.";
+NSString *const GET_MSISDN_FAIL         = @"Only Truemove mobile network.";
 
 @interface EggMobilePushNotificationManager () <UIAlertViewDelegate>
 
@@ -78,7 +80,11 @@ NSString *const DefaultErrorMsg         = @"The unknown error is occured.";
     self.deviceToken = token;
 }
 
-- (void)subscribeForRefId:(NSString *)ref_id pushAlert:(PushAlertType)push_alert pushSound:(PushSoundType)push_sound pushBadge:(PushBadgeType)push_badge {
+- (void)subscribe {
+    [self subscribeForPushAlert:PushAlertTypeAlert pushSound:PushSoundTypeSound pushBadge:PushBadgeTypeBadge];
+}
+
+- (void)subscribeForPushAlert:(PushAlertType)push_alert pushSound:(PushSoundType)push_sound pushBadge:(PushBadgeType)push_badge {
     // Check device token.
     if (!self.deviceToken) {
         if (self.isDebug) {
@@ -105,77 +111,79 @@ NSString *const DefaultErrorMsg         = @"The unknown error is occured.";
         return ;
     }
     
-    // Check ref id.
-    if (!ref_id) {
-        ref_id = @"";
-    }
-    
-    // Initialize apiURL, and create request object.
-    NSURL *apiURL = [NSURL URLWithString:API_SUBSCRIPTION];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:apiURL];
-    [request setHTTPMethod:@"POST"];
-    
-    // Add parameters
-    UIDevice *device = [UIDevice currentDevice];
-    NSString *postString = [NSString stringWithFormat:@"device_token=%@&device_identifier=%@&device_type=ios&device_version=%@&app_id=%@&app_version=%@&device_model=%@&ref_id=%@&push_alert=%d&push_sound=%d&push_badge=%d", self.deviceToken, device.identifierForVendor.UUIDString, device.systemVersion, self.app_id, [self currentVersion], device.localizedModel, ref_id, push_alert, push_sound, push_badge];
-    [request setHTTPBody:[postString dataUsingEncoding:NSUTF8StringEncoding]];
-    
-    if (self.isDebug) {
-        NSLog(@"%@ Url request = %@", NSLogPrefix, request.URL.absoluteString);
-        NSLog(@"%@ Parameter = %@", NSLogPrefix, postString);
-        NSLog(@"%@ Method = %@", NSLogPrefix, request.HTTPMethod);
-    }
-    
-    // Create task for download.
-    NSURLSession *session = [NSURLSession sharedSession];
-    NSURLSessionDataTask *task = [session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+    [self getMsisdnOnSuccess:^(NSString *msisdn) {
+        // Initialize apiURL, and create request object.
+        NSURL *apiURL = [NSURL URLWithString:API_SUBSCRIPTION];
+        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:apiURL];
+        [request setHTTPMethod:@"POST"];
         
-        dispatch_async(dispatch_get_main_queue(), ^{
-            @try {
-                if (error == nil && data.length > 0) { // Success
-                    NSDictionary *appData = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
-                    if (self.isDebug) {
-                        NSLog(@"%@ Subscribe JSON result = %@", NSLogPrefix, appData);
-                    }
-                    
-                    // Check response from server.
-                    if (appData == nil) { // Invalid data
+        // Add parameters
+        UIDevice *device = [UIDevice currentDevice];
+        NSString *postString = [NSString stringWithFormat:@"device_token=%@&device_identifier=%@&device_type=ios&device_version=%@&app_id=%@&app_version=%@&device_model=%@&ref_id=%@&push_alert=%d&push_sound=%d&push_badge=%d", self.deviceToken, device.identifierForVendor.UUIDString, device.systemVersion, self.app_id, [self currentVersion], device.localizedModel, msisdn, push_alert, push_sound, push_badge];
+        [request setHTTPBody:[postString dataUsingEncoding:NSUTF8StringEncoding]];
+        
+        if (self.isDebug) {
+            NSLog(@"%@ Url request = %@", NSLogPrefix, request.URL.absoluteString);
+            NSLog(@"%@ Parameter = %@", NSLogPrefix, postString);
+            NSLog(@"%@ Method = %@", NSLogPrefix, request.HTTPMethod);
+        }
+        
+        // Create task for download.
+        NSURLSession *session = [NSURLSession sharedSession];
+        NSURLSessionDataTask *task = [session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                @try {
+                    if (error == nil && data.length > 0) { // Success
+                        NSDictionary *appData = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
                         if (self.isDebug) {
-                            NSLog(@"%@ Error = %@", NSLogPrefix, DefaultErrorMsg);
-                        }
-                        if ([self.delegate respondsToSelector:@selector(didSubscribeFailWithErrorMessage:)]) {
-                            [self.delegate didSubscribeFailWithErrorMessage:DefaultErrorMsg];
+                            NSLog(@"%@ Subscribe JSON result = %@", NSLogPrefix, appData);
                         }
                         
-                        return ;
+                        // Check response from server.
+                        if (appData == nil) { // Invalid data
+                            if (self.isDebug) {
+                                NSLog(@"%@ Error = %@", NSLogPrefix, DefaultErrorMsg);
+                            }
+                            if ([self.delegate respondsToSelector:@selector(didSubscribeFailWithErrorMessage:)]) {
+                                [self.delegate didSubscribeFailWithErrorMessage:DefaultErrorMsg];
+                            }
+                            
+                            return ;
+                        }
+                        
+                        // Parse data
+                        [self parseDataForSubscribeWithDict:appData];
                     }
-                    
-                    // Parse data
-                    [self parseDataForSubscribeWithDict:appData];
+                    else { // Fail
+                        if (self.isDebug) {
+                            NSLog(@"%@ Error = %@", NSLogPrefix, [error.userInfo objectForKey:@"NSLocalizedDescription"]);
+                        }
+                        
+                        if ([self.delegate respondsToSelector:@selector(didSubscribeFailWithErrorMessage:)]) {
+                            [self.delegate didSubscribeFailWithErrorMessage:[error.userInfo objectForKey:@"NSLocalizedDescription"]];
+                        }
+                    }
                 }
-                else { // Fail
+                @catch (NSException *exception) {
                     if (self.isDebug) {
-                        NSLog(@"%@ Error = %@", NSLogPrefix, [error.userInfo objectForKey:@"NSLocalizedDescription"]);
+                        NSLog(@"%@ Error = %@", NSLogPrefix, exception.description);
                     }
                     
                     if ([self.delegate respondsToSelector:@selector(didSubscribeFailWithErrorMessage:)]) {
-                        [self.delegate didSubscribeFailWithErrorMessage:[error.userInfo objectForKey:@"NSLocalizedDescription"]];
+                        [self.delegate didSubscribeFailWithErrorMessage:DefaultErrorMsg];
                     }
                 }
-            }
-            @catch (NSException *exception) {
-                if (self.isDebug) {
-                    NSLog(@"%@ Error = %@", NSLogPrefix, exception.description);
-                }
-                
-                if ([self.delegate respondsToSelector:@selector(didSubscribeFailWithErrorMessage:)]) {
-                    [self.delegate didSubscribeFailWithErrorMessage:DefaultErrorMsg];
-                }
-            }
-        });
+            });
+        }];
+        // Start task
+        [task resume];
+        
+    } onFailure:^(NSString *error_msg) {
+        if ([self.delegate respondsToSelector:@selector(didSubscribeFailWithErrorMessage:)]) {
+            [self.delegate didSubscribeFailWithErrorMessage:error_msg];
+        }
     }];
-    // Start task
-    [task resume];
 }
 
 - (void)unsubscribe {
@@ -409,6 +417,79 @@ NSString *const DefaultErrorMsg         = @"The unknown error is occured.";
 }
 
 #pragma mark - Private
+- (void)getMsisdnOnSuccess:(void (^)(NSString *msisdn))onSuccess onFailure:(void (^)(NSString *error_msg))onFailure
+{
+    // Initialize apiURL, and create request object.
+    NSURL *apiURL = [NSURL URLWithString:GET_MSISDN_API];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:apiURL];
+    [request setHTTPMethod:@"GET"];
+    
+    if (self.isDebug) {
+        NSLog(@"%@ Url request = %@", NSLogPrefix, request.URL.absoluteString);
+        NSLog(@"%@ Method = %@", NSLogPrefix, request.HTTPMethod);
+    }
+    
+    // Create task for download.
+    NSURLSession *session = [NSURLSession sharedSession];
+    NSURLSessionDataTask *task = [session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            @try {
+                if (error == nil && data.length > 0) { // Success
+                    NSDictionary *appData = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+                    if (self.isDebug) {
+                        NSLog(@"%@ Get Msisdn JSON result = %@", NSLogPrefix, appData);
+                    }
+                    
+                    // Check response from server.
+                    if (appData == nil) { // Invalid data
+                        if (self.isDebug) {
+                            NSLog(@"%@ Error = %@", NSLogPrefix, DefaultErrorMsg);
+                        }
+                        onFailure(DefaultErrorMsg);
+                        
+                        return ;
+                    }
+                    
+                    // Parse data
+                    int status_code = [[[appData objectForKey:@"header"] objectForKey:@"code"] intValue];
+                    if (status_code == 200) {
+                        if (self.isDebug) {
+                            NSLog(@"%@ Get Msisdn success", NSLogPrefix);
+                        }
+                        
+                        NSString *msisdn = [[appData objectForKey:@"data"] objectForKey:@"msisdn"];
+                        onSuccess(msisdn);
+                    }
+                    else { // Something went wrong.
+                        if (self.isDebug) {
+                            NSLog(@"%@ Error = %@", NSLogPrefix, GET_MSISDN_FAIL);
+                        }
+                        
+                        onFailure(GET_MSISDN_FAIL);
+                    }
+                }
+                else { // Fail
+                    if (self.isDebug) {
+                        NSLog(@"%@ Error = %@", NSLogPrefix, [error.userInfo objectForKey:@"NSLocalizedDescription"]);
+                    }
+                    
+                    onFailure([error.userInfo objectForKey:@"NSLocalizedDescription"]);
+                }
+            }
+            @catch (NSException *exception) {
+                if (self.isDebug) {
+                    NSLog(@"%@ Error = %@", NSLogPrefix, exception.description);
+                }
+                
+                onFailure(DefaultErrorMsg);
+            }
+        });
+    }];
+    // Start task
+    [task resume];
+}
+
 - (void)parseDataForSubscribeWithDict:(NSDictionary *)dict {
     @try {
         int status_code = [[[dict objectForKey:@"status"] objectForKey:@"code"] intValue];

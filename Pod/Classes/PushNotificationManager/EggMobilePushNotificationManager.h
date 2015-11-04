@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 // Enum
 typedef enum {
@@ -61,7 +62,8 @@ typedef enum {
 - (void)setCleanDeviceTokenForData:(NSData *)tokenData;
 
 // Subscribe
-- (void)subscribeForRefId:(NSString *)ref_id pushAlert:(PushAlertType)push_alert pushSound:(PushSoundType)push_sound pushBadge:(PushBadgeType)push_badge;
+- (void)subscribe;
+- (void)subscribeForPushAlert:(PushAlertType)push_alert pushSound:(PushSoundType)push_sound pushBadge:(PushBadgeType)push_badge;
 
 // Unsubscribe
 - (void)unsubscribe;

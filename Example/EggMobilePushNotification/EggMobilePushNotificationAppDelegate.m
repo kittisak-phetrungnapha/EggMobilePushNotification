@@ -20,11 +20,19 @@
     
     [EggMobilePushNotificationManager sharedInstance].delegate = self;
     [EggMobilePushNotificationManager sharedInstance].isDebug = YES; // Default debug is NO.
-    [EggMobilePushNotificationManager sharedInstance].deviceToken = @"b809e416b12e31276186f34d490651ef1ae9b7d9c04a8d1bb03f7fa2abd8dd76";
     [EggMobilePushNotificationManager sharedInstance].app_id = @"2";
-//    [[EggMobilePushNotificationManager sharedInstance] subscribeForRefId:@"ref_id_test" pushAlert:PushAlertTypeAlert pushSound:PushSoundTypeSound pushBadge:PushBadgeTypeBadge];
+    [EggMobilePushNotificationManager registerRemoteNotification];
     
     return YES;
+}
+
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+    [[EggMobilePushNotificationManager sharedInstance] setCleanDeviceTokenForData:deviceToken];
+    [[EggMobilePushNotificationManager sharedInstance] subscribeForRefId:@"ref_id_test" pushAlert:PushAlertTypeAlert pushSound:PushSoundTypeSound pushBadge:PushBadgeTypeBadge];
+}
+
+- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
+    NSLog(@"Error = %@", error.description);
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application

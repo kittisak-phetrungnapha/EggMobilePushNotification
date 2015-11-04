@@ -46,7 +46,38 @@ NSString *const DefaultErrorMsg         = @"The unknown error is occured.";
     return self;
 }
 
+#pragma mark - Static
++ (void)registerRemoteNotification {
+    UIApplication *application = [UIApplication sharedApplication];
+    
+    //-- Set Notification
+    if ([application respondsToSelector:@selector(isRegisteredForRemoteNotifications)])
+    {
+        // iOS 8+ Notifications
+        [application registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeSound | UIUserNotificationTypeAlert | UIUserNotificationTypeBadge) categories:nil]];
+        
+        [application registerForRemoteNotifications];
+    }
+    else
+    {
+        // iOS < 8 Notifications
+        [application registerForRemoteNotificationTypes:
+         (UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert)];
+    }
+}
+
 #pragma mark - Public
+- (void)setCleanDeviceTokenForData:(NSData *)tokenData {
+    NSString *token = [[tokenData description] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]];
+    token = [token stringByReplacingOccurrencesOfString:@" " withString:@""];
+    
+    if (self.isDebug) {
+        NSLog(@"%@ Device Token = %@", NSLogPrefix, token);
+    }
+    
+    self.deviceToken = token;
+}
+
 - (void)subscribeForRefId:(NSString *)ref_id pushAlert:(PushAlertType)push_alert pushSound:(PushSoundType)push_sound pushBadge:(PushBadgeType)push_badge {
     // Check device token.
     if (!self.deviceToken) {

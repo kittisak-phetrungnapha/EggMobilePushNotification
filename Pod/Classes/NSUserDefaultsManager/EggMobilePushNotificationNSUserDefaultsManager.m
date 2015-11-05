@@ -12,10 +12,22 @@
 NSString *const EggPushNotificationDeviceTokenKey   = @"EggPushNotificationDeviceTokenKey";
 NSString *const EggPushNotificationMsisdnKey        = @"EggPushNotificationMsisdnKey";
 NSString *const EggPushNotificationSubscribedKey    = @"EggPushNotificationSubscribedKey";
+NSString *const EggPushNotificationNotificationKey  = @"EggPushNotificationNotificationKey";
+NSString *const EggPushNotificationSoundKey         = @"EggPushNotificationSoundKey";
+NSString *const EggPushNotificationBadgeKey         = @"EggPushNotificationBadgeKey";
+NSString *const EggPushNotificationNotFirstLaunchKey   = @"EggPushNotificationNotFirstLaunchKey";
 
 @implementation EggMobilePushNotificationNSUserDefaultsManager
 
 #pragma mark - Public
++ (BOOL)getNotFirstLaunch {
+    return [self getBoolForKey:EggPushNotificationNotFirstLaunchKey];
+}
+
++ (void)setNotFirstLaunch:(BOOL)isNotFirstLaunch {
+    [self setBool:isNotFirstLaunch forKey:EggPushNotificationNotFirstLaunchKey];
+}
+
 + (NSString *)getDeviceToken {
     return [self getStringForKey:EggPushNotificationDeviceTokenKey];
 }
@@ -36,8 +48,32 @@ NSString *const EggPushNotificationSubscribedKey    = @"EggPushNotificationSubsc
     return [self getBoolForKey:EggPushNotificationSubscribedKey];
 }
 
-+ (void)setSubscribed:(BOOL)boolean {
-    [self setBool:boolean forKey:EggPushNotificationSubscribedKey];
++ (void)setSubscribed:(BOOL)isSubscribe {
+    [self setBool:isSubscribe forKey:EggPushNotificationSubscribedKey];
+}
+
++ (BOOL)getNotificationState {
+    return [self getBoolForKey:EggPushNotificationNotificationKey];
+}
+
++ (void)setNotificationState:(BOOL)state {
+    [self setBool:state forKey:EggPushNotificationNotificationKey];
+}
+
++ (BOOL)getSoundState {
+    return [self getBoolForKey:EggPushNotificationSoundKey];
+}
+
++ (void)setSoundState:(BOOL)state {
+    [self setBool:state forKey:EggPushNotificationSoundKey];
+}
+
++ (BOOL)getBadgeState {
+    return [self getBoolForKey:EggPushNotificationBadgeKey];
+}
+
++ (void)setBadgeState:(BOOL)state {
+    [self setBool:state forKey:EggPushNotificationBadgeKey];
 }
 
 #pragma mark - NSUserDefaults getter and setter

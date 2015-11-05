@@ -10,6 +10,10 @@
 
 @interface EggMobilePushNotificationNSUserDefaultsManager : NSObject
 
+// Check first launch application.
++ (BOOL)getNotFirstLaunch;
++ (void)setNotFirstLaunch:(BOOL)isNotFirstLaunch;
+
 // Device Token
 + (NSString *)getDeviceToken;
 + (void)setDeviceToken:(NSString *)device_token;
@@ -20,6 +24,18 @@
 
 // Subscribed
 + (BOOL)getSubscribed;
-+ (void)setSubscribed:(BOOL)boolean;
++ (void)setSubscribed:(BOOL)isSubscribe;
+
+// Notification state
++ (BOOL)getNotificationState;
++ (void)setNotificationState:(BOOL)state;
+
+// Sound state
++ (BOOL)getSoundState;
++ (void)setSoundState:(BOOL)state;
+
+// Badge state
++ (BOOL)getBadgeState;
++ (void)setBadgeState:(BOOL)state;
 
 @end

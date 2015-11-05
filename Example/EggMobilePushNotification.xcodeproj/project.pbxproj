@@ -23,6 +23,7 @@
 		6003F5BC195388D20070C39A /* Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F5BB195388D20070C39A /* Tests.m */; };
 		873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 873B8AEA1B1F5CCA007FD442 /* Main.storyboard */; };
 		EC0327DA98B5D9A74BD0F07D /* Pods_EggMobilePushNotification_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F53ABBC7CDC4CD415B4F2EBB /* Pods_EggMobilePushNotification_Tests.framework */; };
+		EE6AB9771BEB3FD40058E71B /* SettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE6AB9761BEB3FD40058E71B /* SettingViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -64,6 +65,8 @@
 		8BA0085C075E771EBFEAA9BB /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		8C71D735A5B45BD4B211B3C0 /* Pods-EggMobilePushNotification_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EggMobilePushNotification_Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-EggMobilePushNotification_Example/Pods-EggMobilePushNotification_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		A9F4BD5832F356953D829191 /* Pods_EggMobilePushNotification_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_EggMobilePushNotification_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		EE6AB9751BEB3FD40058E71B /* SettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingViewController.h; sourceTree = "<group>"; };
+		EE6AB9761BEB3FD40058E71B /* SettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingViewController.m; sourceTree = "<group>"; };
 		F53ABBC7CDC4CD415B4F2EBB /* Pods_EggMobilePushNotification_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_EggMobilePushNotification_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -146,6 +149,8 @@
 				873B8AEA1B1F5CCA007FD442 /* Main.storyboard */,
 				6003F5A5195388D20070C39A /* EggMobilePushNotificationViewController.h */,
 				6003F5A6195388D20070C39A /* EggMobilePushNotificationViewController.m */,
+				EE6AB9751BEB3FD40058E71B /* SettingViewController.h */,
+				EE6AB9761BEB3FD40058E71B /* SettingViewController.m */,
 				6003F5A8195388D20070C39A /* Images.xcassets */,
 				6003F594195388D20070C39A /* Supporting Files */,
 			);
@@ -393,6 +398,7 @@
 				6003F59E195388D20070C39A /* EggMobilePushNotificationAppDelegate.m in Sources */,
 				6003F5A7195388D20070C39A /* EggMobilePushNotificationViewController.m in Sources */,
 				6003F59A195388D20070C39A /* main.m in Sources */,
+				EE6AB9771BEB3FD40058E71B /* SettingViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -516,10 +522,12 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "EggMobilePushNotification/EggMobilePushNotification-Prefix.pch";
 				INFOPLIST_FILE = "EggMobilePushNotification/EggMobilePushNotification-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.tdcm.EggMobilePushNotification-Demo";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "a66c0607-3b6b-4c60-ac11-b3fafe0f846f";
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -533,9 +541,11 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "EggMobilePushNotification/EggMobilePushNotification-Prefix.pch";
 				INFOPLIST_FILE = "EggMobilePushNotification/EggMobilePushNotification-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.tdcm.EggMobilePushNotification-Demo";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

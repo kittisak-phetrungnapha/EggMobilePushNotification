@@ -67,11 +67,8 @@ typedef enum {
 - (void)showAlertViewForDict:(NSDictionary *)dict viewControllerToPresent:(UIViewController *)vc tag:(NSInteger)tag;
 
 // Setting
-- (void)turnOnSoundWithSuccess:(void (^)())onSuccess onFailure:(void (^)(NSString *error_msg))onFailure;
-- (void)turnOffSoundWithSuccess:(void (^)())onSuccess onFailure:(void (^)(NSString *error_msg))onFailure;
-- (void)turnOnBadgeWithSuccess:(void (^)())onSuccess onFailure:(void (^)(NSString *error_msg))onFailure;
-- (void)turnOffBadgeWithSuccess:(void (^)())onSuccess onFailure:(void (^)(NSString *error_msg))onFailure;
-- (void)turnOnNotificationWithSuccess:(void (^)())onSuccess onFailure:(void (^)(NSString *error_msg))onFailure;
-- (void)turnOffNotificationWithSuccess:(void (^)())onSuccess onFailure:(void (^)(NSString *error_msg))onFailure;
+- (void)setTurnOnSound:(BOOL)isOn onSuccess:(void (^)())onSuccess onFailure:(void (^)(NSString *error_msg))onFailure;
+- (void)setTurnOnBadge:(BOOL)isOn onSuccess:(void (^)())onSuccess onFailure:(void (^)(NSString *error_msg))onFailure;
+- (void)setTurnOnNotification:(BOOL)isOn onSuccess:(void (^)())onSuccess onFailure:(void (^)(NSString *error_msg))onFailure;
 
 @end

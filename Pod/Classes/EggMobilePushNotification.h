@@ -10,5 +10,6 @@
 #define EggMobilePushNotification_h
 
 #import "EggMobilePushNotificationManager.h"
+#import "EggMobilePushNotificationNSUserDefaultsManager.h"
 
 #endif /* EggMobilePushNotification_h */

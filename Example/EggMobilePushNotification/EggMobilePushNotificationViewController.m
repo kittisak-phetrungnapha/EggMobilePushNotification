@@ -7,6 +7,7 @@
 //
 
 #import "EggMobilePushNotificationViewController.h"
+#import "SettingViewController.h"
 
 @interface EggMobilePushNotificationViewController () <EggMobilePushNotificationManagerDelegate>
 
@@ -18,7 +19,17 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
+    
+    UIBarButtonItem *settingBtn = [[UIBarButtonItem alloc] initWithTitle:@"Setting" style:UIBarButtonItemStylePlain target:self action:@selector(showSettingPage)];
+    self.navigationItem.rightBarButtonItem = settingBtn;
+    
     [EggMobilePushNotificationManager sharedInstance].delegate = self;
+}
+
+- (void)showSettingPage {
+    UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    SettingViewController *vc = (SettingViewController *)[sb instantiateViewControllerWithIdentifier:@"settingNav"];
+    [self presentViewController:vc animated:YES completion:nil];
 }
 
 - (void)viewDidAppear:(BOOL)animated {

@@ -7,6 +7,7 @@
 //
 
 #import "EggMobilePushNotificationManager.h"
+#import "EggMobilePushNotificationNSUserDefaultsManager.h"
 
 // API
 NSString *const MAIN_API_ANC            = @"http://api-anc.eggdigital.com";
@@ -45,6 +46,14 @@ NSString *const GET_MSISDN_FAIL         = @"Only Truemove mobile network.";
     self = [super init];
     if (self) {
         self.isDebug = NO;
+        
+        if (![EggMobilePushNotificationNSUserDefaultsManager getNotFirstLaunch]) {
+            [EggMobilePushNotificationNSUserDefaultsManager setNotificationState:YES];
+            [EggMobilePushNotificationNSUserDefaultsManager setSoundState:YES];
+            [EggMobilePushNotificationNSUserDefaultsManager setBadgeState:YES];
+            
+            [EggMobilePushNotificationNSUserDefaultsManager setNotFirstLaunch:YES];
+        }
     }
     return self;
 }
@@ -92,7 +101,7 @@ NSString *const GET_MSISDN_FAIL         = @"Only Truemove mobile network.";
     }];
 }
 
-- (void)subscribeForPushAlert:(PushAlertType)push_alert pushSound:(PushSoundType)push_sound pushBadge:(PushBadgeType)push_badge onSuccess:(void (^)())onSuccess onFailure:(void (^)(NSString *error_msg))onFailure  {
+- (void)subscribeForPushAlert:(PushAlertType)push_alert pushSound:(PushSoundType)push_sound pushBadge:(PushBadgeType)push_badge onSuccess:(void (^)())onSuccess onFailure:(void (^)(NSString *error_msg))onFailure {
     // Check device token.
     if (!self.deviceToken) {
         if (self.isDebug) {
@@ -385,28 +394,37 @@ NSString *const GET_MSISDN_FAIL         = @"Only Truemove mobile network.";
 }
 
 #pragma mark - Setting Notification
-- (void)turnOnSoundWithSuccess:(void (^)())onSuccess onFailure:(void (^)(NSString *error_msg))onFailure {
-    
+- (void)setTurnOnNotification:(BOOL)isOn onSuccess:(void (^)())onSuccess onFailure:(void (^)(NSString *error_msg))onFailure
+{
+    [self updateNotificationConfigForPushAlert:isOn pushSound:[EggMobilePushNotificationNSUserDefaultsManager getSoundState] pushBadge:[EggMobilePushNotificationNSUserDefaultsManager getBadgeState] onSuccess:^{
+        
+        [EggMobilePushNotificationNSUserDefaultsManager setNotificationState:isOn];
+        onSuccess();
+    } onFailure:^(NSString *error_msg) {
+        onFailure(error_msg);
+    }];
 }
 
-- (void)turnOffSoundWithSuccess:(void (^)())onSuccess onFailure:(void (^)(NSString *error_msg))onFailure {
-    
+- (void)setTurnOnSound:(BOOL)isOn onSuccess:(void (^)())onSuccess onFailure:(void (^)(NSString *error_msg))onFailure
+{
+    [self updateNotificationConfigForPushAlert:[EggMobilePushNotificationNSUserDefaultsManager getNotificationState] pushSound:isOn pushBadge:[EggMobilePushNotificationNSUserDefaultsManager getBadgeState] onSuccess:^{
+        
+        [EggMobilePushNotificationNSUserDefaultsManager setSoundState:isOn];
+        onSuccess();
+    } onFailure:^(NSString *error_msg) {
+        onFailure(error_msg);
+    }];
 }
 
-- (void)turnOnBadgeWithSuccess:(void (^)())onSuccess onFailure:(void (^)(NSString *error_msg))onFailure {
-    
-}
-
-- (void)turnOffBadgeWithSuccess:(void (^)())onSuccess onFailure:(void (^)(NSString *error_msg))onFailure {
-    
-}
-
-- (void)turnOnNotificationWithSuccess:(void (^)())onSuccess onFailure:(void (^)(NSString *error_msg))onFailure {
-    
-}
-
-- (void)turnOffNotificationWithSuccess:(void (^)())onSuccess onFailure:(void (^)(NSString *error_msg))onFailure {
-    
+- (void)setTurnOnBadge:(BOOL)isOn onSuccess:(void (^)())onSuccess onFailure:(void (^)(NSString *error_msg))onFailure
+{
+    [self updateNotificationConfigForPushAlert:[EggMobilePushNotificationNSUserDefaultsManager getNotificationState] pushSound:[EggMobilePushNotificationNSUserDefaultsManager getSoundState] pushBadge:isOn onSuccess:^{
+        
+        [EggMobilePushNotificationNSUserDefaultsManager setBadgeState:isOn];
+        onSuccess();
+    } onFailure:^(NSString *error_msg) {
+        onFailure(error_msg);
+    }];
 }
 
 #pragma mark - Private
@@ -454,7 +472,7 @@ NSString *const GET_MSISDN_FAIL         = @"Only Truemove mobile network.";
                         NSString *msisdn = [[appData objectForKey:@"data"] objectForKey:@"msisdn"];
                         
                         // Save msisdn
-//                        [EggMobilePushNotificationNSUserDefaultsManager setMsisdn:msisdn];
+                        [EggMobilePushNotificationNSUserDefaultsManager setMsisdn:msisdn];
                         
                         onSuccess(msisdn);
                     }
@@ -465,6 +483,98 @@ NSString *const GET_MSISDN_FAIL         = @"Only Truemove mobile network.";
                         
                         onFailure(GET_MSISDN_FAIL);
                     }
+                }
+                else { // Fail
+                    if (self.isDebug) {
+                        NSLog(@"%@ Error = %@", NSLogPrefix, [error.userInfo objectForKey:@"NSLocalizedDescription"]);
+                    }
+                    
+                    onFailure([error.userInfo objectForKey:@"NSLocalizedDescription"]);
+                }
+            }
+            @catch (NSException *exception) {
+                if (self.isDebug) {
+                    NSLog(@"%@ Error = %@", NSLogPrefix, exception.description);
+                }
+                
+                onFailure(DefaultErrorMsg);
+            }
+        });
+    }];
+    // Start task
+    [task resume];
+}
+
+- (void)updateNotificationConfigForPushAlert:(PushAlertType)push_alert pushSound:(PushSoundType)push_sound pushBadge:(PushBadgeType)push_badge onSuccess:(void (^)())onSuccess onFailure:(void (^)(NSString *error_msg))onFailure
+{
+    // Check device token.
+    if (!self.deviceToken) {
+        if (self.isDebug) {
+            NSLog(@"%@ %@", NSLogPrefix, MissingDeviceToken);
+        }
+        
+        onFailure(MissingDeviceToken);
+        
+        return ;
+    }
+    
+    // Check app id.
+    if (!self.app_id) {
+        if (self.isDebug) {
+            NSLog(@"%@ %@", NSLogPrefix, MissingAppId);
+        }
+        
+        onFailure(MissingAppId);
+        
+        return ;
+    }
+    
+    // Initialize apiURL, and create request object.
+    NSURL *apiURL = [NSURL URLWithString:API_SUBSCRIPTION];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:apiURL];
+    [request setHTTPMethod:@"POST"];
+    
+    // Add parameters
+    UIDevice *device = [UIDevice currentDevice];
+    NSString *msisdn = [EggMobilePushNotificationNSUserDefaultsManager getMsisdn] ?: @"";
+    
+    NSString *postString = [NSString stringWithFormat:@"device_token=%@&device_identifier=%@&device_type=ios&device_version=%@&app_id=%@&app_version=%@&device_model=%@&ref_id=%@&push_alert=%d&push_sound=%d&push_badge=%d", self.deviceToken, device.identifierForVendor.UUIDString, device.systemVersion, self.app_id, [self currentVersion], device.localizedModel, msisdn, push_alert, push_sound, push_badge];
+    [request setHTTPBody:[postString dataUsingEncoding:NSUTF8StringEncoding]];
+    
+    if (self.isDebug) {
+        NSLog(@"%@ Url request = %@", NSLogPrefix, request.URL.absoluteString);
+        NSLog(@"%@ Parameter = %@", NSLogPrefix, postString);
+        NSLog(@"%@ Method = %@", NSLogPrefix, request.HTTPMethod);
+    }
+    
+    // Create task for download.
+    NSURLSession *session = [NSURLSession sharedSession];
+    NSURLSessionDataTask *task = [session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            @try {
+                if (error == nil && data.length > 0) { // Success
+                    NSDictionary *appData = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+                    if (self.isDebug) {
+                        NSLog(@"%@ Subscribe JSON result = %@", NSLogPrefix, appData);
+                    }
+                    
+                    // Check response from server.
+                    if (appData == nil) { // Invalid data
+                        if (self.isDebug) {
+                            NSLog(@"%@ Error = %@", NSLogPrefix, DefaultErrorMsg);
+                        }
+                        onFailure(DefaultErrorMsg);
+                        
+                        return ;
+                    }
+                    
+                    // Parse data
+                    [self parseDataForSubscribeWithDict:appData onSuccess:^{
+                        onSuccess();
+                    } onFailure:^(NSString *error_msg) {
+                        onFailure(error_msg);
+                    }];
                 }
                 else { // Fail
                     if (self.isDebug) {

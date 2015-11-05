@@ -28,14 +28,6 @@ typedef enum {
 @protocol EggMobilePushNotificationManagerDelegate <NSObject>
 
 @optional
-// ANC Push notification handler result delegate method
-- (void)didSubscribeSuccess;
-- (void)didSubscribeFailWithErrorMessage:(NSString *)error_msg;
-- (void)didUnsubscribeSuccess;
-- (void)didUnsubscribeFailWithErrorMessage:(NSString *)error_msg;
-- (void)didAcceptNotificationSuccess;
-- (void)didAcceptNotificationFailWithErrorMessage:(NSString *)error_msg;
-
 // AlertView action delegate method
 - (void)didClickFirstButtonForAlertViewTag:(NSInteger)tag;
 - (void)didClickSecondButtonForAlertViewTag:(NSInteger)tag;
@@ -62,16 +54,24 @@ typedef enum {
 - (void)setCleanDeviceTokenForData:(NSData *)tokenData;
 
 // Subscribe
-- (void)subscribe;
-- (void)subscribeForPushAlert:(PushAlertType)push_alert pushSound:(PushSoundType)push_sound pushBadge:(PushBadgeType)push_badge;
+- (void)subscribeOnSuccess:(void (^)())onSuccess onFailure:(void (^)(NSString *error_msg))onFailure;
+- (void)subscribeForPushAlert:(PushAlertType)push_alert pushSound:(PushSoundType)push_sound pushBadge:(PushBadgeType)push_badge onSuccess:(void (^)())onSuccess onFailure:(void (^)(NSString *error_msg))onFailure;
 
 // Unsubscribe
-- (void)unsubscribe;
+- (void)unsubscribeOnSuccess:(void (^)())onSuccess onFailure:(void (^)(NSString *error_msg))onFailure;
 
 // Accept notification
-- (void)acceptNotificationForNotiRef:(NSString *)noti_ref;
+- (void)acceptNotificationForNotiRef:(NSString *)noti_ref onSuccess:(void (^)())onSuccess onFailure:(void (^)(NSString *error_msg))onFailure;
 
 // Show native alert
-- (void)showAlertViewForTitle:(NSString *)title message:(NSString *)message firstButtonTitle:(NSString *)firstButtonTitle secondButtonTitle:(NSString *)secondButtonTitle thirdButtonTitle:(NSString *)thirdButtonTitle viewControllerToPresent:(UIViewController *)vc tag:(NSInteger)tag;
+- (void)showAlertViewForDict:(NSDictionary *)dict viewControllerToPresent:(UIViewController *)vc tag:(NSInteger)tag;
+
+// Setting
+- (void)turnOnSoundWithSuccess:(void (^)())onSuccess onFailure:(void (^)(NSString *error_msg))onFailure;
+- (void)turnOffSoundWithSuccess:(void (^)())onSuccess onFailure:(void (^)(NSString *error_msg))onFailure;
+- (void)turnOnBadgeWithSuccess:(void (^)())onSuccess onFailure:(void (^)(NSString *error_msg))onFailure;
+- (void)turnOffBadgeWithSuccess:(void (^)())onSuccess onFailure:(void (^)(NSString *error_msg))onFailure;
+- (void)turnOnNotificationWithSuccess:(void (^)())onSuccess onFailure:(void (^)(NSString *error_msg))onFailure;
+- (void)turnOffNotificationWithSuccess:(void (^)())onSuccess onFailure:(void (^)(NSString *error_msg))onFailure;
 
 @end

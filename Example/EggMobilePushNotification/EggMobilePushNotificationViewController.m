@@ -24,7 +24,7 @@
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
-//    [[EggMobilePushNotificationManager sharedInstance] showAlertViewForTitle:@"Title test" message:@"Message test" firstButtonTitle:@"Cancel" secondButtonTitle:@"OK" thirdButtonTitle:@"Reset" viewControllerToPresent:self tag:200];
+//    [[EggMobilePushNotificationManager sharedInstance] showAlertViewForTitle:@"Title test" message:@"Message test" firstButtonTitle:@"First" secondButtonTitle:@"Second" thirdButtonTitle:@"Third" viewControllerToPresent:self tag:200];
 }
 
 #pragma mark - EggMobilePushNotificationManagerDelegate

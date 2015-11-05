@@ -13,8 +13,9 @@ NSString *const MAIN_API_ANC            = @"http://api-anc.eggdigital.com";
 #define API_SUBSCRIPTION                [NSString stringWithFormat:@"%@/subscription", MAIN_API_ANC]
 #define API_UNSUBSCRIPTION              [NSString stringWithFormat:@"%@/subscription/unsubscribe", MAIN_API_ANC]
 #define API_ACCEPT_NOTIFICATION         [NSString stringWithFormat:@"%@/notificationlog/acceptNotification", MAIN_API_ANC]
-NSString *const GET_MSISDN_API   = @"http://www3.truecorp.co.th/api/services/get_header";
+NSString *const GET_MSISDN_API          = @"http://www3.truecorp.co.th/api/services/get_header";
 
+// Message
 NSString *const NSLogPrefix             = @"EggMobilePushNotification log:";
 NSString *const MissingDeviceToken      = @"Missing device token.";
 NSString *const MissingAppId            = @"Missing app id.";
@@ -78,22 +79,27 @@ NSString *const GET_MSISDN_FAIL         = @"Only Truemove mobile network.";
     }
     
     self.deviceToken = token;
+    
+    // Save clean device token
+//    [EggMobilePushNotificationNSUserDefaultsManager setDeviceToken:token];
 }
 
-- (void)subscribe {
-    [self subscribeForPushAlert:PushAlertTypeAlert pushSound:PushSoundTypeSound pushBadge:PushBadgeTypeBadge];
+- (void)subscribeOnSuccess:(void (^)())onSuccess onFailure:(void (^)(NSString *))onFailure {
+    [self subscribeForPushAlert:PushAlertTypeAlert pushSound:PushSoundTypeSound pushBadge:PushBadgeTypeBadge onSuccess:^{
+        onSuccess();
+    } onFailure:^(NSString *error_msg) {
+        onFailure(error_msg);
+    }];
 }
 
-- (void)subscribeForPushAlert:(PushAlertType)push_alert pushSound:(PushSoundType)push_sound pushBadge:(PushBadgeType)push_badge {
+- (void)subscribeForPushAlert:(PushAlertType)push_alert pushSound:(PushSoundType)push_sound pushBadge:(PushBadgeType)push_badge onSuccess:(void (^)())onSuccess onFailure:(void (^)(NSString *error_msg))onFailure  {
     // Check device token.
     if (!self.deviceToken) {
         if (self.isDebug) {
             NSLog(@"%@ %@", NSLogPrefix, MissingDeviceToken);
         }
         
-        if ([self.delegate respondsToSelector:@selector(didSubscribeFailWithErrorMessage:)]) {
-            [self.delegate didSubscribeFailWithErrorMessage:MissingDeviceToken];
-        }
+        onFailure(MissingDeviceToken);
         
         return ;
     }
@@ -104,9 +110,7 @@ NSString *const GET_MSISDN_FAIL         = @"Only Truemove mobile network.";
             NSLog(@"%@ %@", NSLogPrefix, MissingAppId);
         }
         
-        if ([self.delegate respondsToSelector:@selector(didSubscribeFailWithErrorMessage:)]) {
-            [self.delegate didSubscribeFailWithErrorMessage:MissingAppId];
-        }
+        onFailure(MissingAppId);
         
         return ;
     }
@@ -145,24 +149,24 @@ NSString *const GET_MSISDN_FAIL         = @"Only Truemove mobile network.";
                             if (self.isDebug) {
                                 NSLog(@"%@ Error = %@", NSLogPrefix, DefaultErrorMsg);
                             }
-                            if ([self.delegate respondsToSelector:@selector(didSubscribeFailWithErrorMessage:)]) {
-                                [self.delegate didSubscribeFailWithErrorMessage:DefaultErrorMsg];
-                            }
+                            onFailure(DefaultErrorMsg);
                             
                             return ;
                         }
                         
                         // Parse data
-                        [self parseDataForSubscribeWithDict:appData];
+                        [self parseDataForSubscribeWithDict:appData onSuccess:^{
+                            onSuccess();
+                        } onFailure:^(NSString *error_msg) {
+                            onFailure(error_msg);
+                        }];
                     }
                     else { // Fail
                         if (self.isDebug) {
                             NSLog(@"%@ Error = %@", NSLogPrefix, [error.userInfo objectForKey:@"NSLocalizedDescription"]);
                         }
                         
-                        if ([self.delegate respondsToSelector:@selector(didSubscribeFailWithErrorMessage:)]) {
-                            [self.delegate didSubscribeFailWithErrorMessage:[error.userInfo objectForKey:@"NSLocalizedDescription"]];
-                        }
+                        onFailure([error.userInfo objectForKey:@"NSLocalizedDescription"]);
                     }
                 }
                 @catch (NSException *exception) {
@@ -170,9 +174,7 @@ NSString *const GET_MSISDN_FAIL         = @"Only Truemove mobile network.";
                         NSLog(@"%@ Error = %@", NSLogPrefix, exception.description);
                     }
                     
-                    if ([self.delegate respondsToSelector:@selector(didSubscribeFailWithErrorMessage:)]) {
-                        [self.delegate didSubscribeFailWithErrorMessage:DefaultErrorMsg];
-                    }
+                    onFailure(DefaultErrorMsg);
                 }
             });
         }];
@@ -180,22 +182,18 @@ NSString *const GET_MSISDN_FAIL         = @"Only Truemove mobile network.";
         [task resume];
         
     } onFailure:^(NSString *error_msg) {
-        if ([self.delegate respondsToSelector:@selector(didSubscribeFailWithErrorMessage:)]) {
-            [self.delegate didSubscribeFailWithErrorMessage:error_msg];
-        }
+        onFailure(error_msg);
     }];
 }
 
-- (void)unsubscribe {
+- (void)unsubscribeOnSuccess:(void (^)())onSuccess onFailure:(void (^)(NSString *error_msg))onFailure {
     // Check app id.
     if (!self.app_id) {
         if (self.isDebug) {
             NSLog(@"%@ %@", NSLogPrefix, MissingAppId);
         }
         
-        if ([self.delegate respondsToSelector:@selector(didUnsubscribeFailWithErrorMessage:)]) {
-            [self.delegate didUnsubscribeFailWithErrorMessage:MissingAppId];
-        }
+        onFailure(MissingAppId);
         
         return ;
     }
@@ -233,24 +231,24 @@ NSString *const GET_MSISDN_FAIL         = @"Only Truemove mobile network.";
                         if (self.isDebug) {
                             NSLog(@"%@ Error = %@", NSLogPrefix, DefaultErrorMsg);
                         }
-                        if ([self.delegate respondsToSelector:@selector(didUnsubscribeFailWithErrorMessage:)]) {
-                            [self.delegate didUnsubscribeFailWithErrorMessage:DefaultErrorMsg];
-                        }
+                        onFailure(DefaultErrorMsg);
                         
                         return ;
                     }
                     
                     // Parse data
-                    [self parseDataForUnsubscribeWithDict:appData];
+                    [self parseDataForUnsubscribeWithDict:appData onSuccess:^{
+                        onSuccess();
+                    } onFailure:^(NSString *error_msg) {
+                        onFailure(error_msg);
+                    }];
                 }
                 else { // Fail
                     if (self.isDebug) {
                         NSLog(@"%@ Error = %@", NSLogPrefix, [error.userInfo objectForKey:@"NSLocalizedDescription"]);
                     }
                     
-                    if ([self.delegate respondsToSelector:@selector(didUnsubscribeFailWithErrorMessage:)]) {
-                        [self.delegate didUnsubscribeFailWithErrorMessage:[error.userInfo objectForKey:@"NSLocalizedDescription"]];
-                    }
+                    onFailure([error.userInfo objectForKey:@"NSLocalizedDescription"]);
                 }
             }
             @catch (NSException *exception) {
@@ -258,9 +256,7 @@ NSString *const GET_MSISDN_FAIL         = @"Only Truemove mobile network.";
                     NSLog(@"%@ Error = %@", NSLogPrefix, exception.description);
                 }
                 
-                if ([self.delegate respondsToSelector:@selector(didUnsubscribeFailWithErrorMessage:)]) {
-                    [self.delegate didUnsubscribeFailWithErrorMessage:DefaultErrorMsg];
-                }
+                onFailure(DefaultErrorMsg);
             }
         });
     }];
@@ -268,16 +264,14 @@ NSString *const GET_MSISDN_FAIL         = @"Only Truemove mobile network.";
     [task resume];
 }
 
-- (void)acceptNotificationForNotiRef:(NSString *)noti_ref {
+- (void)acceptNotificationForNotiRef:(NSString *)noti_ref onSuccess:(void (^)())onSuccess onFailure:(void (^)(NSString *error_msg))onFailure {
     // Check noti_ref
     if (!noti_ref) {
         if (self.isDebug) {
             NSLog(@"%@ Error = %@", NSLogPrefix, MissingNotiRef);
         }
         
-        if ([self.delegate respondsToSelector:@selector(didAcceptNotificationFailWithErrorMessage:)]) {
-            [self.delegate didAcceptNotificationFailWithErrorMessage:MissingNotiRef];
-        }
+        onFailure(MissingNotiRef);
         
         return ;
     }
@@ -315,24 +309,24 @@ NSString *const GET_MSISDN_FAIL         = @"Only Truemove mobile network.";
                         if (self.isDebug) {
                             NSLog(@"%@ Error = %@", NSLogPrefix, DefaultErrorMsg);
                         }
-                        if ([self.delegate respondsToSelector:@selector(didAcceptNotificationFailWithErrorMessage:)]) {
-                            [self.delegate didAcceptNotificationFailWithErrorMessage:DefaultErrorMsg];
-                        }
+                        onFailure(DefaultErrorMsg);
                         
                         return ;
                     }
                     
                     // Parse data
-                    [self parseDataForAcceptNotificationWithDict:appData];
+                    [self parseDataForAcceptNotificationWithDict:appData onSuccess:^{
+                        onSuccess();
+                    } onFailure:^(NSString *error_msg) {
+                        onFailure(error_msg);
+                    }];
                 }
                 else { // Fail
                     if (self.isDebug) {
                         NSLog(@"%@ Error = %@", NSLogPrefix, [error.userInfo objectForKey:@"NSLocalizedDescription"]);
                     }
                     
-                    if ([self.delegate respondsToSelector:@selector(didAcceptNotificationFailWithErrorMessage:)]) {
-                        [self.delegate didAcceptNotificationFailWithErrorMessage:[error.userInfo objectForKey:@"NSLocalizedDescription"]];
-                    }
+                    onFailure([error.userInfo objectForKey:@"NSLocalizedDescription"]);
                 }
             }
             @catch (NSException *exception) {
@@ -340,9 +334,7 @@ NSString *const GET_MSISDN_FAIL         = @"Only Truemove mobile network.";
                     NSLog(@"%@ Error = %@", NSLogPrefix, exception.description);
                 }
                 
-                if ([self.delegate respondsToSelector:@selector(didAcceptNotificationFailWithErrorMessage:)]) {
-                    [self.delegate didAcceptNotificationFailWithErrorMessage:DefaultErrorMsg];
-                }
+                onFailure(DefaultErrorMsg);
             }
         });
     }];
@@ -350,70 +342,71 @@ NSString *const GET_MSISDN_FAIL         = @"Only Truemove mobile network.";
     [task resume];
 }
 
-- (void)showAlertViewForTitle:(NSString *)title message:(NSString *)message firstButtonTitle:(NSString *)firstButtonTitle secondButtonTitle:(NSString *)secondButtonTitle thirdButtonTitle:(NSString *)thirdButtonTitle viewControllerToPresent:(UIViewController *)vc tag:(NSInteger)tag {
-    
+- (void)showAlertViewForDict:(NSDictionary *)dict viewControllerToPresent:(UIViewController *)vc tag:(NSInteger)tag {
     if ([UIAlertController class]) {
         // use UIAlertController
-        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Title" message:@"Message" preferredStyle:UIAlertControllerStyleAlert];
         
-        // Add button action if need.
-        if (firstButtonTitle && ![@"" isEqualToString:firstButtonTitle]) {
-            UIAlertAction *alertFirstAction = [UIAlertAction actionWithTitle:firstButtonTitle style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-                
-                if ([self.delegate respondsToSelector:@selector(didClickFirstButtonForAlertViewTag:)]) {
-                    [self.delegate didClickFirstButtonForAlertViewTag:tag];
-                }
-            }];
-            [alertController addAction:alertFirstAction];
-        }
+        UIAlertAction *alertFirstAction = [UIAlertAction actionWithTitle:@"First" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+            
+        }];
+        [alertController addAction:alertFirstAction];
         
-        if (secondButtonTitle && ![@"" isEqualToString:secondButtonTitle]) {
-            UIAlertAction *alertSecondAction = [UIAlertAction actionWithTitle:secondButtonTitle style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                
-                if ([self.delegate respondsToSelector:@selector(didClickSecondButtonForAlertViewTag:)]) {
-                    [self.delegate didClickSecondButtonForAlertViewTag:tag];
-                }
-            }];
-            [alertController addAction:alertSecondAction];
-        }
+        UIAlertAction *alertSecondAction = [UIAlertAction actionWithTitle:@"Second" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            
+        }];
+        [alertController addAction:alertSecondAction];
         
-        if (thirdButtonTitle && ![@"" isEqualToString:thirdButtonTitle]) {
-            UIAlertAction *alertThirdAction = [UIAlertAction actionWithTitle:thirdButtonTitle style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                
-                if ([self.delegate respondsToSelector:@selector(didClickThirdButtonForAlertViewTag:)]) {
-                    [self.delegate didClickThirdButtonForAlertViewTag:tag];
-                }
-            }];
-            [alertController addAction:alertThirdAction];
-        }
+//        UIAlertAction *alertThirdAction = [UIAlertAction actionWithTitle:@"Third" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+//            
+//        }];
+//        [alertController addAction:alertThirdAction];
         
         // Show alert controller
         [vc presentViewController:alertController animated:YES completion:nil];
     } else {
         // use UIAlertView
         UIAlertView *alertView = [[UIAlertView alloc] init];
-        alertView.title = title;
-        alertView.message = message;
+        alertView.title = @"Title";
+        alertView.message = @"Message";
         alertView.delegate = self;
         alertView.tag = tag;
         
-        // Add button action if need.
-        if (firstButtonTitle && ![@"" isEqualToString:firstButtonTitle]) {
-            [alertView addButtonWithTitle:firstButtonTitle];
-            [alertView setCancelButtonIndex:0];
-        }
+        [alertView addButtonWithTitle:@"First"];
+        [alertView setCancelButtonIndex:0];
         
-        if (secondButtonTitle && ![@"" isEqualToString:secondButtonTitle]) {
-            [alertView addButtonWithTitle:secondButtonTitle];
-        }
+        [alertView addButtonWithTitle:@"Second"];
         
-        if (thirdButtonTitle && ![@"" isEqualToString:thirdButtonTitle]) {
-            [alertView addButtonWithTitle:thirdButtonTitle];
-        }
+//        [alertView addButtonWithTitle:@"Third"];
         
         // Show alert view
         [alertView show];
     }
+}
+
+#pragma mark - Setting Notification
+- (void)turnOnSoundWithSuccess:(void (^)())onSuccess onFailure:(void (^)(NSString *error_msg))onFailure {
+    
+}
+
+- (void)turnOffSoundWithSuccess:(void (^)())onSuccess onFailure:(void (^)(NSString *error_msg))onFailure {
+    
+}
+
+- (void)turnOnBadgeWithSuccess:(void (^)())onSuccess onFailure:(void (^)(NSString *error_msg))onFailure {
+    
+}
+
+- (void)turnOffBadgeWithSuccess:(void (^)())onSuccess onFailure:(void (^)(NSString *error_msg))onFailure {
+    
+}
+
+- (void)turnOnNotificationWithSuccess:(void (^)())onSuccess onFailure:(void (^)(NSString *error_msg))onFailure {
+    
+}
+
+- (void)turnOffNotificationWithSuccess:(void (^)())onSuccess onFailure:(void (^)(NSString *error_msg))onFailure {
+    
 }
 
 #pragma mark - Private
@@ -459,6 +452,10 @@ NSString *const GET_MSISDN_FAIL         = @"Only Truemove mobile network.";
                         }
                         
                         NSString *msisdn = [[appData objectForKey:@"data"] objectForKey:@"msisdn"];
+                        
+                        // Save msisdn
+//                        [EggMobilePushNotificationNSUserDefaultsManager setMsisdn:msisdn];
+                        
                         onSuccess(msisdn);
                     }
                     else { // Something went wrong.
@@ -490,17 +487,18 @@ NSString *const GET_MSISDN_FAIL         = @"Only Truemove mobile network.";
     [task resume];
 }
 
-- (void)parseDataForSubscribeWithDict:(NSDictionary *)dict {
+- (void)parseDataForSubscribeWithDict:(NSDictionary *)dict onSuccess:(void (^)())onSuccess onFailure:(void (^)(NSString *error_msg))onFailure {
     @try {
         int status_code = [[[dict objectForKey:@"status"] objectForKey:@"code"] intValue];
         if (status_code == 200) { // Subscribe success
+            // Save subscribed success already.
+//            [EggMobilePushNotificationNSUserDefaultsManager setSubscribed:YES];
+            
             if (self.isDebug) {
                 NSLog(@"%@ Subscribe success", NSLogPrefix);
             }
             
-            if ([self.delegate respondsToSelector:@selector(didSubscribeSuccess)]) {
-                [self.delegate didSubscribeSuccess];
-            }
+            onSuccess();
         }
         else { // Something went wrong. So, get error msg from API.
             NSString *error_msg = [[dict objectForKey:@"error"] objectForKey:@"msg"];
@@ -508,9 +506,7 @@ NSString *const GET_MSISDN_FAIL         = @"Only Truemove mobile network.";
                 NSLog(@"%@ Error = %@", NSLogPrefix, error_msg);
             }
             
-            if ([self.delegate respondsToSelector:@selector(didSubscribeFailWithErrorMessage:)]) {
-                [self.delegate didSubscribeFailWithErrorMessage:error_msg];
-            }
+            onFailure(error_msg);
         }
     }
     @catch (NSException *exception) {
@@ -518,13 +514,11 @@ NSString *const GET_MSISDN_FAIL         = @"Only Truemove mobile network.";
             NSLog(@"%@ Error = %@", NSLogPrefix, exception.description);
         }
         
-        if ([self.delegate respondsToSelector:@selector(didSubscribeFailWithErrorMessage:)]) {
-            [self.delegate didSubscribeFailWithErrorMessage:DefaultErrorMsg];
-        }
+        onFailure(DefaultErrorMsg);
     }
 }
 
-- (void)parseDataForUnsubscribeWithDict:(NSDictionary *)dict {
+- (void)parseDataForUnsubscribeWithDict:(NSDictionary *)dict onSuccess:(void (^)())onSuccess onFailure:(void (^)(NSString *error_msg))onFailure {
     @try {
         int status_code = [[[dict objectForKey:@"status"] objectForKey:@"code"] intValue];
         if (status_code == 200) { // Unsubscribe success
@@ -532,9 +526,7 @@ NSString *const GET_MSISDN_FAIL         = @"Only Truemove mobile network.";
                 NSLog(@"%@ Unsubscribe success", NSLogPrefix);
             }
             
-            if ([self.delegate respondsToSelector:@selector(didUnsubscribeSuccess)]) {
-                [self.delegate didUnsubscribeSuccess];
-            }
+            onSuccess();
         }
         else { // Something went wrong. So, get error msg from API.
             NSString *error_msg = [[dict objectForKey:@"error"] objectForKey:@"msg"];
@@ -542,9 +534,7 @@ NSString *const GET_MSISDN_FAIL         = @"Only Truemove mobile network.";
                 NSLog(@"%@ Error = %@", NSLogPrefix, error_msg);
             }
             
-            if ([self.delegate respondsToSelector:@selector(didUnsubscribeFailWithErrorMessage:)]) {
-                [self.delegate didUnsubscribeFailWithErrorMessage:error_msg];
-            }
+            onFailure(error_msg);
         }
     }
     @catch (NSException *exception) {
@@ -552,13 +542,11 @@ NSString *const GET_MSISDN_FAIL         = @"Only Truemove mobile network.";
             NSLog(@"%@ Error = %@", NSLogPrefix, exception.description);
         }
         
-        if ([self.delegate respondsToSelector:@selector(didUnsubscribeFailWithErrorMessage:)]) {
-            [self.delegate didUnsubscribeFailWithErrorMessage:DefaultErrorMsg];
-        }
+        onFailure(DefaultErrorMsg);
     }
 }
 
-- (void)parseDataForAcceptNotificationWithDict:(NSDictionary *)dict {
+- (void)parseDataForAcceptNotificationWithDict:(NSDictionary *)dict onSuccess:(void (^)())onSuccess onFailure:(void (^)(NSString *error_msg))onFailure {
     @try {
         int status_code = [[[dict objectForKey:@"status"] objectForKey:@"code"] intValue];
         if (status_code == 200) { // Accept notification success
@@ -566,9 +554,7 @@ NSString *const GET_MSISDN_FAIL         = @"Only Truemove mobile network.";
                 NSLog(@"%@ Accept notification success", NSLogPrefix);
             }
             
-            if ([self.delegate respondsToSelector:@selector(didAcceptNotificationSuccess)]) {
-                [self.delegate didAcceptNotificationSuccess];
-            }
+            onSuccess();
         }
         else { // Something went wrong. So, get error msg from API.
             NSString *error_msg = [[dict objectForKey:@"error"] objectForKey:@"msg"];
@@ -576,9 +562,7 @@ NSString *const GET_MSISDN_FAIL         = @"Only Truemove mobile network.";
                 NSLog(@"%@ Error = %@", NSLogPrefix, error_msg);
             }
             
-            if ([self.delegate respondsToSelector:@selector(didAcceptNotificationFailWithErrorMessage:)]) {
-                [self.delegate didAcceptNotificationFailWithErrorMessage:error_msg];
-            }
+            onFailure(error_msg);
         }
     }
     @catch (NSException *exception) {
@@ -586,9 +570,7 @@ NSString *const GET_MSISDN_FAIL         = @"Only Truemove mobile network.";
             NSLog(@"%@ Error = %@", NSLogPrefix, exception.description);
         }
         
-        if ([self.delegate respondsToSelector:@selector(didAcceptNotificationFailWithErrorMessage:)]) {
-            [self.delegate didAcceptNotificationFailWithErrorMessage:DefaultErrorMsg];
-        }
+        onFailure(DefaultErrorMsg);
     }
 }
 
@@ -601,19 +583,13 @@ NSString *const GET_MSISDN_FAIL         = @"Only Truemove mobile network.";
 #pragma mark - UIAlertView Delegate
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
     if (buttonIndex == 0) {
-        if ([self.delegate respondsToSelector:@selector(didClickFirstButtonForAlertViewTag:)]) {
-            [self.delegate didClickFirstButtonForAlertViewTag:alertView.tag];
-        }
+        
     }
     else if (buttonIndex == 1) {
-        if ([self.delegate respondsToSelector:@selector(didClickSecondButtonForAlertViewTag:)]) {
-            [self.delegate didClickSecondButtonForAlertViewTag:alertView.tag];
-        }
+        
     }
     else if (buttonIndex == 2) {
-        if ([self.delegate respondsToSelector:@selector(didClickThirdButtonForAlertViewTag:)]) {
-            [self.delegate didClickThirdButtonForAlertViewTag:alertView.tag];
-        }
+        
     }
 }
 

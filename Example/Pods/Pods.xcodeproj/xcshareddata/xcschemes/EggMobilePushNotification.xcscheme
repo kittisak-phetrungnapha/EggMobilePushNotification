@@ -14,7 +14,7 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = 'primary'
-               BlueprintIdentifier = '59C120314567D7AA4F184CC8'
+               BlueprintIdentifier = 'FEECFC63BD8E323EC5EA8A7E'
                BlueprintName = 'EggMobilePushNotification'
                ReferencedContainer = 'container:Pods.xcodeproj'
                BuildableName = 'EggMobilePushNotification.framework'>

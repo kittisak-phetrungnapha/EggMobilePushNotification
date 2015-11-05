@@ -8,19 +8,15 @@
 
 #import "EggMobilePushNotificationAppDelegate.h"
 
-@interface EggMobilePushNotificationAppDelegate() <EggMobilePushNotificationManagerDelegate>
-
-@end
-
 @implementation EggMobilePushNotificationAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
+    [application setApplicationIconBadgeNumber:0];
     
-    [EggMobilePushNotificationManager sharedInstance].delegate = self;
     [EggMobilePushNotificationManager sharedInstance].isDebug = YES; // Default debug is NO.
-    [EggMobilePushNotificationManager sharedInstance].app_id = @"2";
+    [EggMobilePushNotificationManager sharedInstance].app_id = @"11";
     [EggMobilePushNotificationManager registerRemoteNotification];
     
     return YES;
@@ -28,7 +24,11 @@
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
     [[EggMobilePushNotificationManager sharedInstance] setCleanDeviceTokenForData:deviceToken];
-    [[EggMobilePushNotificationManager sharedInstance] subscribeForRefId:@"ref_id_test" pushAlert:PushAlertTypeAlert pushSound:PushSoundTypeSound pushBadge:PushBadgeTypeBadge];
+    [[EggMobilePushNotificationManager sharedInstance] subscribeOnSuccess:^{
+        NSLog(@"Callback success");
+    } onFailure:^(NSString *error_msg) {
+        NSLog(@"Callback fail = %@", error_msg);
+    }];
 }
 
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
@@ -60,31 +60,6 @@
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
-}
-
-#pragma mark - EggMobilePushNotificationManager Delegate
-- (void)didSubscribeSuccess {
-    
-}
-
-- (void)didSubscribeFailWithErrorMessage:(NSString *)error_msg {
-    
-}
-
-- (void)didUnsubscribeSuccess {
-    
-}
-
-- (void)didUnsubscribeFailWithErrorMessage:(NSString *)error_msg {
-    
-}
-
-- (void)didAcceptNotificationSuccess {
-    
-}
-
-- (void)didAcceptNotificationFailWithErrorMessage:(NSString *)error_msg {
-    
 }
 
 @end

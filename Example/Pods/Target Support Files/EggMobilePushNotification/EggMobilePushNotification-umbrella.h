@@ -1,6 +1,7 @@
 #import <UIKit/UIKit.h>
 
 #import "EggMobilePushNotification.h"
+#import "EggMobilePushNotificationNSUserDefaultsManager.h"
 #import "EggMobilePushNotificationManager.h"
 
 FOUNDATION_EXPORT double EggMobilePushNotificationVersionNumber;

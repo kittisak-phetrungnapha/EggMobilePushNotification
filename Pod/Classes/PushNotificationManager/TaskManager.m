@@ -32,7 +32,7 @@ NSString *const DefaultErrorMessage         = @"The unknown error is occured.";
 {
     if (self.isDebug) {
         NSLog(@"TaskManager: Url request = %@", self.request.URL.absoluteString);
-        NSLog(@"TaskManager: Parameter = %@", self.request.HTTPBody.description);
+        NSLog(@"TaskManager: Parameter = %@", [[NSString alloc] initWithData:self.request.HTTPBody encoding:NSUTF8StringEncoding]);
         NSLog(@"TaskManager: Method = %@", self.request.HTTPMethod);
     }
     

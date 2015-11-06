@@ -9,6 +9,7 @@
 #import "EggMobilePushNotificationManager.h"
 #import "EggMobilePushNotificationNSUserDefaultsManager.h"
 #import "TaskManager.h"
+#import "ResponseObject.h"
 
 // API
 NSString *const MAIN_API_ANC            = @"http://api-anc.eggdigital.com";
@@ -165,11 +166,13 @@ NSString *const GET_MSISDN_FAIL         = @"Only Truemove mobile network.";
                         }
                         
                         // Parse data
-                        [self parseDataForSubscribeWithDict:appData onSuccess:^{
+                        ResponseObject *ro = [self parseDataForSubscribeWithDict:appData];
+                        if (ro.isSuccess) {
                             onSuccess();
-                        } onFailure:^(NSString *error_msg) {
-                            onFailure(error_msg);
-                        }];
+                        }
+                        else {
+                            onFailure(ro.error_msg);
+                        }
                     }
                     else { // Fail
                         if (self.isDebug) {
@@ -247,11 +250,13 @@ NSString *const GET_MSISDN_FAIL         = @"Only Truemove mobile network.";
                     }
                     
                     // Parse data
-                    [self parseDataForUnsubscribeWithDict:appData onSuccess:^{
+                    ResponseObject *ro = [self parseDataForUnsubscribeWithDict:appData];
+                    if (ro.isSuccess) {
                         onSuccess();
-                    } onFailure:^(NSString *error_msg) {
-                        onFailure(error_msg);
-                    }];
+                    }
+                    else {
+                        onFailure(ro.error_msg);
+                    }
                 }
                 else { // Fail
                     if (self.isDebug) {
@@ -325,11 +330,13 @@ NSString *const GET_MSISDN_FAIL         = @"Only Truemove mobile network.";
                     }
                     
                     // Parse data
-                    [self parseDataForAcceptNotificationWithDict:appData onSuccess:^{
+                    ResponseObject *ro = [self parseDataForAcceptNotificationWithDict:appData];
+                    if (ro.isSuccess) {
                         onSuccess();
-                    } onFailure:^(NSString *error_msg) {
-                        onFailure(error_msg);
-                    }];
+                    }
+                    else {
+                        onFailure(ro.error_msg);
+                    }
                 }
                 else { // Fail
                     if (self.isDebug) {
@@ -545,18 +552,23 @@ NSString *const GET_MSISDN_FAIL         = @"Only Truemove mobile network.";
     TaskManager *task = [[TaskManager alloc] initWithRequest:request isDebug:self.isDebug];
     [task performTaskWithCompletionHandlerOnSuccess:^(NSDictionary *responseDict) {
         
-        [self parseDataForSubscribeWithDict:responseDict onSuccess:^{
+        // Parse data
+        ResponseObject *ro = [self parseDataForSubscribeWithDict:responseDict];
+        if (ro.isSuccess) {
             onSuccess();
-        } onFailure:^(NSString *error_msg) {
-            onFailure(error_msg);
-        }];
+        }
+        else {
+            onFailure(ro.error_msg);
+        }
         
     } onFailure:^(NSString *error_msg) {
         onFailure(error_msg);
     }];
 }
 
-- (void)parseDataForSubscribeWithDict:(NSDictionary *)dict onSuccess:(void (^)())onSuccess onFailure:(void (^)(NSString *error_msg))onFailure {
+- (ResponseObject *)parseDataForSubscribeWithDict:(NSDictionary *)dict {
+    ResponseObject *ro = [[ResponseObject alloc] init];
+    
     @try {
         int status_code = [[[dict objectForKey:@"status"] objectForKey:@"code"] intValue];
         if (status_code == 200) { // Subscribe success
@@ -567,7 +579,8 @@ NSString *const GET_MSISDN_FAIL         = @"Only Truemove mobile network.";
                 NSLog(@"%@ Subscribe success", NSLogPrefix);
             }
             
-            onSuccess();
+            ro.isSuccess = YES;
+            ro.error_msg = @"";
         }
         else { // Something went wrong. So, get error msg from API.
             NSString *error_msg = [[dict objectForKey:@"error"] objectForKey:@"msg"];
@@ -575,7 +588,8 @@ NSString *const GET_MSISDN_FAIL         = @"Only Truemove mobile network.";
                 NSLog(@"%@ Error = %@", NSLogPrefix, error_msg);
             }
             
-            onFailure(error_msg);
+            ro.isSuccess = NO;
+            ro.error_msg = error_msg;
         }
     }
     @catch (NSException *exception) {
@@ -583,11 +597,16 @@ NSString *const GET_MSISDN_FAIL         = @"Only Truemove mobile network.";
             NSLog(@"%@ Error = %@", NSLogPrefix, exception.description);
         }
         
-        onFailure(DefaultErrorMsg);
+        ro.isSuccess = NO;
+        ro.error_msg = DefaultErrorMsg;
     }
+    
+    return ro;
 }
 
-- (void)parseDataForUnsubscribeWithDict:(NSDictionary *)dict onSuccess:(void (^)())onSuccess onFailure:(void (^)(NSString *error_msg))onFailure {
+- (ResponseObject *)parseDataForUnsubscribeWithDict:(NSDictionary *)dict {
+    ResponseObject *ro = [[ResponseObject alloc] init];
+    
     @try {
         int status_code = [[[dict objectForKey:@"status"] objectForKey:@"code"] intValue];
         if (status_code == 200) { // Unsubscribe success
@@ -595,7 +614,8 @@ NSString *const GET_MSISDN_FAIL         = @"Only Truemove mobile network.";
                 NSLog(@"%@ Unsubscribe success", NSLogPrefix);
             }
             
-            onSuccess();
+            ro.isSuccess = YES;
+            ro.error_msg = @"";
         }
         else { // Something went wrong. So, get error msg from API.
             NSString *error_msg = [[dict objectForKey:@"error"] objectForKey:@"msg"];
@@ -603,7 +623,8 @@ NSString *const GET_MSISDN_FAIL         = @"Only Truemove mobile network.";
                 NSLog(@"%@ Error = %@", NSLogPrefix, error_msg);
             }
             
-            onFailure(error_msg);
+            ro.isSuccess = NO;
+            ro.error_msg = error_msg;
         }
     }
     @catch (NSException *exception) {
@@ -611,11 +632,16 @@ NSString *const GET_MSISDN_FAIL         = @"Only Truemove mobile network.";
             NSLog(@"%@ Error = %@", NSLogPrefix, exception.description);
         }
         
-        onFailure(DefaultErrorMsg);
+        ro.isSuccess = NO;
+        ro.error_msg = DefaultErrorMsg;
     }
+    
+    return ro;
 }
 
-- (void)parseDataForAcceptNotificationWithDict:(NSDictionary *)dict onSuccess:(void (^)())onSuccess onFailure:(void (^)(NSString *error_msg))onFailure {
+- (ResponseObject *)parseDataForAcceptNotificationWithDict:(NSDictionary *)dict {
+    ResponseObject *ro = [[ResponseObject alloc] init];
+    
     @try {
         int status_code = [[[dict objectForKey:@"status"] objectForKey:@"code"] intValue];
         if (status_code == 200) { // Accept notification success
@@ -623,7 +649,8 @@ NSString *const GET_MSISDN_FAIL         = @"Only Truemove mobile network.";
                 NSLog(@"%@ Accept notification success", NSLogPrefix);
             }
             
-            onSuccess();
+            ro.isSuccess = YES;
+            ro.error_msg = @"";
         }
         else { // Something went wrong. So, get error msg from API.
             NSString *error_msg = [[dict objectForKey:@"error"] objectForKey:@"msg"];
@@ -631,7 +658,8 @@ NSString *const GET_MSISDN_FAIL         = @"Only Truemove mobile network.";
                 NSLog(@"%@ Error = %@", NSLogPrefix, error_msg);
             }
             
-            onFailure(error_msg);
+            ro.isSuccess = NO;
+            ro.error_msg = error_msg;
         }
     }
     @catch (NSException *exception) {
@@ -639,8 +667,11 @@ NSString *const GET_MSISDN_FAIL         = @"Only Truemove mobile network.";
             NSLog(@"%@ Error = %@", NSLogPrefix, exception.description);
         }
         
-        onFailure(DefaultErrorMsg);
+        ro.isSuccess = NO;
+        ro.error_msg = DefaultErrorMsg;
     }
+    
+    return ro;
 }
 
 #pragma mark - NSBundle Strings

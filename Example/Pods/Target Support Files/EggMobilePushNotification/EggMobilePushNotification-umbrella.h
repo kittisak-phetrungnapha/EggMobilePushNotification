@@ -3,6 +3,7 @@
 #import "EggMobilePushNotification.h"
 #import "EggMobilePushNotificationNSUserDefaultsManager.h"
 #import "EggMobilePushNotificationManager.h"
+#import "ResponseObject.h"
 #import "TaskManager.h"
 
 FOUNDATION_EXPORT double EggMobilePushNotificationVersionNumber;

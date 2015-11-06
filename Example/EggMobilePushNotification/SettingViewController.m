@@ -28,10 +28,18 @@
 - (IBAction)notiSwAction:(id)sender {
     UISwitch *sw = (UISwitch *)sender;
     
+    [self.tableView beginUpdates];
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
+    [self.tableView endUpdates];
+    
     [[EggMobilePushNotificationManager sharedInstance] setTurnOnNotification:sw.isOn onSuccess:^{
         NSLog(@"Change noti state success.");
     } onFailure:^(NSString *error_msg) {
         [sw setOn:!sw.isOn animated:YES];
+        
+        [self.tableView beginUpdates];
+        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
+        [self.tableView endUpdates];
     }];
 }
 
@@ -53,6 +61,16 @@
     } onFailure:^(NSString *error_msg) {
         [sw setOn:!sw.isOn animated:YES];
     }];
+}
+
+#pragma mark - UITableViewDataSource
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    if (self.notiSw.isOn) {
+        return 3;
+    }
+    else {
+        return 1;
+    }
 }
 
 @end

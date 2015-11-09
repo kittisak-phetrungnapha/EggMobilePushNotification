@@ -8,7 +8,8 @@
 
 #import "TaskManager.h"
 
-NSString *const DefaultErrorMessage         = @"The unknown error is occured.";
+NSString *const NSLogPrefixTaskClass                 = @"TaskManager log:";
+NSString *const DefaultErrorMessage                  = @"The unknown error is occured.";
 
 @interface TaskManager ()
 
@@ -31,9 +32,9 @@ NSString *const DefaultErrorMessage         = @"The unknown error is occured.";
 - (void)performTaskWithCompletionHandlerOnSuccess:(void (^)(NSDictionary *responseDict))onSuccess onFailure:(void (^)(NSString *error_msg))onFailure
 {
     if (self.isDebug) {
-        NSLog(@"TaskManager: Url request = %@", self.request.URL.absoluteString);
-        NSLog(@"TaskManager: Parameter = %@", [[NSString alloc] initWithData:self.request.HTTPBody encoding:NSUTF8StringEncoding]);
-        NSLog(@"TaskManager: Method = %@", self.request.HTTPMethod);
+        NSLog(@"%@ Url request = %@", NSLogPrefixTaskClass, self.request.URL.absoluteString);
+        NSLog(@"%@ Parameter = %@", NSLogPrefixTaskClass, [[NSString alloc] initWithData:self.request.HTTPBody encoding:NSUTF8StringEncoding]);
+        NSLog(@"%@ Method = %@", NSLogPrefixTaskClass, self.request.HTTPMethod);
     }
     
     NSURLSession *session = [NSURLSession sharedSession];
@@ -46,7 +47,7 @@ NSString *const DefaultErrorMessage         = @"The unknown error is occured.";
                 // Check response from server.
                 if (appData == nil) { // Invalid data
                     if (self.isDebug) {
-                        NSLog(@"TaskManager: Error = %@", DefaultErrorMessage);
+                        NSLog(@"%@ Error = %@", NSLogPrefixTaskClass, DefaultErrorMessage);
                     }
                     
                     dispatch_async(dispatch_get_main_queue(), ^{
@@ -56,7 +57,7 @@ NSString *const DefaultErrorMessage         = @"The unknown error is occured.";
                 }
                 
                 if (self.isDebug) {
-                    NSLog(@"TaskManager: Perform task success");
+                    NSLog(@"%@ JSON Success = %@", NSLogPrefixTaskClass, appData);
                 }
                 dispatch_async(dispatch_get_main_queue(), ^{
                     onSuccess(appData);
@@ -64,7 +65,7 @@ NSString *const DefaultErrorMessage         = @"The unknown error is occured.";
             }
             else { // Fail
                 if (self.isDebug) {
-                    NSLog(@"TaskManager: Error = %@", [error.userInfo objectForKey:@"NSLocalizedDescription"]);
+                    NSLog(@"%@ Error = %@", NSLogPrefixTaskClass, [error.userInfo objectForKey:@"NSLocalizedDescription"]);
                 }
                 
                 dispatch_async(dispatch_get_main_queue(), ^{
@@ -74,7 +75,7 @@ NSString *const DefaultErrorMessage         = @"The unknown error is occured.";
         }
         @catch (NSException *exception) {
             if (self.isDebug) {
-                NSLog(@"TaskManager: Error = %@", exception.description);
+                NSLog(@"%@ Error = %@", NSLogPrefixTaskClass, exception.description);
             }
             
             dispatch_async(dispatch_get_main_queue(), ^{

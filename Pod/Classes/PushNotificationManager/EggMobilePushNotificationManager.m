@@ -128,80 +128,48 @@ NSString *const NoConnection            = @"The Internet connection appears to b
         return ;
     }
     
-    [self getMsisdnOnSuccess:^(NSString *msisdn) {
-        // Initialize apiURL, and create request object.
-        NSURL *apiURL = [NSURL URLWithString:API_SUBSCRIPTION];
-        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:apiURL];
-        [request setHTTPMethod:@"POST"];
-        
-        // Add parameters
-        UIDevice *device = [UIDevice currentDevice];
-        NSString *postString = [NSString stringWithFormat:@"device_token=%@&device_identifier=%@&device_type=ios&device_version=%@&app_id=%@&app_version=%@&device_model=%@&ref_id=%@&push_alert=%d&push_sound=%d&push_badge=%d", self.deviceToken, device.identifierForVendor.UUIDString, device.systemVersion, self.app_id, [self currentVersion], device.localizedModel, msisdn, push_alert, push_sound, push_badge];
-        [request setHTTPBody:[postString dataUsingEncoding:NSUTF8StringEncoding]];
-        
-        if (self.isDebug) {
-            NSLog(@"%@ Url request = %@", NSLogPrefix, request.URL.absoluteString);
-            NSLog(@"%@ Parameter = %@", NSLogPrefix, postString);
-            NSLog(@"%@ Method = %@", NSLogPrefix, request.HTTPMethod);
-        }
-        
-        // Create task for download.
-        NSURLSession *session = [NSURLSession sharedSession];
-        NSURLSessionDataTask *task = [session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+    // Check network status before perform task.
+    EPNetworkStatus networkStatus = [ConnectionManager checkNetworkStatus];
+    switch (networkStatus) {
+        case EPReachableViaWiFi: // Wifi
+        {
+            // Use msisdn from local cache for being the ref id.
+            NSString *msisdn = [EggMobilePushNotificationNSUserDefaultsManager getMsisdn];
+            if (msisdn == nil) { // Ignore subscribe
+                onFailure(GET_MSISDN_FAIL);
+            }
+            else {
+                [self performSubscribeTaskForRefId:msisdn pushAlert:push_alert pushSound:push_sound pushBadge:push_badge onSuccess:^{
+                    onSuccess();
+                } onFailure:^(NSString *error_msg) {
+                    onFailure(error_msg);
+                }];
+            }
             
-            dispatch_async(dispatch_get_main_queue(), ^{
-                @try {
-                    if (error == nil && data.length > 0) { // Success
-                        NSDictionary *appData = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
-                        if (self.isDebug) {
-                            NSLog(@"%@ Subscribe JSON result = %@", NSLogPrefix, appData);
-                        }
-                        
-                        // Check response from server.
-                        if (appData == nil) { // Invalid data
-                            if (self.isDebug) {
-                                NSLog(@"%@ Error = %@", NSLogPrefix, DefaultErrorMsg);
-                            }
-                            onFailure(DefaultErrorMsg);
-                            
-                            return ;
-                        }
-                        
-                        // Parse data
-                        ResponseObject *ro = [self parseDataForSubscribeWithDict:appData];
-                        if (ro.isSuccess) {
-                            onSuccess();
-                        }
-                        else {
-                            onFailure(ro.error_msg);
-                        }
-                    }
-                    else { // Fail
-                        if (self.isDebug) {
-                            NSLog(@"%@ Error = %@", NSLogPrefix, [error.userInfo objectForKey:@"NSLocalizedDescription"]);
-                        }
-                        
-                        onFailure([error.userInfo objectForKey:@"NSLocalizedDescription"]);
-                    }
-                }
-                @catch (NSException *exception) {
-                    if (self.isDebug) {
-                        NSLog(@"%@ Error = %@", NSLogPrefix, exception.description);
-                    }
-                    
-                    onFailure(DefaultErrorMsg);
-                }
-            });
-        }];
-        // Start task
-        [task resume];
-        
-    } onFailure:^(NSString *error_msg) {
-        onFailure(error_msg);
-    }];
+            break ;
+        }
+            
+        case EPReachableViaWWAN: // Cellular
+        {
+            [self getMsisdnOnSuccess:^(NSString *msisdn) {
+                [self performSubscribeTaskForRefId:msisdn pushAlert:push_alert pushSound:push_sound pushBadge:push_badge onSuccess:^{
+                    onSuccess();
+                } onFailure:^(NSString *error_msg) {
+                    onFailure(error_msg);
+                }];
+                
+            } onFailure:^(NSString *error_msg) {
+                onFailure(error_msg);
+            }];
+            
+            break ;
+        }
+            
+        default: onFailure(NoConnection);
+    }
 }
 
-- (void)unsubscribeOnSuccess:(void (^)())onSuccess onFailure:(void (^)(NSString *error_msg))onFailure {
+- (void)unSubscribeOnSuccess:(void (^)())onSuccess onFailure:(void (^)(NSString *error_msg))onFailure {
     // Check app id.
     if (!self.app_id) {
         if (self.isDebug) {
@@ -356,6 +324,35 @@ NSString *const NoConnection            = @"The Internet connection appears to b
 }
 
 #pragma mark - Private
+- (void)performSubscribeTaskForRefId:(NSString *)refId pushAlert:(PushAlertType)pushAlert pushSound:(PushSoundType)pushSound pushBadge:(PushBadgeType)pushBadge onSuccess:(void (^)())onSuccess onFailure:(void (^)(NSString *error_msg))onFailure
+{
+    // Initialize apiURL, and create request object.
+    NSURL *apiURL = [NSURL URLWithString:API_SUBSCRIPTION];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:apiURL];
+    [request setHTTPMethod:@"POST"];
+    
+    // Add parameters
+    UIDevice *device = [UIDevice currentDevice];
+    NSString *postString = [NSString stringWithFormat:@"device_token=%@&device_identifier=%@&device_type=ios&device_version=%@&app_id=%@&app_version=%@&device_model=%@&ref_id=%@&push_alert=%d&push_sound=%d&push_badge=%d", self.deviceToken, device.identifierForVendor.UUIDString, device.systemVersion, self.app_id, [self currentVersion], device.localizedModel, refId, pushAlert, pushSound, pushBadge];
+    [request setHTTPBody:[postString dataUsingEncoding:NSUTF8StringEncoding]];
+    
+    // Create task for download.
+    TaskManager *task = [[TaskManager alloc] initWithRequest:request isDebug:self.isDebug];
+    [task performTaskWithCompletionHandlerOnSuccess:^(NSDictionary *responseDict) {
+        
+        // Parse data
+        ResponseObject *ro = [self parseDataForSubscribeWithDict:responseDict];
+        if (ro.isSuccess) {
+            onSuccess();
+        }
+        else {
+            onFailure(ro.error_msg);
+        }
+    } onFailure:^(NSString *error_msg) {
+        onFailure(error_msg);
+    }];
+}
+
 - (void)getMsisdnOnSuccess:(void (^)(NSString *msisdn))onSuccess onFailure:(void (^)(NSString *error_msg))onFailure
 {
     // Initialize apiURL, and create request object.
@@ -371,14 +368,19 @@ NSString *const NoConnection            = @"The Internet connection appears to b
             // Parse data
             int status_code = [[[responseDict objectForKey:@"header"] objectForKey:@"code"] intValue];
             if (status_code == 200) {
-                if (self.isDebug) {
-                    NSLog(@"%@ Get Msisdn success", NSLogPrefix);
-                }
-                
                 // Save msisdn
                 NSString *msisdn = [[responseDict objectForKey:@"data"] objectForKey:@"msisdn"];
-                [EggMobilePushNotificationNSUserDefaultsManager setMsisdn:msisdn];
-                onSuccess(msisdn);
+                if (!msisdn || [@"" isEqualToString:msisdn]) {
+                    onFailure(GET_MSISDN_FAIL);
+                }
+                else {
+                    if (self.isDebug) {
+                        NSLog(@"%@ Get Msisdn success = %@", NSLogPrefix, msisdn);
+                    }
+                    
+                    [EggMobilePushNotificationNSUserDefaultsManager setMsisdn:msisdn];
+                    onSuccess(msisdn);
+                }
             }
             else { // Something went wrong.
                 if (self.isDebug) {

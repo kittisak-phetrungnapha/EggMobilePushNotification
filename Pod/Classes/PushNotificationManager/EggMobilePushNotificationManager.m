@@ -26,6 +26,7 @@ NSString *const MissingAppId            = @"Missing app id.";
 NSString *const MissingNotiRef          = @"Missing noti ref.";
 NSString *const DefaultErrorMsg         = @"The unknown error is occured.";
 NSString *const GET_MSISDN_FAIL         = @"Only Truemove mobile network.";
+NSString *const NoConnection            = @"The Internet connection appears to be offline.";
 
 @interface EggMobilePushNotificationManager () <UIAlertViewDelegate>
 
@@ -362,74 +363,42 @@ NSString *const GET_MSISDN_FAIL         = @"Only Truemove mobile network.";
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:apiURL];
     [request setHTTPMethod:@"GET"];
     
-    if (self.isDebug) {
-        NSLog(@"%@ Url request = %@", NSLogPrefix, request.URL.absoluteString);
-        NSLog(@"%@ Method = %@", NSLogPrefix, request.HTTPMethod);
-    }
-    
     // Create task for download.
-    NSURLSession *session = [NSURLSession sharedSession];
-    NSURLSessionDataTask *task = [session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            @try {
-                if (error == nil && data.length > 0) { // Success
-                    NSDictionary *appData = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
-                    if (self.isDebug) {
-                        NSLog(@"%@ Get Msisdn JSON result = %@", NSLogPrefix, appData);
-                    }
-                    
-                    // Check response from server.
-                    if (appData == nil) { // Invalid data
-                        if (self.isDebug) {
-                            NSLog(@"%@ Error = %@", NSLogPrefix, DefaultErrorMsg);
-                        }
-                        onFailure(DefaultErrorMsg);
-                        
-                        return ;
-                    }
-                    
-                    // Parse data
-                    int status_code = [[[appData objectForKey:@"header"] objectForKey:@"code"] intValue];
-                    if (status_code == 200) {
-                        if (self.isDebug) {
-                            NSLog(@"%@ Get Msisdn success", NSLogPrefix);
-                        }
-                        
-                        NSString *msisdn = [[appData objectForKey:@"data"] objectForKey:@"msisdn"];
-                        
-                        // Save msisdn
-                        [EggMobilePushNotificationNSUserDefaultsManager setMsisdn:msisdn];
-                        
-                        onSuccess(msisdn);
-                    }
-                    else { // Something went wrong.
-                        if (self.isDebug) {
-                            NSLog(@"%@ Error = %@", NSLogPrefix, GET_MSISDN_FAIL);
-                        }
-                        
-                        onFailure(GET_MSISDN_FAIL);
-                    }
-                }
-                else { // Fail
-                    if (self.isDebug) {
-                        NSLog(@"%@ Error = %@", NSLogPrefix, [error.userInfo objectForKey:@"NSLocalizedDescription"]);
-                    }
-                    
-                    onFailure([error.userInfo objectForKey:@"NSLocalizedDescription"]);
-                }
-            }
-            @catch (NSException *exception) {
+    TaskManager *task = [[TaskManager alloc] initWithRequest:request isDebug:self.isDebug];
+    [task performTaskWithCompletionHandlerOnSuccess:^(NSDictionary *responseDict) {
+       
+        @try {
+            // Parse data
+            int status_code = [[[responseDict objectForKey:@"header"] objectForKey:@"code"] intValue];
+            if (status_code == 200) {
                 if (self.isDebug) {
-                    NSLog(@"%@ Error = %@", NSLogPrefix, exception.description);
+                    NSLog(@"%@ Get Msisdn success", NSLogPrefix);
                 }
                 
-                onFailure(DefaultErrorMsg);
+                // Save msisdn
+                NSString *msisdn = [[responseDict objectForKey:@"data"] objectForKey:@"msisdn"];
+                [EggMobilePushNotificationNSUserDefaultsManager setMsisdn:msisdn];
+                onSuccess(msisdn);
             }
-        });
+            else { // Something went wrong.
+                if (self.isDebug) {
+                    NSLog(@"%@ Error = %@", NSLogPrefix, GET_MSISDN_FAIL);
+                }
+                
+                onFailure(GET_MSISDN_FAIL);
+            }
+        }
+        @catch (NSException *exception) {
+            if (self.isDebug) {
+                NSLog(@"%@ Error = %@", NSLogPrefix, exception.description);
+            }
+            
+            onFailure(DefaultErrorMsg);
+        }
+        
+    } onFailure:^(NSString *error_msg) {
+        onFailure(error_msg);
     }];
-    // Start task
-    [task resume];
 }
 
 - (void)updateNotificationConfigForPushAlert:(PushAlertType)push_alert pushSound:(PushSoundType)push_sound pushBadge:(PushBadgeType)push_badge onSuccess:(void (^)())onSuccess onFailure:(void (^)(NSString *error_msg))onFailure

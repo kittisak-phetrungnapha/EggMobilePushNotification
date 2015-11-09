@@ -221,62 +221,21 @@ NSString *const GET_MSISDN_FAIL         = @"Only Truemove mobile network.";
     NSString *postString = [NSString stringWithFormat:@"device_identifier=%@&device_type=ios&app_id=%@", device.identifierForVendor.UUIDString, self.app_id];
     [request setHTTPBody:[postString dataUsingEncoding:NSUTF8StringEncoding]];
     
-    if (self.isDebug) {
-        NSLog(@"%@ Url request = %@", NSLogPrefix, request.URL.absoluteString);
-        NSLog(@"%@ Parameter = %@", NSLogPrefix, postString);
-        NSLog(@"%@ Method = %@", NSLogPrefix, request.HTTPMethod);
-    }
-    
     // Create task for download.
-    NSURLSession *session = [NSURLSession sharedSession];
-    NSURLSessionDataTask *task = [session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+    TaskManager *task = [[TaskManager alloc] initWithRequest:request isDebug:self.isDebug];
+    [task performTaskWithCompletionHandlerOnSuccess:^(NSDictionary *responseDict) {
         
-        dispatch_async(dispatch_get_main_queue(), ^{
-            @try {
-                if (error == nil && data.length > 0) { // Success
-                    NSDictionary *appData = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
-                    if (self.isDebug) {
-                        NSLog(@"%@ Unsubscribe JSON result = %@", NSLogPrefix, appData);
-                    }
-                    
-                    // Check response from server.
-                    if (appData == nil) { // Invalid data
-                        if (self.isDebug) {
-                            NSLog(@"%@ Error = %@", NSLogPrefix, DefaultErrorMsg);
-                        }
-                        onFailure(DefaultErrorMsg);
-                        
-                        return ;
-                    }
-                    
-                    // Parse data
-                    ResponseObject *ro = [self parseDataForUnsubscribeWithDict:appData];
-                    if (ro.isSuccess) {
-                        onSuccess();
-                    }
-                    else {
-                        onFailure(ro.error_msg);
-                    }
-                }
-                else { // Fail
-                    if (self.isDebug) {
-                        NSLog(@"%@ Error = %@", NSLogPrefix, [error.userInfo objectForKey:@"NSLocalizedDescription"]);
-                    }
-                    
-                    onFailure([error.userInfo objectForKey:@"NSLocalizedDescription"]);
-                }
-            }
-            @catch (NSException *exception) {
-                if (self.isDebug) {
-                    NSLog(@"%@ Error = %@", NSLogPrefix, exception.description);
-                }
-                
-                onFailure(DefaultErrorMsg);
-            }
-        });
+        // Parse data
+        ResponseObject *ro = [self parseDataForUnsubscribeWithDict:responseDict];
+        if (ro.isSuccess) {
+            onSuccess();
+        }
+        else {
+            onFailure(ro.error_msg);
+        }
+    } onFailure:^(NSString *error_msg) {
+        onFailure(error_msg);
     }];
-    // Start task
-    [task resume];
 }
 
 - (void)acceptNotificationForNotiRef:(NSString *)noti_ref onSuccess:(void (^)())onSuccess onFailure:(void (^)(NSString *error_msg))onFailure {
@@ -549,6 +508,7 @@ NSString *const GET_MSISDN_FAIL         = @"Only Truemove mobile network.";
     NSString *postString = [NSString stringWithFormat:@"device_token=%@&device_identifier=%@&device_type=ios&device_version=%@&app_id=%@&app_version=%@&device_model=%@&ref_id=%@&push_alert=%d&push_sound=%d&push_badge=%d", self.deviceToken, device.identifierForVendor.UUIDString, device.systemVersion, self.app_id, [self currentVersion], device.localizedModel, msisdn, push_alert, push_sound, push_badge];
     [request setHTTPBody:[postString dataUsingEncoding:NSUTF8StringEncoding]];
     
+    // Create task for download.
     TaskManager *task = [[TaskManager alloc] initWithRequest:request isDebug:self.isDebug];
     [task performTaskWithCompletionHandlerOnSuccess:^(NSDictionary *responseDict) {
         

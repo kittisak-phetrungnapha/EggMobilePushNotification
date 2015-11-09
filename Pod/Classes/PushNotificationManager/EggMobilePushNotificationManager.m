@@ -292,7 +292,7 @@ NSString *const NoConnection            = @"The Internet connection appears to b
 #pragma mark - Setting Notification
 - (void)setTurnOnNotification:(BOOL)isOn onSuccess:(void (^)())onSuccess onFailure:(void (^)(NSString *error_msg))onFailure
 {
-    [self updateNotificationConfigForPushAlert:isOn pushSound:[EggMobilePushNotificationNSUserDefaultsManager getSoundState] pushBadge:[EggMobilePushNotificationNSUserDefaultsManager getBadgeState] onSuccess:^{
+    [self subscribeForPushAlert:isOn pushSound:[EggMobilePushNotificationNSUserDefaultsManager getSoundState] pushBadge:[EggMobilePushNotificationNSUserDefaultsManager getBadgeState] onSuccess:^{
         
         [EggMobilePushNotificationNSUserDefaultsManager setNotificationState:isOn];
         onSuccess();
@@ -303,7 +303,7 @@ NSString *const NoConnection            = @"The Internet connection appears to b
 
 - (void)setTurnOnSound:(BOOL)isOn onSuccess:(void (^)())onSuccess onFailure:(void (^)(NSString *error_msg))onFailure
 {
-    [self updateNotificationConfigForPushAlert:[EggMobilePushNotificationNSUserDefaultsManager getNotificationState] pushSound:isOn pushBadge:[EggMobilePushNotificationNSUserDefaultsManager getBadgeState] onSuccess:^{
+    [self subscribeForPushAlert:[EggMobilePushNotificationNSUserDefaultsManager getNotificationState] pushSound:isOn pushBadge:[EggMobilePushNotificationNSUserDefaultsManager getBadgeState] onSuccess:^{
         
         [EggMobilePushNotificationNSUserDefaultsManager setSoundState:isOn];
         onSuccess();
@@ -314,7 +314,7 @@ NSString *const NoConnection            = @"The Internet connection appears to b
 
 - (void)setTurnOnBadge:(BOOL)isOn onSuccess:(void (^)())onSuccess onFailure:(void (^)(NSString *error_msg))onFailure
 {
-    [self updateNotificationConfigForPushAlert:[EggMobilePushNotificationNSUserDefaultsManager getNotificationState] pushSound:[EggMobilePushNotificationNSUserDefaultsManager getSoundState] pushBadge:isOn onSuccess:^{
+    [self subscribeForPushAlert:[EggMobilePushNotificationNSUserDefaultsManager getNotificationState] pushSound:[EggMobilePushNotificationNSUserDefaultsManager getSoundState] pushBadge:isOn onSuccess:^{
         
         [EggMobilePushNotificationNSUserDefaultsManager setBadgeState:isOn];
         onSuccess();
@@ -396,60 +396,6 @@ NSString *const NoConnection            = @"The Internet connection appears to b
             }
             
             onFailure(DefaultErrorMsg);
-        }
-        
-    } onFailure:^(NSString *error_msg) {
-        onFailure(error_msg);
-    }];
-}
-
-- (void)updateNotificationConfigForPushAlert:(PushAlertType)push_alert pushSound:(PushSoundType)push_sound pushBadge:(PushBadgeType)push_badge onSuccess:(void (^)())onSuccess onFailure:(void (^)(NSString *error_msg))onFailure
-{
-    // Check device token.
-    if (!self.deviceToken) {
-        if (self.isDebug) {
-            NSLog(@"%@ %@", NSLogPrefix, MissingDeviceToken);
-        }
-        
-        onFailure(MissingDeviceToken);
-        
-        return ;
-    }
-    
-    // Check app id.
-    if (!self.app_id) {
-        if (self.isDebug) {
-            NSLog(@"%@ %@", NSLogPrefix, MissingAppId);
-        }
-        
-        onFailure(MissingAppId);
-        
-        return ;
-    }
-    
-    // Initialize apiURL, and create request object.
-    NSURL *apiURL = [NSURL URLWithString:API_SUBSCRIPTION];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:apiURL];
-    [request setHTTPMethod:@"POST"];
-    
-    // Add parameters
-    UIDevice *device = [UIDevice currentDevice];
-    NSString *msisdn = [EggMobilePushNotificationNSUserDefaultsManager getMsisdn] ?: @"";
-    
-    NSString *postString = [NSString stringWithFormat:@"device_token=%@&device_identifier=%@&device_type=ios&device_version=%@&app_id=%@&app_version=%@&device_model=%@&ref_id=%@&push_alert=%d&push_sound=%d&push_badge=%d", self.deviceToken, device.identifierForVendor.UUIDString, device.systemVersion, self.app_id, [self currentVersion], device.localizedModel, msisdn, push_alert, push_sound, push_badge];
-    [request setHTTPBody:[postString dataUsingEncoding:NSUTF8StringEncoding]];
-    
-    // Create task for download.
-    TaskManager *task = [[TaskManager alloc] initWithRequest:request isDebug:self.isDebug];
-    [task performTaskWithCompletionHandlerOnSuccess:^(NSDictionary *responseDict) {
-        
-        // Parse data
-        ResponseObject *ro = [self parseDataForSubscribeWithDict:responseDict];
-        if (ro.isSuccess) {
-            onSuccess();
-        }
-        else {
-            onFailure(ro.error_msg);
         }
         
     } onFailure:^(NSString *error_msg) {

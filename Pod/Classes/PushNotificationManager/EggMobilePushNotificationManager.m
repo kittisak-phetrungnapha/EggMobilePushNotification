@@ -260,62 +260,21 @@ NSString *const GET_MSISDN_FAIL         = @"Only Truemove mobile network.";
     NSString *postString = [NSString stringWithFormat:@"device_identifier=%@&noti_ref=%@", device.identifierForVendor.UUIDString, noti_ref];
     [request setHTTPBody:[postString dataUsingEncoding:NSUTF8StringEncoding]];
     
-    if (self.isDebug) {
-        NSLog(@"%@ Url request = %@", NSLogPrefix, request.URL.absoluteString);
-        NSLog(@"%@ Parameter = %@", NSLogPrefix, postString);
-        NSLog(@"%@ Method = %@", NSLogPrefix, request.HTTPMethod);
-    }
-    
     // Create task for download.
-    NSURLSession *session = [NSURLSession sharedSession];
-    NSURLSessionDataTask *task = [session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            @try {
-                if (error == nil && data.length > 0) { // Success
-                    NSDictionary *appData = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
-                    if (self.isDebug) {
-                        NSLog(@"%@ Accept Notification JSON result = %@", NSLogPrefix, appData);
-                    }
-                    
-                    // Check response from server.
-                    if (appData == nil) { // Invalid data
-                        if (self.isDebug) {
-                            NSLog(@"%@ Error = %@", NSLogPrefix, DefaultErrorMsg);
-                        }
-                        onFailure(DefaultErrorMsg);
-                        
-                        return ;
-                    }
-                    
-                    // Parse data
-                    ResponseObject *ro = [self parseDataForAcceptNotificationWithDict:appData];
-                    if (ro.isSuccess) {
-                        onSuccess();
-                    }
-                    else {
-                        onFailure(ro.error_msg);
-                    }
-                }
-                else { // Fail
-                    if (self.isDebug) {
-                        NSLog(@"%@ Error = %@", NSLogPrefix, [error.userInfo objectForKey:@"NSLocalizedDescription"]);
-                    }
-                    
-                    onFailure([error.userInfo objectForKey:@"NSLocalizedDescription"]);
-                }
-            }
-            @catch (NSException *exception) {
-                if (self.isDebug) {
-                    NSLog(@"%@ Error = %@", NSLogPrefix, exception.description);
-                }
-                
-                onFailure(DefaultErrorMsg);
-            }
-        });
+    TaskManager *task = [[TaskManager alloc] initWithRequest:request isDebug:self.isDebug];
+    [task performTaskWithCompletionHandlerOnSuccess:^(NSDictionary *responseDict) {
+       
+        // Parse data
+        ResponseObject *ro = [self parseDataForAcceptNotificationWithDict:responseDict];
+        if (ro.isSuccess) {
+            onSuccess();
+        }
+        else {
+            onFailure(ro.error_msg);
+        }
+    } onFailure:^(NSString *error_msg) {
+        onFailure(error_msg);
     }];
-    // Start task
-    [task resume];
 }
 
 - (void)showAlertViewForDict:(NSDictionary *)dict viewControllerToPresent:(UIViewController *)vc tag:(NSInteger)tag {

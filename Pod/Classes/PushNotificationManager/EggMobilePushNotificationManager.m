@@ -10,6 +10,7 @@
 #import "EggMobilePushNotificationNSUserDefaultsManager.h"
 #import "TaskManager.h"
 #import "ResponseObject.h"
+#import "ConnectionManager.h"
 
 // API
 NSString *const MAIN_API_ANC            = @"http://api-anc.eggdigital.com";

@@ -98,7 +98,8 @@ NSString *const NoConnection            = @"The Internet connection appears to b
 }
 
 - (void)subscribeOnSuccess:(void (^)())onSuccess onFailure:(void (^)(NSString *))onFailure {
-    [self subscribeForPushAlert:PushAlertTypeAlert pushSound:PushSoundTypeSound pushBadge:PushBadgeTypeBadge onSuccess:^{
+    [self subscribeForPushAlert:[EggMobilePushNotificationNSUserDefaultsManager getNotificationState] pushSound:[EggMobilePushNotificationNSUserDefaultsManager getSoundState] pushBadge:[EggMobilePushNotificationNSUserDefaultsManager getBadgeState] onSuccess:^{
+        
         onSuccess();
     } onFailure:^(NSString *error_msg) {
         onFailure(error_msg);

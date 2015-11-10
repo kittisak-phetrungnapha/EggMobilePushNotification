@@ -16,7 +16,7 @@
     [application setApplicationIconBadgeNumber:0];
     
     [EggMobilePushNotificationManager sharedInstance].isDebug = YES; // Default debug is NO.
-    [EggMobilePushNotificationManager sharedInstance].app_id = @"11";
+    [EggMobilePushNotificationManager sharedInstance].app_id = @"5";
     [EggMobilePushNotificationManager registerRemoteNotification];
     
     return YES;

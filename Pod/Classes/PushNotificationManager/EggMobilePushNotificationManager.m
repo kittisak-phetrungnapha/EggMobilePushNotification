@@ -13,10 +13,11 @@
 #import "ConnectionManager.h"
 
 // API
-NSString *const MAIN_API_ANC            = @"http://api-anc.eggdigital.com";
-#define API_SUBSCRIPTION                [NSString stringWithFormat:@"%@/subscription", MAIN_API_ANC]
-#define API_UNSUBSCRIPTION              [NSString stringWithFormat:@"%@/subscription/unsubscribe", MAIN_API_ANC]
-#define API_ACCEPT_NOTIFICATION         [NSString stringWithFormat:@"%@/notificationlog/acceptNotification", MAIN_API_ANC]
+NSString *const MAIN_API_ANC            = @"http://api-truepush.eggdigital.com/api";
+NSString *const OTHER_API_ANC           = @"http://api-anc.eggdigital.com";
+#define API_SUBSCRIPTION                [NSString stringWithFormat:@"%@/subscription/ios", MAIN_API_ANC]
+#define API_UNSUBSCRIPTION              [NSString stringWithFormat:@"%@/unsubscription/ios", MAIN_API_ANC]
+#define API_ACCEPT_NOTIFICATION         [NSString stringWithFormat:@"%@/notificationlog/acceptNotification", OTHER_API_ANC]
 NSString *const GET_MSISDN_API          = @"http://www3.truecorp.co.th/api/services/get_header";
 
 // Message
@@ -82,7 +83,7 @@ NSString *const NoConnection            = @"The Internet connection appears to b
     }
 }
 
-#pragma mark - Public
+#pragma mark - Setter
 - (void)setCleanDeviceTokenForData:(NSData *)tokenData {
     NSString *token = [[tokenData description] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]];
     token = [token stringByReplacingOccurrencesOfString:@" " withString:@""];
@@ -97,6 +98,7 @@ NSString *const NoConnection            = @"The Internet connection appears to b
 //    [EggMobilePushNotificationNSUserDefaultsManager setDeviceToken:token];
 }
 
+#pragma mark - Subscribe
 - (void)subscribeOnSuccess:(void (^)())onSuccess onFailure:(void (^)(NSString *))onFailure {
     [self subscribeForPushAlert:[EggMobilePushNotificationNSUserDefaultsManager getNotificationState] pushSound:[EggMobilePushNotificationNSUserDefaultsManager getSoundState] pushBadge:[EggMobilePushNotificationNSUserDefaultsManager getBadgeState] onSuccess:^{
         
@@ -140,7 +142,7 @@ NSString *const NoConnection            = @"The Internet connection appears to b
                 onFailure(GET_MSISDN_FAIL);
             }
             else {
-                [self performSubscribeTaskForRefId:msisdn pushAlert:push_alert pushSound:push_sound pushBadge:push_badge onSuccess:^{
+                [self performSubscribeTaskForMsisdn:msisdn pushAlert:push_alert pushSound:push_sound pushBadge:push_badge onSuccess:^{
                     onSuccess();
                 } onFailure:^(NSString *error_msg) {
                     onFailure(error_msg);
@@ -153,7 +155,7 @@ NSString *const NoConnection            = @"The Internet connection appears to b
         case EPReachableViaWWAN: // Cellular
         {
             [self getMsisdnOnSuccess:^(NSString *msisdn) {
-                [self performSubscribeTaskForRefId:msisdn pushAlert:push_alert pushSound:push_sound pushBadge:push_badge onSuccess:^{
+                [self performSubscribeTaskForMsisdn:msisdn pushAlert:push_alert pushSound:push_sound pushBadge:push_badge onSuccess:^{
                     onSuccess();
                 } onFailure:^(NSString *error_msg) {
                     onFailure(error_msg);
@@ -170,162 +172,45 @@ NSString *const NoConnection            = @"The Internet connection appears to b
     }
 }
 
-- (void)unSubscribeOnSuccess:(void (^)())onSuccess onFailure:(void (^)(NSString *error_msg))onFailure {
-    // Check app id.
-    if (!self.app_id) {
-        if (self.isDebug) {
-            NSLog(@"%@ %@", NSLogPrefix, MissingAppId);
-        }
-        
-        onFailure(MissingAppId);
-        
-        return ;
-    }
+- (ResponseObject *)parseDataForSubscribeWithDict:(NSDictionary *)dict {
+    ResponseObject *ro = [[ResponseObject alloc] init];
     
-    // Initialize apiURL, and create request object.
-    NSURL *apiURL = [NSURL URLWithString:API_UNSUBSCRIPTION];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:apiURL];
-    [request setHTTPMethod:@"POST"];
-    
-    // Add parameters
-    UIDevice *device = [UIDevice currentDevice];
-    NSString *postString = [NSString stringWithFormat:@"device_identifier=%@&device_type=ios&app_id=%@", device.identifierForVendor.UUIDString, self.app_id];
-    [request setHTTPBody:[postString dataUsingEncoding:NSUTF8StringEncoding]];
-    
-    // Create task for download.
-    TaskManager *task = [[TaskManager alloc] initWithRequest:request isDebug:self.isDebug];
-    [task performTaskWithCompletionHandlerOnSuccess:^(NSDictionary *responseDict) {
-        
-        // Parse data
-        ResponseObject *ro = [self parseDataForUnsubscribeWithDict:responseDict];
-        if (ro.isSuccess) {
-            onSuccess();
-        }
-        else {
-            onFailure(ro.error_msg);
-        }
-    } onFailure:^(NSString *error_msg) {
-        onFailure(error_msg);
-    }];
-}
-
-- (void)acceptNotificationForNotiRef:(NSString *)noti_ref onSuccess:(void (^)())onSuccess onFailure:(void (^)(NSString *error_msg))onFailure {
-    // Check noti_ref
-    if (!noti_ref) {
-        if (self.isDebug) {
-            NSLog(@"%@ Error = %@", NSLogPrefix, MissingNotiRef);
-        }
-        
-        onFailure(MissingNotiRef);
-        
-        return ;
-    }
-    
-    // Initialize apiURL, and create request object.
-    NSURL *apiURL = [NSURL URLWithString:API_ACCEPT_NOTIFICATION];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:apiURL];
-    [request setHTTPMethod:@"POST"];
-    
-    // Add parameters
-    UIDevice *device = [UIDevice currentDevice];
-    NSString *postString = [NSString stringWithFormat:@"device_identifier=%@&noti_ref=%@", device.identifierForVendor.UUIDString, noti_ref];
-    [request setHTTPBody:[postString dataUsingEncoding:NSUTF8StringEncoding]];
-    
-    // Create task for download.
-    TaskManager *task = [[TaskManager alloc] initWithRequest:request isDebug:self.isDebug];
-    [task performTaskWithCompletionHandlerOnSuccess:^(NSDictionary *responseDict) {
-       
-        // Parse data
-        ResponseObject *ro = [self parseDataForAcceptNotificationWithDict:responseDict];
-        if (ro.isSuccess) {
-            onSuccess();
-        }
-        else {
-            onFailure(ro.error_msg);
-        }
-    } onFailure:^(NSString *error_msg) {
-        onFailure(error_msg);
-    }];
-}
-
-- (void)showAlertViewForDict:(NSDictionary *)dict viewControllerToPresent:(UIViewController *)vc tag:(NSInteger)tag {
-    if ([UIAlertController class]) {
-        // use UIAlertController
-        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Title" message:@"Message" preferredStyle:UIAlertControllerStyleAlert];
-        
-        UIAlertAction *alertFirstAction = [UIAlertAction actionWithTitle:@"First" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+    @try {
+        int status_code = [[[dict objectForKey:@"status"] objectForKey:@"code"] intValue];
+        if (status_code == 0) { // Subscribe success
+            // Save subscribed success already.
+//            [EggMobilePushNotificationNSUserDefaultsManager setSubscribed:YES];
             
-        }];
-        [alertController addAction:alertFirstAction];
-        
-        UIAlertAction *alertSecondAction = [UIAlertAction actionWithTitle:@"Second" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            if (self.isDebug) {
+                NSLog(@"%@ Subscribe success", NSLogPrefix);
+            }
             
-        }];
-        [alertController addAction:alertSecondAction];
-        
-//        UIAlertAction *alertThirdAction = [UIAlertAction actionWithTitle:@"Third" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-//            
-//        }];
-//        [alertController addAction:alertThirdAction];
-        
-        // Show alert controller
-        [vc presentViewController:alertController animated:YES completion:nil];
-    } else {
-        // use UIAlertView
-        UIAlertView *alertView = [[UIAlertView alloc] init];
-        alertView.title = @"Title";
-        alertView.message = @"Message";
-        alertView.delegate = self;
-        alertView.tag = tag;
-        
-        [alertView addButtonWithTitle:@"First"];
-        [alertView setCancelButtonIndex:0];
-        
-        [alertView addButtonWithTitle:@"Second"];
-        
-//        [alertView addButtonWithTitle:@"Third"];
-        
-        // Show alert view
-        [alertView show];
+            ro.isSuccess = YES;
+            ro.error_msg = @"";
+        }
+        else { // Something went wrong. So, get error msg from API.
+            NSString *error_msg = [[dict objectForKey:@"error"] objectForKey:@"msg"];
+            if (self.isDebug) {
+                NSLog(@"%@ Error = %@", NSLogPrefix, error_msg);
+            }
+            
+            ro.isSuccess = NO;
+            ro.error_msg = error_msg;
+        }
     }
-}
-
-#pragma mark - Setting Notification
-- (void)setTurnOnNotification:(BOOL)isOn onSuccess:(void (^)())onSuccess onFailure:(void (^)(NSString *error_msg))onFailure
-{
-    [self subscribeForPushAlert:isOn pushSound:[EggMobilePushNotificationNSUserDefaultsManager getSoundState] pushBadge:[EggMobilePushNotificationNSUserDefaultsManager getBadgeState] onSuccess:^{
+    @catch (NSException *exception) {
+        if (self.isDebug) {
+            NSLog(@"%@ Error = %@", NSLogPrefix, exception.description);
+        }
         
-        [EggMobilePushNotificationNSUserDefaultsManager setNotificationState:isOn];
-        onSuccess();
-    } onFailure:^(NSString *error_msg) {
-        onFailure(error_msg);
-    }];
+        ro.isSuccess = NO;
+        ro.error_msg = DefaultErrorMsg;
+    }
+    
+    return ro;
 }
 
-- (void)setTurnOnSound:(BOOL)isOn onSuccess:(void (^)())onSuccess onFailure:(void (^)(NSString *error_msg))onFailure
-{
-    [self subscribeForPushAlert:[EggMobilePushNotificationNSUserDefaultsManager getNotificationState] pushSound:isOn pushBadge:[EggMobilePushNotificationNSUserDefaultsManager getBadgeState] onSuccess:^{
-        
-        [EggMobilePushNotificationNSUserDefaultsManager setSoundState:isOn];
-        onSuccess();
-    } onFailure:^(NSString *error_msg) {
-        onFailure(error_msg);
-    }];
-}
-
-- (void)setTurnOnBadge:(BOOL)isOn onSuccess:(void (^)())onSuccess onFailure:(void (^)(NSString *error_msg))onFailure
-{
-    [self subscribeForPushAlert:[EggMobilePushNotificationNSUserDefaultsManager getNotificationState] pushSound:[EggMobilePushNotificationNSUserDefaultsManager getSoundState] pushBadge:isOn onSuccess:^{
-        
-        [EggMobilePushNotificationNSUserDefaultsManager setBadgeState:isOn];
-        onSuccess();
-    } onFailure:^(NSString *error_msg) {
-        onFailure(error_msg);
-    }];
-}
-
-#pragma mark - Private
-- (void)performSubscribeTaskForRefId:(NSString *)refId pushAlert:(PushAlertType)pushAlert pushSound:(PushSoundType)pushSound pushBadge:(PushBadgeType)pushBadge onSuccess:(void (^)())onSuccess onFailure:(void (^)(NSString *error_msg))onFailure
+- (void)performSubscribeTaskForMsisdn:(NSString *)msisdn pushAlert:(PushAlertType)pushAlert pushSound:(PushSoundType)pushSound pushBadge:(PushBadgeType)pushBadge onSuccess:(void (^)())onSuccess onFailure:(void (^)(NSString *error_msg))onFailure
 {
     // Initialize apiURL, and create request object.
     NSURL *apiURL = [NSURL URLWithString:API_SUBSCRIPTION];
@@ -334,7 +219,7 @@ NSString *const NoConnection            = @"The Internet connection appears to b
     
     // Add parameters
     UIDevice *device = [UIDevice currentDevice];
-    NSString *postString = [NSString stringWithFormat:@"device_token=%@&device_identifier=%@&device_type=ios&device_version=%@&app_id=%@&app_version=%@&device_model=%@&ref_id=%@&push_alert=%d&push_sound=%d&push_badge=%d", self.deviceToken, device.identifierForVendor.UUIDString, device.systemVersion, self.app_id, [self currentVersion], device.localizedModel, refId, pushAlert, pushSound, pushBadge];
+    NSString *postString = [NSString stringWithFormat:@"device_token=%@&device_identifier=%@&device_version=%@&app_id=%@&app_version=%@&device_model=%@&msisdn=%@&push_alert=%d&push_sound=%d&push_badge=%d", self.deviceToken, device.identifierForVendor.UUIDString, device.systemVersion, self.app_id, [self currentVersion], device.localizedModel, msisdn, pushAlert, pushSound, pushBadge];
     [request setHTTPBody:[postString dataUsingEncoding:NSUTF8StringEncoding]];
     
     // Create task for download.
@@ -364,7 +249,7 @@ NSString *const NoConnection            = @"The Internet connection appears to b
     // Create task for download.
     TaskManager *task = [[TaskManager alloc] initWithRequest:request isDebug:self.isDebug];
     [task performTaskWithCompletionHandlerOnSuccess:^(NSDictionary *responseDict) {
-       
+        
         @try {
             // Parse data
             int status_code = [[[responseDict objectForKey:@"header"] objectForKey:@"code"] intValue];
@@ -404,42 +289,78 @@ NSString *const NoConnection            = @"The Internet connection appears to b
     }];
 }
 
-- (ResponseObject *)parseDataForSubscribeWithDict:(NSDictionary *)dict {
-    ResponseObject *ro = [[ResponseObject alloc] init];
-    
-    @try {
-        int status_code = [[[dict objectForKey:@"status"] objectForKey:@"code"] intValue];
-        if (status_code == 200) { // Subscribe success
-            // Save subscribed success already.
-//            [EggMobilePushNotificationNSUserDefaultsManager setSubscribed:YES];
-            
-            if (self.isDebug) {
-                NSLog(@"%@ Subscribe success", NSLogPrefix);
-            }
-            
-            ro.isSuccess = YES;
-            ro.error_msg = @"";
-        }
-        else { // Something went wrong. So, get error msg from API.
-            NSString *error_msg = [[dict objectForKey:@"error"] objectForKey:@"msg"];
-            if (self.isDebug) {
-                NSLog(@"%@ Error = %@", NSLogPrefix, error_msg);
-            }
-            
-            ro.isSuccess = NO;
-            ro.error_msg = error_msg;
-        }
-    }
-    @catch (NSException *exception) {
+#pragma mark - Setting Notification
+- (void)setTurnOnNotification:(BOOL)isOn onSuccess:(void (^)())onSuccess onFailure:(void (^)(NSString *error_msg))onFailure
+{
+    [self subscribeForPushAlert:isOn pushSound:[EggMobilePushNotificationNSUserDefaultsManager getSoundState] pushBadge:[EggMobilePushNotificationNSUserDefaultsManager getBadgeState] onSuccess:^{
+        
+        [EggMobilePushNotificationNSUserDefaultsManager setNotificationState:isOn];
+        onSuccess();
+    } onFailure:^(NSString *error_msg) {
+        onFailure(error_msg);
+    }];
+}
+
+- (void)setTurnOnSound:(BOOL)isOn onSuccess:(void (^)())onSuccess onFailure:(void (^)(NSString *error_msg))onFailure
+{
+    [self subscribeForPushAlert:[EggMobilePushNotificationNSUserDefaultsManager getNotificationState] pushSound:isOn pushBadge:[EggMobilePushNotificationNSUserDefaultsManager getBadgeState] onSuccess:^{
+        
+        [EggMobilePushNotificationNSUserDefaultsManager setSoundState:isOn];
+        onSuccess();
+    } onFailure:^(NSString *error_msg) {
+        onFailure(error_msg);
+    }];
+}
+
+- (void)setTurnOnBadge:(BOOL)isOn onSuccess:(void (^)())onSuccess onFailure:(void (^)(NSString *error_msg))onFailure
+{
+    [self subscribeForPushAlert:[EggMobilePushNotificationNSUserDefaultsManager getNotificationState] pushSound:[EggMobilePushNotificationNSUserDefaultsManager getSoundState] pushBadge:isOn onSuccess:^{
+        
+        [EggMobilePushNotificationNSUserDefaultsManager setBadgeState:isOn];
+        onSuccess();
+    } onFailure:^(NSString *error_msg) {
+        onFailure(error_msg);
+    }];
+}
+
+#pragma mark - Unsubscribe
+- (void)unSubscribeOnSuccess:(void (^)())onSuccess onFailure:(void (^)(NSString *error_msg))onFailure {
+    // Check app id.
+    if (!self.app_id) {
         if (self.isDebug) {
-            NSLog(@"%@ Error = %@", NSLogPrefix, exception.description);
+            NSLog(@"%@ %@", NSLogPrefix, MissingAppId);
         }
         
-        ro.isSuccess = NO;
-        ro.error_msg = DefaultErrorMsg;
+        onFailure(MissingAppId);
+        
+        return ;
     }
     
-    return ro;
+    // Initialize apiURL, and create request object.
+    NSURL *apiURL = [NSURL URLWithString:API_UNSUBSCRIPTION];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:apiURL];
+    [request setHTTPMethod:@"POST"];
+    
+    // Add parameters
+    UIDevice *device = [UIDevice currentDevice];
+    NSString *postString = [NSString stringWithFormat:@"device_identifier=%@&app_id=%@", device.identifierForVendor.UUIDString, self.app_id];
+    [request setHTTPBody:[postString dataUsingEncoding:NSUTF8StringEncoding]];
+    
+    // Create task for download.
+    TaskManager *task = [[TaskManager alloc] initWithRequest:request isDebug:self.isDebug];
+    [task performTaskWithCompletionHandlerOnSuccess:^(NSDictionary *responseDict) {
+        
+        // Parse data
+        ResponseObject *ro = [self parseDataForUnsubscribeWithDict:responseDict];
+        if (ro.isSuccess) {
+            onSuccess();
+        }
+        else {
+            onFailure(ro.error_msg);
+        }
+    } onFailure:^(NSString *error_msg) {
+        onFailure(error_msg);
+    }];
 }
 
 - (ResponseObject *)parseDataForUnsubscribeWithDict:(NSDictionary *)dict {
@@ -447,7 +368,7 @@ NSString *const NoConnection            = @"The Internet connection appears to b
     
     @try {
         int status_code = [[[dict objectForKey:@"status"] objectForKey:@"code"] intValue];
-        if (status_code == 200) { // Unsubscribe success
+        if (status_code == 0) { // Unsubscribe success
             if (self.isDebug) {
                 NSLog(@"%@ Unsubscribe success", NSLogPrefix);
             }
@@ -475,6 +396,46 @@ NSString *const NoConnection            = @"The Internet connection appears to b
     }
     
     return ro;
+}
+
+#pragma mark - Accept notification log
+- (void)acceptNotificationForNotiRef:(NSString *)noti_ref onSuccess:(void (^)())onSuccess onFailure:(void (^)(NSString *error_msg))onFailure {
+    // Check noti_ref
+    if (!noti_ref) {
+        if (self.isDebug) {
+            NSLog(@"%@ Error = %@", NSLogPrefix, MissingNotiRef);
+        }
+        
+        onFailure(MissingNotiRef);
+        
+        return ;
+    }
+    
+    // Initialize apiURL, and create request object.
+    NSURL *apiURL = [NSURL URLWithString:API_ACCEPT_NOTIFICATION];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:apiURL];
+    [request setHTTPMethod:@"POST"];
+    
+    // Add parameters
+    UIDevice *device = [UIDevice currentDevice];
+    NSString *postString = [NSString stringWithFormat:@"device_identifier=%@&noti_ref=%@", device.identifierForVendor.UUIDString, noti_ref];
+    [request setHTTPBody:[postString dataUsingEncoding:NSUTF8StringEncoding]];
+    
+    // Create task for download.
+    TaskManager *task = [[TaskManager alloc] initWithRequest:request isDebug:self.isDebug];
+    [task performTaskWithCompletionHandlerOnSuccess:^(NSDictionary *responseDict) {
+       
+        // Parse data
+        ResponseObject *ro = [self parseDataForAcceptNotificationWithDict:responseDict];
+        if (ro.isSuccess) {
+            onSuccess();
+        }
+        else {
+            onFailure(ro.error_msg);
+        }
+    } onFailure:^(NSString *error_msg) {
+        onFailure(error_msg);
+    }];
 }
 
 - (ResponseObject *)parseDataForAcceptNotificationWithDict:(NSDictionary *)dict {
@@ -512,10 +473,47 @@ NSString *const NoConnection            = @"The Internet connection appears to b
     return ro;
 }
 
-#pragma mark - NSBundle Strings
-- (NSString *)currentVersion
-{
-    return [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
+#pragma mark - Show alertview
+- (void)showAlertViewForDict:(NSDictionary *)dict viewControllerToPresent:(UIViewController *)vc tag:(NSInteger)tag {
+    if ([UIAlertController class]) {
+        // use UIAlertController
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Title" message:@"Message" preferredStyle:UIAlertControllerStyleAlert];
+        
+        UIAlertAction *alertFirstAction = [UIAlertAction actionWithTitle:@"First" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+            
+        }];
+        [alertController addAction:alertFirstAction];
+        
+        UIAlertAction *alertSecondAction = [UIAlertAction actionWithTitle:@"Second" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            
+        }];
+        [alertController addAction:alertSecondAction];
+        
+        //        UIAlertAction *alertThirdAction = [UIAlertAction actionWithTitle:@"Third" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        //
+        //        }];
+        //        [alertController addAction:alertThirdAction];
+        
+        // Show alert controller
+        [vc presentViewController:alertController animated:YES completion:nil];
+    } else {
+        // use UIAlertView
+        UIAlertView *alertView = [[UIAlertView alloc] init];
+        alertView.title = @"Title";
+        alertView.message = @"Message";
+        alertView.delegate = self;
+        alertView.tag = tag;
+        
+        [alertView addButtonWithTitle:@"First"];
+        [alertView setCancelButtonIndex:0];
+        
+        [alertView addButtonWithTitle:@"Second"];
+        
+        //        [alertView addButtonWithTitle:@"Third"];
+        
+        // Show alert view
+        [alertView show];
+    }
 }
 
 #pragma mark - UIAlertView Delegate
@@ -529,6 +527,12 @@ NSString *const NoConnection            = @"The Internet connection appears to b
     else if (buttonIndex == 2) {
         
     }
+}
+
+#pragma mark - NSBundle Strings
+- (NSString *)currentVersion
+{
+    return [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
 }
 
 @end

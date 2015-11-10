@@ -9,17 +9,17 @@
 #import "EggMobilePushNotificationNSUserDefaultsManager.h"
 
 // Key
-NSString *const EggPushNotificationDeviceTokenKey   = @"EggPushNotificationDeviceTokenKey";
-NSString *const EggPushNotificationMsisdnKey        = @"EggPushNotificationMsisdnKey";
-NSString *const EggPushNotificationSubscribedKey    = @"EggPushNotificationSubscribedKey";
-NSString *const EggPushNotificationNotificationKey  = @"EggPushNotificationNotificationKey";
-NSString *const EggPushNotificationSoundKey         = @"EggPushNotificationSoundKey";
-NSString *const EggPushNotificationBadgeKey         = @"EggPushNotificationBadgeKey";
-NSString *const EggPushNotificationNotFirstLaunchKey   = @"EggPushNotificationNotFirstLaunchKey";
+NSString *const EggPushNotificationDeviceTokenKey       = @"EggPushNotificationDeviceTokenKey";
+NSString *const EggPushNotificationMsisdnKey            = @"EggPushNotificationMsisdnKey";
+NSString *const EggPushNotificationSubscribedKey        = @"EggPushNotificationSubscribedKey";
+NSString *const EggPushNotificationNotificationKey      = @"EggPushNotificationNotificationKey";
+NSString *const EggPushNotificationSoundKey             = @"EggPushNotificationSoundKey";
+NSString *const EggPushNotificationBadgeKey             = @"EggPushNotificationBadgeKey";
+NSString *const EggPushNotificationNotFirstLaunchKey    = @"EggPushNotificationNotFirstLaunchKey";
 
 @implementation EggMobilePushNotificationNSUserDefaultsManager
 
-#pragma mark - Public
+#pragma mark - First launch
 + (BOOL)getNotFirstLaunch {
     return [self getBoolForKey:EggPushNotificationNotFirstLaunchKey];
 }
@@ -28,6 +28,7 @@ NSString *const EggPushNotificationNotFirstLaunchKey   = @"EggPushNotificationNo
     [self setBool:isNotFirstLaunch forKey:EggPushNotificationNotFirstLaunchKey];
 }
 
+#pragma mark - Device token
 + (NSString *)getDeviceToken {
     return [self getStringForKey:EggPushNotificationDeviceTokenKey];
 }
@@ -36,6 +37,7 @@ NSString *const EggPushNotificationNotFirstLaunchKey   = @"EggPushNotificationNo
     [self setString:device_token forKey:EggPushNotificationDeviceTokenKey];
 }
 
+#pragma mark - MSISDN
 + (NSString *)getMsisdn {
     return [self getStringForKey:EggPushNotificationMsisdnKey];
 }
@@ -44,6 +46,7 @@ NSString *const EggPushNotificationNotFirstLaunchKey   = @"EggPushNotificationNo
     [self setString:msisdn forKey:EggPushNotificationMsisdnKey];
 }
 
+#pragma mark - Subscribed
 + (BOOL)getSubscribed {
     return [self getBoolForKey:EggPushNotificationSubscribedKey];
 }
@@ -52,6 +55,7 @@ NSString *const EggPushNotificationNotFirstLaunchKey   = @"EggPushNotificationNo
     [self setBool:isSubscribe forKey:EggPushNotificationSubscribedKey];
 }
 
+#pragma mark - Notification state
 + (BOOL)getNotificationState {
     return [self getBoolForKey:EggPushNotificationNotificationKey];
 }
@@ -60,6 +64,7 @@ NSString *const EggPushNotificationNotFirstLaunchKey   = @"EggPushNotificationNo
     [self setBool:state forKey:EggPushNotificationNotificationKey];
 }
 
+#pragma mark - Sound state
 + (BOOL)getSoundState {
     return [self getBoolForKey:EggPushNotificationSoundKey];
 }
@@ -68,6 +73,7 @@ NSString *const EggPushNotificationNotFirstLaunchKey   = @"EggPushNotificationNo
     [self setBool:state forKey:EggPushNotificationSoundKey];
 }
 
+#pragma mark - Badge state
 + (BOOL)getBadgeState {
     return [self getBoolForKey:EggPushNotificationBadgeKey];
 }

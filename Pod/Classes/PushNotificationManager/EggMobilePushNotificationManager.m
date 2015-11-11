@@ -31,6 +31,8 @@ NSString *const NoConnection            = @"The Internet connection appears to b
 
 @interface EggMobilePushNotificationManager () <UIAlertViewDelegate>
 
+@property (nonatomic, strong) NSString *deviceToken;
+
 @end
 
 @implementation EggMobilePushNotificationManager
@@ -324,7 +326,7 @@ NSString *const NoConnection            = @"The Internet connection appears to b
 }
 
 #pragma mark - Unsubscribe
-- (void)unSubscribeOnSuccess:(void (^)())onSuccess onFailure:(void (^)(NSString *error_msg))onFailure {
+- (void)unsubscribeOnSuccess:(void (^)())onSuccess onFailure:(void (^)(NSString *error_msg))onFailure {
     // Check app id.
     if (!self.app_id) {
         if (self.isDebug) {

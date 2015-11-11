@@ -23,16 +23,15 @@
 }
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
-    [[EggMobilePushNotificationManager sharedInstance] setCleanDeviceTokenForData:deviceToken];
-    [[EggMobilePushNotificationManager sharedInstance] subscribeOnSuccess:^{
-        NSLog(@"Callback success");
-    } onFailure:^(NSString *error_msg) {
-        NSLog(@"Callback fail = %@", error_msg);
-    }];
+    [[EggMobilePushNotificationManager sharedInstance] setCleanDeviceTokenForData:deviceToken];    
 }
 
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
     NSLog(@"Error = %@", error.description);
+}
+
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
+    NSLog(@"Push notification data = %@", userInfo);
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application

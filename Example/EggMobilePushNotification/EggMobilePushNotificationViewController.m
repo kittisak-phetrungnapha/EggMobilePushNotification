@@ -32,10 +32,20 @@
     [self presentViewController:vc animated:YES completion:nil];
 }
 
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-    
-//    [[EggMobilePushNotificationManager sharedInstance] showAlertViewForTitle:@"Title test" message:@"Message test" firstButtonTitle:@"First" secondButtonTitle:@"Second" thirdButtonTitle:@"Third" viewControllerToPresent:self tag:200];
+- (IBAction)subscribePressed:(id)sender {
+    [[EggMobilePushNotificationManager sharedInstance] subscribeOnSuccess:^{
+        self.resultLb.text = @"Subscribe success.";
+    } onFailure:^(NSString *error_msg) {
+        self.resultLb.text = [NSString stringWithFormat:@"Subscribe fail with error = %@", error_msg];
+    }];
+}
+
+- (IBAction)unsubscribePressed:(id)sender {
+    [[EggMobilePushNotificationManager sharedInstance] unsubscribeOnSuccess:^{
+        self.resultLb.text = @"Unsubscribe success.";
+    } onFailure:^(NSString *error_msg) {
+        self.resultLb.text = [NSString stringWithFormat:@"Unsubscribe fail with error = %@", error_msg];
+    }];
 }
 
 #pragma mark - EggMobilePushNotificationManagerDelegate

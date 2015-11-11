@@ -10,4 +10,8 @@
 
 @interface EggMobilePushNotificationViewController : UIViewController
 
+@property (weak, nonatomic) IBOutlet UILabel *resultLb;
+- (IBAction)subscribePressed:(id)sender;
+- (IBAction)unsubscribePressed:(id)sender;
+
 @end

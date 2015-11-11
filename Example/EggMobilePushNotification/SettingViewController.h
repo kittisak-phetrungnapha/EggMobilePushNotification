@@ -13,6 +13,7 @@
 @property (weak, nonatomic) IBOutlet UISwitch *notiSw;
 @property (weak, nonatomic) IBOutlet UISwitch *soundSw;
 @property (weak, nonatomic) IBOutlet UISwitch *badgeSw;
+@property (weak, nonatomic) IBOutlet UILabel *resultLb;
 
 - (IBAction)notiSwAction:(id)sender;
 - (IBAction)soundSwAction:(id)sender;

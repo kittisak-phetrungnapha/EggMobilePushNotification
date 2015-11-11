@@ -38,7 +38,6 @@ typedef enum {
 @interface EggMobilePushNotificationManager : NSObject
 
 @property (nonatomic, weak) id<EggMobilePushNotificationManagerDelegate> delegate;
-@property (nonatomic, strong) NSString *deviceToken;
 @property (nonatomic, strong) NSString *app_id;
 @property (nonatomic) BOOL isDebug;
 
@@ -57,7 +56,7 @@ typedef enum {
 - (void)subscribeOnSuccess:(void (^)())onSuccess onFailure:(void (^)(NSString *error_msg))onFailure;
 
 // Unsubscribe
-- (void)unSubscribeOnSuccess:(void (^)())onSuccess onFailure:(void (^)(NSString *error_msg))onFailure;
+- (void)unsubscribeOnSuccess:(void (^)())onSuccess onFailure:(void (^)(NSString *error_msg))onFailure;
 
 // Accept notification
 - (void)acceptNotificationForNotiRef:(NSString *)noti_ref onSuccess:(void (^)())onSuccess onFailure:(void (^)(NSString *error_msg))onFailure;

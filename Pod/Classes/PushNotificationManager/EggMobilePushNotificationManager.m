@@ -22,14 +22,11 @@ NSString *const GET_MSISDN_API          = @"http://www3.truecorp.co.th/api/servi
 
 // Message
 NSString *const NSLogPrefix             = @"EggMobilePushNotification log:";
-NSString *const MissingDeviceToken      = @"Missing device token.";
-NSString *const MissingAppId            = @"Missing app id.";
-NSString *const MissingNotiRef          = @"Missing noti ref.";
 NSString *const DefaultErrorMsg         = @"The unknown error is occured.";
 NSString *const GET_MSISDN_FAIL         = @"Only Truemove mobile network.";
 NSString *const NoConnection            = @"The Internet connection appears to be offline.";
 
-@interface EggMobilePushNotificationManager () <UIAlertViewDelegate>
+@interface EggMobilePushNotificationManager ()
 
 @property (nonatomic, strong) NSString *deviceToken;
 
@@ -52,7 +49,10 @@ NSString *const NoConnection            = @"The Internet connection appears to b
 {
     self = [super init];
     if (self) {
+        // Set default value.
         self.isDebug = NO;
+        self.deviceToken = @"";
+        self.app_id = @"";
         
         if (![EggMobilePushNotificationNSUserDefaultsManager getNotFirstLaunch]) {
             [EggMobilePushNotificationNSUserDefaultsManager setNotificationState:YES];
@@ -111,27 +111,6 @@ NSString *const NoConnection            = @"The Internet connection appears to b
 }
 
 - (void)subscribeForPushAlert:(PushAlertType)push_alert pushSound:(PushSoundType)push_sound pushBadge:(PushBadgeType)push_badge onSuccess:(void (^)())onSuccess onFailure:(void (^)(NSString *error_msg))onFailure {
-    // Check device token.
-    if (!self.deviceToken) {
-        if (self.isDebug) {
-            NSLog(@"%@ %@", NSLogPrefix, MissingDeviceToken);
-        }
-        
-        onFailure(MissingDeviceToken);
-        
-        return ;
-    }
-    
-    // Check app id.
-    if (!self.app_id) {
-        if (self.isDebug) {
-            NSLog(@"%@ %@", NSLogPrefix, MissingAppId);
-        }
-        
-        onFailure(MissingAppId);
-        
-        return ;
-    }
     
     // Check network status before perform task.
     EPNetworkStatus networkStatus = [ConnectionManager checkNetworkStatus];
@@ -327,16 +306,9 @@ NSString *const NoConnection            = @"The Internet connection appears to b
 
 #pragma mark - Unsubscribe
 - (void)unsubscribeOnSuccess:(void (^)())onSuccess onFailure:(void (^)(NSString *error_msg))onFailure {
-    // Check app id.
-    if (!self.app_id) {
-        if (self.isDebug) {
-            NSLog(@"%@ %@", NSLogPrefix, MissingAppId);
-        }
-        
-        onFailure(MissingAppId);
-        
-        return ;
-    }
+    
+    // Get msisdn
+    NSString *msisdn = [EggMobilePushNotificationNSUserDefaultsManager getMsisdn] ?: @"";
     
     // Initialize apiURL, and create request object.
     NSURL *apiURL = [NSURL URLWithString:API_UNSUBSCRIPTION];
@@ -345,7 +317,7 @@ NSString *const NoConnection            = @"The Internet connection appears to b
     
     // Add parameters
     UIDevice *device = [UIDevice currentDevice];
-    NSString *postString = [NSString stringWithFormat:@"device_identifier=%@&app_id=%@", device.identifierForVendor.UUIDString, self.app_id];
+    NSString *postString = [NSString stringWithFormat:@"device_identifier=%@&app_id=%@&msisdn=%@", device.identifierForVendor.UUIDString, self.app_id, msisdn];
     [request setHTTPBody:[postString dataUsingEncoding:NSUTF8StringEncoding]];
     
     // Create task for download.
@@ -403,14 +375,8 @@ NSString *const NoConnection            = @"The Internet connection appears to b
 #pragma mark - Accept notification log
 - (void)acceptNotificationForNotiRef:(NSString *)noti_ref onSuccess:(void (^)())onSuccess onFailure:(void (^)(NSString *error_msg))onFailure {
     // Check noti_ref
-    if (!noti_ref) {
-        if (self.isDebug) {
-            NSLog(@"%@ Error = %@", NSLogPrefix, MissingNotiRef);
-        }
-        
-        onFailure(MissingNotiRef);
-        
-        return ;
+    if (noti_ref == nil) {
+        noti_ref = @"";
     }
     
     // Initialize apiURL, and create request object.
@@ -473,62 +439,6 @@ NSString *const NoConnection            = @"The Internet connection appears to b
     }
     
     return ro;
-}
-
-#pragma mark - Show alertview
-- (void)showAlertViewForDict:(NSDictionary *)dict viewControllerToPresent:(UIViewController *)vc tag:(NSInteger)tag {
-    if ([UIAlertController class]) {
-        // use UIAlertController
-        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Title" message:@"Message" preferredStyle:UIAlertControllerStyleAlert];
-        
-        UIAlertAction *alertFirstAction = [UIAlertAction actionWithTitle:@"First" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-            
-        }];
-        [alertController addAction:alertFirstAction];
-        
-        UIAlertAction *alertSecondAction = [UIAlertAction actionWithTitle:@"Second" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            
-        }];
-        [alertController addAction:alertSecondAction];
-        
-        //        UIAlertAction *alertThirdAction = [UIAlertAction actionWithTitle:@"Third" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        //
-        //        }];
-        //        [alertController addAction:alertThirdAction];
-        
-        // Show alert controller
-        [vc presentViewController:alertController animated:YES completion:nil];
-    } else {
-        // use UIAlertView
-        UIAlertView *alertView = [[UIAlertView alloc] init];
-        alertView.title = @"Title";
-        alertView.message = @"Message";
-        alertView.delegate = self;
-        alertView.tag = tag;
-        
-        [alertView addButtonWithTitle:@"First"];
-        [alertView setCancelButtonIndex:0];
-        
-        [alertView addButtonWithTitle:@"Second"];
-        
-        //        [alertView addButtonWithTitle:@"Third"];
-        
-        // Show alert view
-        [alertView show];
-    }
-}
-
-#pragma mark - UIAlertView Delegate
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if (buttonIndex == 0) {
-        
-    }
-    else if (buttonIndex == 1) {
-        
-    }
-    else if (buttonIndex == 2) {
-        
-    }
 }
 
 #pragma mark - NSBundle Strings

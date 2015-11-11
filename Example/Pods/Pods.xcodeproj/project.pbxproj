@@ -7,91 +7,87 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0E4D983A56C32E4C0B47A33F775010BA /* EggMobilePushNotification-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = E66DA17B4BD40B59CC1C64430295E164 /* EggMobilePushNotification-dummy.m */; };
+		0FE6E7BC5B3BB94F38DA9A3FDBEDF26F /* EPReachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 462D01DE76C96A87E2E815A8909E7905 /* EPReachability.m */; };
 		1C3F82858042DF147EAFA8CB971FA2C5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E4E89230EF59BC255123B67864ACF77 /* Foundation.framework */; };
-		1D9B72510BD703A49B060363A6CA572D /* ConnectionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 37A63EEEDDE9768106C2925CD34E604B /* ConnectionManager.m */; };
-		2740D55AA37F092785FCE0D4622EC1CF /* EggMobilePushNotification.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 64645BA3BE4A3EF05B6C695115A2BFF2 /* EggMobilePushNotification.bundle */; };
-		50F7438B516B1EB448A21FF4F767A74E /* EggMobilePushNotificationManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 06663022C14017301ECB360858764AB4 /* EggMobilePushNotificationManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		6CE26111CC58901286768B4A005C8A5D /* EggMobilePushNotification.h in Headers */ = {isa = PBXBuildFile; fileRef = 40D2AE30CBB7C42AAF1FF8A18DC91F9E /* EggMobilePushNotification.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		1E6FBEC4CBA2968AF7E66DC420F6C7BC /* ConnectionManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 2860C80A2B16AB97FA14F5D933A75744 /* ConnectionManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		37DBAA24733CCDCEE2D0AC7B234DCFD9 /* ResponseObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 14F6273CB9E77E82640CB5BD27CA4AAE /* ResponseObject.m */; };
+		3E28F57D3A854A6FFF2662665D9BA8E9 /* EggMobilePushNotification.h in Headers */ = {isa = PBXBuildFile; fileRef = 8B0164818788EF4B2F9B7631C6AC2F27 /* EggMobilePushNotification.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		64687ED2F82EB1C702E21C2DD21D068E /* TaskManager.h in Headers */ = {isa = PBXBuildFile; fileRef = E3AA2489B31B88D001FA24560E1263CC /* TaskManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		6B6C1583DF0217C0C09234E46942F81E /* EggMobilePushNotification-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = E66DA17B4BD40B59CC1C64430295E164 /* EggMobilePushNotification-dummy.m */; };
+		6FF65C520758FBCD0FE9E85998B9CBDD /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E4E89230EF59BC255123B67864ACF77 /* Foundation.framework */; };
+		73F5EE2B58B538077D1591B91D6D52D3 /* EggMobilePushNotification-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = DDD3A88AC807AF0CA6A96B39BDA3F9F8 /* EggMobilePushNotification-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		858166142C745E661B5A37E280A77567 /* Pods-EggMobilePushNotification_Example-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 93F15A0EA8F3416C5BBFC196070244FE /* Pods-EggMobilePushNotification_Example-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		8DEB62E8EA919A2D485E42A89ED7ED14 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E4E89230EF59BC255123B67864ACF77 /* Foundation.framework */; };
-		92A7C1D33D119FCAD85328F37D94773C /* EPReachability.h in Headers */ = {isa = PBXBuildFile; fileRef = D14FF8BFE0C920C86FA58FAA7B6575CD /* EPReachability.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		92F024463D52FB8B1A70D67433ABED93 /* EggMobilePushNotificationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BF8D541432E3449BFA3CDC1A48587706 /* EggMobilePushNotificationManager.m */; };
-		B7A800EB3EEDB1D5F53551388966C39E /* TaskManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 66F79E0F77EA473D099AFB14ACFD945C /* TaskManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		878DB41F02ADC3BB70BF88036FC6BD95 /* AlertViewManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 448B606C8CF123853DEAAD58762FCF6E /* AlertViewManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8ECE0881108F40BA470477551C58262D /* EggMobilePushNotificationManager.h in Headers */ = {isa = PBXBuildFile; fileRef = E94B81199C0B0A0E0EFECAD86CB03523 /* EggMobilePushNotificationManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B79CD50D3B04814FF6A29D5EEFEFEF6F /* TaskManager.m in Sources */ = {isa = PBXBuildFile; fileRef = FD4E7DE6456403B6C04D3B98FC04EB2F /* TaskManager.m */; };
+		BCAA44FC774675E5890BC43322924DF6 /* EggMobilePushNotificationNSUserDefaultsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B76D26762EC51DD30394E9390CDD99A5 /* EggMobilePushNotificationNSUserDefaultsManager.m */; };
 		BF57A30892A8C86833B97560D491A69C /* Pods-EggMobilePushNotification_Example-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E06DFCEE9E1BFE570A040C034ECC5F0 /* Pods-EggMobilePushNotification_Example-dummy.m */; };
-		C005F823F215E8B50BFA3BB11804C4CA /* EggMobilePushNotification-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = DDD3A88AC807AF0CA6A96B39BDA3F9F8 /* EggMobilePushNotification-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		C08680CBC2688A3E538B6E08FF62139A /* TaskManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A8B194E1B2D4FF829DA1F852F069E125 /* TaskManager.m */; };
-		D282C0CD29212BB507261B931697C60A /* ResponseObject.m in Sources */ = {isa = PBXBuildFile; fileRef = C411A8E348B5043658E858A5924AB017 /* ResponseObject.m */; };
-		D5D9430C193CD22EBD72F423F2785911 /* ResponseObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CA43FD94C242D515BA29D9D1EF8024F /* ResponseObject.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E6480B2852197A114CECF3D0EB7975A7 /* ConnectionManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 9B51D1FD60858F5B0EA17D45D9397DDC /* ConnectionManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		EC24983F888B515DD0BA891BD1CAACBF /* EggMobilePushNotificationNSUserDefaultsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = AF84D68394A956BD558E14B7BDBB7F78 /* EggMobilePushNotificationNSUserDefaultsManager.m */; };
-		F571E2C1167136818BCD188EE1523168 /* EPReachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 149681BD02A8EC4364941F0BD2F535DB /* EPReachability.m */; };
-		F617144BEC95F36B649A4A4361F6CBE3 /* EggMobilePushNotificationNSUserDefaultsManager.h in Headers */ = {isa = PBXBuildFile; fileRef = A5EDCF834256CD5F3F36FF05AC05E96E /* EggMobilePushNotificationNSUserDefaultsManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C8A91308F361E1E465176F89D2AD6862 /* EPReachability.h in Headers */ = {isa = PBXBuildFile; fileRef = AF9DFB36DAEBDA44C794B5217E115410 /* EPReachability.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		CBD9B069304E13A2B97EC06CFE9885F7 /* EggMobilePushNotificationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 64C45F58AC4FE8A065E95C13406725C1 /* EggMobilePushNotificationManager.m */; };
+		CE3B7AF3996F6005301D6A8F2501376F /* ConnectionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1509120E961EDED7186FBE6938114F5F /* ConnectionManager.m */; };
+		E6815D482ABC81D3D0FD453B33BB1351 /* EggMobilePushNotification.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 64645BA3BE4A3EF05B6C695115A2BFF2 /* EggMobilePushNotification.bundle */; };
+		E764481C0E01B61815DFB2FC6218F47F /* AlertViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CE4FDF067546D2EDEB5F58794239438 /* AlertViewManager.m */; };
+		EC225E81888FC4330F6A448F334175FF /* EggMobilePushNotificationNSUserDefaultsManager.h in Headers */ = {isa = PBXBuildFile; fileRef = C4FA3FC070DBAAD2EB428E977AE7A063 /* EggMobilePushNotificationNSUserDefaultsManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F5DA1A7355E253597EED646EF0F2ABF5 /* ResponseObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 4703A27893C1F73E0AF480C4FEE0D1CE /* ResponseObject.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		2E5FCB64D10401C83E5536723A8F56AF /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = D41D8CD98F00B204E9800998ECF8427E /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 27EC1AAC4922B38482EF66CA9FB80FE5;
-			remoteInfo = "EggMobilePushNotification-EggMobilePushNotification";
-		};
 		4A8C71DC68493BC15DF57C3B8E5D9188 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = D41D8CD98F00B204E9800998ECF8427E /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = CE464F7730CA4E4F8EFF360F48EB85CC;
+			remoteGlobalIDString = 2B25775CC949AA37E7A758C94DF17232;
 			remoteInfo = EggMobilePushNotification;
+		};
+		8B8EB268034D548197FACEC479ACC550 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D41D8CD98F00B204E9800998ECF8427E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2FE43AE6B8B9820511BF0F9AFC2BF085;
+			remoteInfo = "EggMobilePushNotification-EggMobilePushNotification";
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		048E12C61B1B91A7851A2ED5C778AA09 /* Pods-EggMobilePushNotification_Example-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-EggMobilePushNotification_Example-acknowledgements.markdown"; sourceTree = "<group>"; };
-		06663022C14017301ECB360858764AB4 /* EggMobilePushNotificationManager.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = EggMobilePushNotificationManager.h; sourceTree = "<group>"; };
 		0A533970255DED447DD9359203B3FA64 /* EggMobilePushNotification.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = EggMobilePushNotification.xcconfig; sourceTree = "<group>"; };
-		149681BD02A8EC4364941F0BD2F535DB /* EPReachability.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = EPReachability.m; sourceTree = "<group>"; };
+		14F6273CB9E77E82640CB5BD27CA4AAE /* ResponseObject.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ResponseObject.m; sourceTree = "<group>"; };
+		1509120E961EDED7186FBE6938114F5F /* ConnectionManager.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ConnectionManager.m; sourceTree = "<group>"; };
 		16C30CE2BB416099F5B08FE44C0EE4B1 /* EggMobilePushNotification.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = EggMobilePushNotification.modulemap; sourceTree = "<group>"; };
 		1A8AE0026D6D14C2749227ED1EC1A77E /* EggMobilePushNotification.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = EggMobilePushNotification.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		2860C80A2B16AB97FA14F5D933A75744 /* ConnectionManager.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ConnectionManager.h; sourceTree = "<group>"; };
 		2F45665F1167385C8D4DD58D1CB25228 /* Pods-EggMobilePushNotification_Example.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = "Pods-EggMobilePushNotification_Example.modulemap"; sourceTree = "<group>"; };
 		33B348647B552551FD8C2C13884D3AF6 /* Pods-EggMobilePushNotification_Example-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-EggMobilePushNotification_Example-frameworks.sh"; sourceTree = "<group>"; };
-		37A63EEEDDE9768106C2925CD34E604B /* ConnectionManager.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ConnectionManager.m; sourceTree = "<group>"; };
 		3E4E89230EF59BC255123B67864ACF77 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
-		40D2AE30CBB7C42AAF1FF8A18DC91F9E /* EggMobilePushNotification.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = EggMobilePushNotification.h; sourceTree = "<group>"; };
+		448B606C8CF123853DEAAD58762FCF6E /* AlertViewManager.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = AlertViewManager.h; sourceTree = "<group>"; };
+		462D01DE76C96A87E2E815A8909E7905 /* EPReachability.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = EPReachability.m; sourceTree = "<group>"; };
+		4703A27893C1F73E0AF480C4FEE0D1CE /* ResponseObject.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ResponseObject.h; sourceTree = "<group>"; };
 		4E06DFCEE9E1BFE570A040C034ECC5F0 /* Pods-EggMobilePushNotification_Example-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-EggMobilePushNotification_Example-dummy.m"; sourceTree = "<group>"; };
 		5DE1CBC572E4197397F40B8349717AEE /* Pods-EggMobilePushNotification_Example-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-EggMobilePushNotification_Example-acknowledgements.plist"; sourceTree = "<group>"; };
 		639D7DC5DEA5FE8438CAA5D09F313336 /* Pods-EggMobilePushNotification_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-EggMobilePushNotification_Example.release.xcconfig"; sourceTree = "<group>"; };
 		64645BA3BE4A3EF05B6C695115A2BFF2 /* EggMobilePushNotification.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EggMobilePushNotification.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
-		66F79E0F77EA473D099AFB14ACFD945C /* TaskManager.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = TaskManager.h; sourceTree = "<group>"; };
-		6CA43FD94C242D515BA29D9D1EF8024F /* ResponseObject.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ResponseObject.h; sourceTree = "<group>"; };
+		64C45F58AC4FE8A065E95C13406725C1 /* EggMobilePushNotificationManager.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = EggMobilePushNotificationManager.m; sourceTree = "<group>"; };
 		78EE3B7ABA30AE26502D52784C9F1997 /* Pods_EggMobilePushNotification_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_EggMobilePushNotification_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		80C5A8FD08B11CFD1BBDE0B5BF2EF1CC /* EggMobilePushNotification-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "EggMobilePushNotification-prefix.pch"; sourceTree = "<group>"; };
+		8B0164818788EF4B2F9B7631C6AC2F27 /* EggMobilePushNotification.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = EggMobilePushNotification.h; sourceTree = "<group>"; };
+		8CE4FDF067546D2EDEB5F58794239438 /* AlertViewManager.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = AlertViewManager.m; sourceTree = "<group>"; };
 		8D4EED24D70B701188CE03AAC8A3497F /* Pods-EggMobilePushNotification_Example-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-EggMobilePushNotification_Example-resources.sh"; sourceTree = "<group>"; };
 		93F15A0EA8F3416C5BBFC196070244FE /* Pods-EggMobilePushNotification_Example-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-EggMobilePushNotification_Example-umbrella.h"; sourceTree = "<group>"; };
-		9B51D1FD60858F5B0EA17D45D9397DDC /* ConnectionManager.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ConnectionManager.h; sourceTree = "<group>"; };
-		A5EDCF834256CD5F3F36FF05AC05E96E /* EggMobilePushNotificationNSUserDefaultsManager.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = EggMobilePushNotificationNSUserDefaultsManager.h; sourceTree = "<group>"; };
-		A8B194E1B2D4FF829DA1F852F069E125 /* TaskManager.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = TaskManager.m; sourceTree = "<group>"; };
 		ACB368F3F0606749E6AAB8D66ABA3B62 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		AF84D68394A956BD558E14B7BDBB7F78 /* EggMobilePushNotificationNSUserDefaultsManager.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = EggMobilePushNotificationNSUserDefaultsManager.m; sourceTree = "<group>"; };
+		AF9DFB36DAEBDA44C794B5217E115410 /* EPReachability.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = EPReachability.h; sourceTree = "<group>"; };
+		B76D26762EC51DD30394E9390CDD99A5 /* EggMobilePushNotificationNSUserDefaultsManager.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = EggMobilePushNotificationNSUserDefaultsManager.m; sourceTree = "<group>"; };
 		BA6428E9F66FD5A23C0A2E06ED26CD2F /* Podfile */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		BF8D541432E3449BFA3CDC1A48587706 /* EggMobilePushNotificationManager.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = EggMobilePushNotificationManager.m; sourceTree = "<group>"; };
-		C411A8E348B5043658E858A5924AB017 /* ResponseObject.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ResponseObject.m; sourceTree = "<group>"; };
-		D14FF8BFE0C920C86FA58FAA7B6575CD /* EPReachability.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = EPReachability.h; sourceTree = "<group>"; };
+		C4FA3FC070DBAAD2EB428E977AE7A063 /* EggMobilePushNotificationNSUserDefaultsManager.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = EggMobilePushNotificationNSUserDefaultsManager.h; sourceTree = "<group>"; };
 		D4ED8D95398823B43630EFE19B0A2863 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DDD3A88AC807AF0CA6A96B39BDA3F9F8 /* EggMobilePushNotification-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "EggMobilePushNotification-umbrella.h"; sourceTree = "<group>"; };
 		DF48761E18C7390B10BE46B363F6C62E /* Pods-EggMobilePushNotification_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-EggMobilePushNotification_Example.debug.xcconfig"; sourceTree = "<group>"; };
+		E3AA2489B31B88D001FA24560E1263CC /* TaskManager.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = TaskManager.h; sourceTree = "<group>"; };
 		E66DA17B4BD40B59CC1C64430295E164 /* EggMobilePushNotification-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "EggMobilePushNotification-dummy.m"; sourceTree = "<group>"; };
+		E94B81199C0B0A0E0EFECAD86CB03523 /* EggMobilePushNotificationManager.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = EggMobilePushNotificationManager.h; sourceTree = "<group>"; };
+		FD4E7DE6456403B6C04D3B98FC04EB2F /* TaskManager.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = TaskManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		70F462157EADFF8D1B1939E498FAE5FF /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				8DEB62E8EA919A2D485E42A89ED7ED14 /* Foundation.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		A17AFDE57452C2265317DEA2DF800526 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -100,10 +96,18 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		FE625759F4C5D3F9403E2E651278AB61 /* Frameworks */ = {
+		D7E376CFB0B9E13B1C05CF96DC6929CE /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EB2DADE4E71A04F9F5115AB2814D5D11 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6FF65C520758FBCD0FE9E85998B9CBDD /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -121,33 +125,19 @@
 		1BB66CE67FA912BEE9D750B9E909CC52 /* EggMobilePushNotification */ = {
 			isa = PBXGroup;
 			children = (
-				5D5EF3A9D119C49076BF8F414E7D7145 /* Pod */,
+				46BA57B80722DF7F2282751158307358 /* Pod */,
 				620DE3CC13310F03ADC7312A99E2BD7F /* Support Files */,
 			);
 			name = EggMobilePushNotification;
 			path = ../..;
 			sourceTree = "<group>";
 		};
-		2B5B83EB39F5B28B250141D5A3A2A84F /* Reachability */ = {
+		46BA57B80722DF7F2282751158307358 /* Pod */ = {
 			isa = PBXGroup;
 			children = (
-				9B51D1FD60858F5B0EA17D45D9397DDC /* ConnectionManager.h */,
-				37A63EEEDDE9768106C2925CD34E604B /* ConnectionManager.m */,
-				D14FF8BFE0C920C86FA58FAA7B6575CD /* EPReachability.h */,
-				149681BD02A8EC4364941F0BD2F535DB /* EPReachability.m */,
+				62E98D2763FEF197A597458753AA42E4 /* Classes */,
 			);
-			path = Reachability;
-			sourceTree = "<group>";
-		};
-		3121C1901A94F78751FC614DB469CCDA /* Classes */ = {
-			isa = PBXGroup;
-			children = (
-				40D2AE30CBB7C42AAF1FF8A18DC91F9E /* EggMobilePushNotification.h */,
-				BC9D7A773FEDE846D90655AF7BB71742 /* PushNotificationManager */,
-				67332D4F1C48AEE49906FC9A0F6F52F8 /* NSUserDefaultsManager */,
-				2B5B83EB39F5B28B250141D5A3A2A84F /* Reachability */,
-			);
-			path = Classes;
+			path = Pod;
 			sourceTree = "<group>";
 		};
 		474937794D627157491D3AFF3964D275 /* Pods-EggMobilePushNotification_Example */ = {
@@ -168,12 +158,13 @@
 			path = "Target Support Files/Pods-EggMobilePushNotification_Example";
 			sourceTree = "<group>";
 		};
-		5D5EF3A9D119C49076BF8F414E7D7145 /* Pod */ = {
+		5F8DB4AC44B65DE863AE0E044AF8A5B0 /* NSUserDefaultsManager */ = {
 			isa = PBXGroup;
 			children = (
-				3121C1901A94F78751FC614DB469CCDA /* Classes */,
+				C4FA3FC070DBAAD2EB428E977AE7A063 /* EggMobilePushNotificationNSUserDefaultsManager.h */,
+				B76D26762EC51DD30394E9390CDD99A5 /* EggMobilePushNotificationNSUserDefaultsManager.m */,
 			);
-			path = Pod;
+			path = NSUserDefaultsManager;
 			sourceTree = "<group>";
 		};
 		620DE3CC13310F03ADC7312A99E2BD7F /* Support Files */ = {
@@ -190,13 +181,16 @@
 			path = "Example/Pods/Target Support Files/EggMobilePushNotification";
 			sourceTree = "<group>";
 		};
-		67332D4F1C48AEE49906FC9A0F6F52F8 /* NSUserDefaultsManager */ = {
+		62E98D2763FEF197A597458753AA42E4 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				A5EDCF834256CD5F3F36FF05AC05E96E /* EggMobilePushNotificationNSUserDefaultsManager.h */,
-				AF84D68394A956BD558E14B7BDBB7F78 /* EggMobilePushNotificationNSUserDefaultsManager.m */,
+				8B0164818788EF4B2F9B7631C6AC2F27 /* EggMobilePushNotification.h */,
+				8E100A5A48538C48EA888E4FBCA8A6B6 /* AlertViewManager */,
+				5F8DB4AC44B65DE863AE0E044AF8A5B0 /* NSUserDefaultsManager */,
+				FFB973E2BC9C9634C6422525482B3FF3 /* PushNotificationManager */,
+				B907D02F6CE7F3DD6FFD1D421632F99F /* Reachability */,
 			);
-			path = NSUserDefaultsManager;
+			path = Classes;
 			sourceTree = "<group>";
 		};
 		7DB346D0F39D3F0E887471402A8071AB = {
@@ -208,6 +202,15 @@
 				905D3B75A7F3E749E1FDA34058BE2450 /* Products */,
 				1154BC16EA4590459935A1C7D31782BA /* Targets Support Files */,
 			);
+			sourceTree = "<group>";
+		};
+		8E100A5A48538C48EA888E4FBCA8A6B6 /* AlertViewManager */ = {
+			isa = PBXGroup;
+			children = (
+				448B606C8CF123853DEAAD58762FCF6E /* AlertViewManager.h */,
+				8CE4FDF067546D2EDEB5F58794239438 /* AlertViewManager.m */,
+			);
+			path = AlertViewManager;
 			sourceTree = "<group>";
 		};
 		905D3B75A7F3E749E1FDA34058BE2450 /* Products */ = {
@@ -228,25 +231,23 @@
 			name = "Development Pods";
 			sourceTree = "<group>";
 		};
+		B907D02F6CE7F3DD6FFD1D421632F99F /* Reachability */ = {
+			isa = PBXGroup;
+			children = (
+				2860C80A2B16AB97FA14F5D933A75744 /* ConnectionManager.h */,
+				1509120E961EDED7186FBE6938114F5F /* ConnectionManager.m */,
+				AF9DFB36DAEBDA44C794B5217E115410 /* EPReachability.h */,
+				462D01DE76C96A87E2E815A8909E7905 /* EPReachability.m */,
+			);
+			path = Reachability;
+			sourceTree = "<group>";
+		};
 		BC3CA7F9E30CC8F7E2DD044DD34432FC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
 				BF6342C8B29F4CEEA088EFF7AB4DE362 /* iOS */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		BC9D7A773FEDE846D90655AF7BB71742 /* PushNotificationManager */ = {
-			isa = PBXGroup;
-			children = (
-				06663022C14017301ECB360858764AB4 /* EggMobilePushNotificationManager.h */,
-				BF8D541432E3449BFA3CDC1A48587706 /* EggMobilePushNotificationManager.m */,
-				66F79E0F77EA473D099AFB14ACFD945C /* TaskManager.h */,
-				A8B194E1B2D4FF829DA1F852F069E125 /* TaskManager.m */,
-				6CA43FD94C242D515BA29D9D1EF8024F /* ResponseObject.h */,
-				C411A8E348B5043658E858A5924AB017 /* ResponseObject.m */,
-			);
-			path = PushNotificationManager;
 			sourceTree = "<group>";
 		};
 		BF6342C8B29F4CEEA088EFF7AB4DE362 /* iOS */ = {
@@ -257,21 +258,35 @@
 			name = iOS;
 			sourceTree = "<group>";
 		};
+		FFB973E2BC9C9634C6422525482B3FF3 /* PushNotificationManager */ = {
+			isa = PBXGroup;
+			children = (
+				E94B81199C0B0A0E0EFECAD86CB03523 /* EggMobilePushNotificationManager.h */,
+				64C45F58AC4FE8A065E95C13406725C1 /* EggMobilePushNotificationManager.m */,
+				4703A27893C1F73E0AF480C4FEE0D1CE /* ResponseObject.h */,
+				14F6273CB9E77E82640CB5BD27CA4AAE /* ResponseObject.m */,
+				E3AA2489B31B88D001FA24560E1263CC /* TaskManager.h */,
+				FD4E7DE6456403B6C04D3B98FC04EB2F /* TaskManager.m */,
+			);
+			path = PushNotificationManager;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
-		825FA2476D05E1EB189ECF300460BD84 /* Headers */ = {
+		6C4B3E98A3678A9E9D0371CDA46B7CFB /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E6480B2852197A114CECF3D0EB7975A7 /* ConnectionManager.h in Headers */,
-				C005F823F215E8B50BFA3BB11804C4CA /* EggMobilePushNotification-umbrella.h in Headers */,
-				6CE26111CC58901286768B4A005C8A5D /* EggMobilePushNotification.h in Headers */,
-				50F7438B516B1EB448A21FF4F767A74E /* EggMobilePushNotificationManager.h in Headers */,
-				F617144BEC95F36B649A4A4361F6CBE3 /* EggMobilePushNotificationNSUserDefaultsManager.h in Headers */,
-				92A7C1D33D119FCAD85328F37D94773C /* EPReachability.h in Headers */,
-				D5D9430C193CD22EBD72F423F2785911 /* ResponseObject.h in Headers */,
-				B7A800EB3EEDB1D5F53551388966C39E /* TaskManager.h in Headers */,
+				878DB41F02ADC3BB70BF88036FC6BD95 /* AlertViewManager.h in Headers */,
+				1E6FBEC4CBA2968AF7E66DC420F6C7BC /* ConnectionManager.h in Headers */,
+				73F5EE2B58B538077D1591B91D6D52D3 /* EggMobilePushNotification-umbrella.h in Headers */,
+				3E28F57D3A854A6FFF2662665D9BA8E9 /* EggMobilePushNotification.h in Headers */,
+				8ECE0881108F40BA470477551C58262D /* EggMobilePushNotificationManager.h in Headers */,
+				EC225E81888FC4330F6A448F334175FF /* EggMobilePushNotificationNSUserDefaultsManager.h in Headers */,
+				C8A91308F361E1E465176F89D2AD6862 /* EPReachability.h in Headers */,
+				F5DA1A7355E253597EED646EF0F2ABF5 /* ResponseObject.h in Headers */,
+				64687ED2F82EB1C702E21C2DD21D068E /* TaskManager.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -286,13 +301,32 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		27EC1AAC4922B38482EF66CA9FB80FE5 /* EggMobilePushNotification-EggMobilePushNotification */ = {
+		2B25775CC949AA37E7A758C94DF17232 /* EggMobilePushNotification */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 632B3C84238EB218265F69CDAA4E8E46 /* Build configuration list for PBXNativeTarget "EggMobilePushNotification-EggMobilePushNotification" */;
+			buildConfigurationList = 9DDBB948BBAA4D44F18F5C8809D4309F /* Build configuration list for PBXNativeTarget "EggMobilePushNotification" */;
 			buildPhases = (
-				EC797291C652C9CB755C4ED991DCC9DA /* Sources */,
-				FE625759F4C5D3F9403E2E651278AB61 /* Frameworks */,
-				0253DC9BDED237C9AC11A2A2D63935EB /* Resources */,
+				4AEA73532A42E1E4BA279055AFB608A1 /* Sources */,
+				EB2DADE4E71A04F9F5115AB2814D5D11 /* Frameworks */,
+				C02444131353E8FEC99A4EDA2AC949F1 /* Resources */,
+				6C4B3E98A3678A9E9D0371CDA46B7CFB /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				74959129B2451B6AE169CE6EBEEF83BB /* PBXTargetDependency */,
+			);
+			name = EggMobilePushNotification;
+			productName = EggMobilePushNotification;
+			productReference = 1A8AE0026D6D14C2749227ED1EC1A77E /* EggMobilePushNotification.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		2FE43AE6B8B9820511BF0F9AFC2BF085 /* EggMobilePushNotification-EggMobilePushNotification */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C84750E4AEF40754EB168760BB1D35D7 /* Build configuration list for PBXNativeTarget "EggMobilePushNotification-EggMobilePushNotification" */;
+			buildPhases = (
+				AD9A1E27E42573C188F0FA878B128E5D /* Sources */,
+				D7E376CFB0B9E13B1C05CF96DC6929CE /* Frameworks */,
+				D568A947D4806CE11016979F8249FA6B /* Resources */,
 			);
 			buildRules = (
 			);
@@ -321,25 +355,6 @@
 			productReference = 78EE3B7ABA30AE26502D52784C9F1997 /* Pods_EggMobilePushNotification_Example.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		CE464F7730CA4E4F8EFF360F48EB85CC /* EggMobilePushNotification */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = BCCC9DADC24E9D3AB0FA6ECA60EDC575 /* Build configuration list for PBXNativeTarget "EggMobilePushNotification" */;
-			buildPhases = (
-				ABA399BAC920DB480D750BF2568E2A5C /* Sources */,
-				70F462157EADFF8D1B1939E498FAE5FF /* Frameworks */,
-				39D1DF52A9C6569B4E7130423CD05E7E /* Resources */,
-				825FA2476D05E1EB189ECF300460BD84 /* Headers */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				6D0A178E105DDCC82F6A010FFC98876D /* PBXTargetDependency */,
-			);
-			name = EggMobilePushNotification;
-			productName = EggMobilePushNotification;
-			productReference = 1A8AE0026D6D14C2749227ED1EC1A77E /* EggMobilePushNotification.framework */;
-			productType = "com.apple.product-type.framework";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -361,32 +376,47 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				CE464F7730CA4E4F8EFF360F48EB85CC /* EggMobilePushNotification */,
-				27EC1AAC4922B38482EF66CA9FB80FE5 /* EggMobilePushNotification-EggMobilePushNotification */,
+				2B25775CC949AA37E7A758C94DF17232 /* EggMobilePushNotification */,
+				2FE43AE6B8B9820511BF0F9AFC2BF085 /* EggMobilePushNotification-EggMobilePushNotification */,
 				AA3664906F025F97BC2C439D0266FC09 /* Pods-EggMobilePushNotification_Example */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		0253DC9BDED237C9AC11A2A2D63935EB /* Resources */ = {
+		C02444131353E8FEC99A4EDA2AC949F1 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E6815D482ABC81D3D0FD453B33BB1351 /* EggMobilePushNotification.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		39D1DF52A9C6569B4E7130423CD05E7E /* Resources */ = {
+		D568A947D4806CE11016979F8249FA6B /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2740D55AA37F092785FCE0D4622EC1CF /* EggMobilePushNotification.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		4AEA73532A42E1E4BA279055AFB608A1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E764481C0E01B61815DFB2FC6218F47F /* AlertViewManager.m in Sources */,
+				CE3B7AF3996F6005301D6A8F2501376F /* ConnectionManager.m in Sources */,
+				6B6C1583DF0217C0C09234E46942F81E /* EggMobilePushNotification-dummy.m in Sources */,
+				CBD9B069304E13A2B97EC06CFE9885F7 /* EggMobilePushNotificationManager.m in Sources */,
+				BCAA44FC774675E5890BC43322924DF6 /* EggMobilePushNotificationNSUserDefaultsManager.m in Sources */,
+				0FE6E7BC5B3BB94F38DA9A3FDBEDF26F /* EPReachability.m in Sources */,
+				37DBAA24733CCDCEE2D0AC7B234DCFD9 /* ResponseObject.m in Sources */,
+				B79CD50D3B04814FF6A29D5EEFEFEF6F /* TaskManager.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		A5F5DB3927DEA8AF7E9EFABA4088E8DC /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -395,21 +425,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		ABA399BAC920DB480D750BF2568E2A5C /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				1D9B72510BD703A49B060363A6CA572D /* ConnectionManager.m in Sources */,
-				0E4D983A56C32E4C0B47A33F775010BA /* EggMobilePushNotification-dummy.m in Sources */,
-				92F024463D52FB8B1A70D67433ABED93 /* EggMobilePushNotificationManager.m in Sources */,
-				EC24983F888B515DD0BA891BD1CAACBF /* EggMobilePushNotificationNSUserDefaultsManager.m in Sources */,
-				F571E2C1167136818BCD188EE1523168 /* EPReachability.m in Sources */,
-				D282C0CD29212BB507261B931697C60A /* ResponseObject.m in Sources */,
-				C08680CBC2688A3E538B6E08FF62139A /* TaskManager.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		EC797291C652C9CB755C4ED991DCC9DA /* Sources */ = {
+		AD9A1E27E42573C188F0FA878B128E5D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -419,16 +435,16 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		6D0A178E105DDCC82F6A010FFC98876D /* PBXTargetDependency */ = {
+		74959129B2451B6AE169CE6EBEEF83BB /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = "EggMobilePushNotification-EggMobilePushNotification";
-			target = 27EC1AAC4922B38482EF66CA9FB80FE5 /* EggMobilePushNotification-EggMobilePushNotification */;
-			targetProxy = 2E5FCB64D10401C83E5536723A8F56AF /* PBXContainerItemProxy */;
+			target = 2FE43AE6B8B9820511BF0F9AFC2BF085 /* EggMobilePushNotification-EggMobilePushNotification */;
+			targetProxy = 8B8EB268034D548197FACEC479ACC550 /* PBXContainerItemProxy */;
 		};
 		A6BF6F6EBE784D2C05E684C62FEA78EA /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = EggMobilePushNotification;
-			target = CE464F7730CA4E4F8EFF360F48EB85CC /* EggMobilePushNotification */;
+			target = 2B25775CC949AA37E7A758C94DF17232 /* EggMobilePushNotification */;
 			targetProxy = 4A8C71DC68493BC15DF57C3B8E5D9188 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -468,18 +484,6 @@
 			};
 			name = Release;
 		};
-		1ADFC5C90F18617ED3389757DF7D1662 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0A533970255DED447DD9359203B3FA64 /* EggMobilePushNotification.xcconfig */;
-			buildSettings = {
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				PRODUCT_NAME = EggMobilePushNotification;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				WRAPPER_EXTENSION = bundle;
-			};
-			name = Debug;
-		};
 		1C6896B397DFB547B16E3DA148BAFA6A /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 639D7DC5DEA5FE8438CAA5D09F313336 /* Pods-EggMobilePushNotification_Example.release.xcconfig */;
@@ -510,7 +514,58 @@
 			};
 			name = Release;
 		};
-		694A498FE04316840B5D1F5F12209EFF /* Release */ = {
+		319D3DC985182D45714FCF3604F6F6ED /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0A533970255DED447DD9359203B3FA64 /* EggMobilePushNotification.xcconfig */;
+			buildSettings = {
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				PRODUCT_NAME = EggMobilePushNotification;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Release;
+		};
+		3E716B9AE3F819487C7C248CD38C4228 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0A533970255DED447DD9359203B3FA64 /* EggMobilePushNotification.xcconfig */;
+			buildSettings = {
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				PRODUCT_NAME = EggMobilePushNotification;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Debug;
+		};
+		5CA6C969A7BACACDF7363098DE002B0E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0A533970255DED447DD9359203B3FA64 /* EggMobilePushNotification.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_PREFIX_HEADER = "Target Support Files/EggMobilePushNotification/EggMobilePushNotification-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/EggMobilePushNotification/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/EggMobilePushNotification/EggMobilePushNotification.modulemap";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_NAME = EggMobilePushNotification;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		908277E9DFDB9EA6EDDF9183E8E7A810 /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 0A533970255DED447DD9359203B3FA64 /* EggMobilePushNotification.xcconfig */;
 			buildSettings = {
@@ -534,18 +589,6 @@
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
-			};
-			name = Release;
-		};
-		B29A1A37125B39492BFEB34B2EEAAF0C /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0A533970255DED447DD9359203B3FA64 /* EggMobilePushNotification.xcconfig */;
-			buildSettings = {
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				PRODUCT_NAME = EggMobilePushNotification;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				WRAPPER_EXTENSION = bundle;
 			};
 			name = Release;
 		};
@@ -618,33 +661,6 @@
 			};
 			name = Debug;
 		};
-		F7D066363FEF043FB5CEE4027C924DB0 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0A533970255DED447DD9359203B3FA64 /* EggMobilePushNotification.xcconfig */;
-			buildSettings = {
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_PREFIX_HEADER = "Target Support Files/EggMobilePushNotification/EggMobilePushNotification-prefix.pch";
-				INFOPLIST_FILE = "Target Support Files/EggMobilePushNotification/Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MODULEMAP_FILE = "Target Support Files/EggMobilePushNotification/EggMobilePushNotification.modulemap";
-				MTL_ENABLE_DEBUG_INFO = YES;
-				PRODUCT_NAME = EggMobilePushNotification;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Debug;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -657,20 +673,20 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		632B3C84238EB218265F69CDAA4E8E46 /* Build configuration list for PBXNativeTarget "EggMobilePushNotification-EggMobilePushNotification" */ = {
+		9DDBB948BBAA4D44F18F5C8809D4309F /* Build configuration list for PBXNativeTarget "EggMobilePushNotification" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				1ADFC5C90F18617ED3389757DF7D1662 /* Debug */,
-				B29A1A37125B39492BFEB34B2EEAAF0C /* Release */,
+				5CA6C969A7BACACDF7363098DE002B0E /* Debug */,
+				908277E9DFDB9EA6EDDF9183E8E7A810 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		BCCC9DADC24E9D3AB0FA6ECA60EDC575 /* Build configuration list for PBXNativeTarget "EggMobilePushNotification" */ = {
+		C84750E4AEF40754EB168760BB1D35D7 /* Build configuration list for PBXNativeTarget "EggMobilePushNotification-EggMobilePushNotification" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				F7D066363FEF043FB5CEE4027C924DB0 /* Debug */,
-				694A498FE04316840B5D1F5F12209EFF /* Release */,
+				3E716B9AE3F819487C7C248CD38C4228 /* Debug */,
+				319D3DC985182D45714FCF3604F6F6ED /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

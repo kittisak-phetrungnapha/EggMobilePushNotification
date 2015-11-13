@@ -9,10 +9,6 @@
 #import "EggMobilePushNotificationViewController.h"
 #import "SettingViewController.h"
 
-@interface EggMobilePushNotificationViewController () <EggMobilePushNotificationManagerDelegate>
-
-@end
-
 @implementation EggMobilePushNotificationViewController
 
 - (void)viewDidLoad
@@ -22,8 +18,6 @@
     
     UIBarButtonItem *settingBtn = [[UIBarButtonItem alloc] initWithTitle:@"Setting" style:UIBarButtonItemStylePlain target:self action:@selector(showSettingPage)];
     self.navigationItem.rightBarButtonItem = settingBtn;
-    
-    [EggMobilePushNotificationManager sharedInstance].delegate = self;
 }
 
 - (void)showSettingPage {
@@ -46,22 +40,6 @@
     } onFailure:^(NSString *error_msg) {
         self.resultLb.text = [NSString stringWithFormat:@"Unsubscribe fail with error = %@", error_msg];
     }];
-}
-
-#pragma mark - EggMobilePushNotificationManagerDelegate
-- (void)didClickFirstButtonForAlertViewTag:(NSInteger)tag {
-    NSLog(@"TAG = %ld", tag);
-    NSLog(@"%s", __FUNCTION__);
-}
-
-- (void)didClickSecondButtonForAlertViewTag:(NSInteger)tag {
-    NSLog(@"TAG = %ld", tag);
-    NSLog(@"%s", __FUNCTION__);
-}
-
-- (void)didClickThirdButtonForAlertViewTag:(NSInteger)tag {
-    NSLog(@"TAG = %ld", tag);
-    NSLog(@"%s", __FUNCTION__);
 }
 
 @end

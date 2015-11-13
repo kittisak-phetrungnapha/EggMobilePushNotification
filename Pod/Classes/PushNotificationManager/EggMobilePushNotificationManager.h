@@ -25,19 +25,8 @@ typedef enum {
     PushBadgeTypeBadge = 1
 } PushBadgeType;
 
-@protocol EggMobilePushNotificationManagerDelegate <NSObject>
-
-@optional
-// AlertView action delegate method
-- (void)didClickFirstButtonForAlertViewTag:(NSInteger)tag;
-- (void)didClickSecondButtonForAlertViewTag:(NSInteger)tag;
-- (void)didClickThirdButtonForAlertViewTag:(NSInteger)tag;
-
-@end
-
 @interface EggMobilePushNotificationManager : NSObject
 
-@property (nonatomic, weak) id<EggMobilePushNotificationManagerDelegate> delegate;
 @property (nonatomic, strong) NSString *app_id;
 @property (nonatomic) BOOL isDebug;
 

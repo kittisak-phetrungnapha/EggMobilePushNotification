@@ -11,5 +11,6 @@
 
 #import "EggMobilePushNotificationManager.h"
 #import "EggMobilePushNotificationNSUserDefaultsManager.h"
+#import "EPAlertViewManager.h"
 
 #endif /* EggMobilePushNotification_h */

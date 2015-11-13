@@ -19,6 +19,13 @@
     [EggMobilePushNotificationManager sharedInstance].app_id = @"5";
     [EggMobilePushNotificationManager registerRemoteNotification];
     
+    NSDictionary *userInfo = [launchOptions objectForKey:@"UIApplicationLaunchOptionsRemoteNotificationKey"];
+    if (userInfo) {
+        [EPAlertViewManager sharedInstance].isDebug = YES;
+        [[EPAlertViewManager sharedInstance] parseWithDict:userInfo];
+        [[EPAlertViewManager sharedInstance] showAlertView];
+    }
+    
     return YES;
 }
 
@@ -32,6 +39,10 @@
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
     NSLog(@"Push notification data = %@", userInfo);
+    
+    [EPAlertViewManager sharedInstance].isDebug = YES;
+    [[EPAlertViewManager sharedInstance] parseWithDict:userInfo];
+    [[EPAlertViewManager sharedInstance] showAlertView];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application

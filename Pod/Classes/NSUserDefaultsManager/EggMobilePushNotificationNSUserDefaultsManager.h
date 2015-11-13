@@ -22,10 +22,6 @@
 + (NSString *)getMsisdn;
 + (void)setMsisdn:(NSString *)msisdn;
 
-// Subscribed
-+ (BOOL)getSubscribed;
-+ (void)setSubscribed:(BOOL)isSubscribe;
-
 // Notification state
 + (BOOL)getNotificationState;
 + (void)setNotificationState:(BOOL)state;

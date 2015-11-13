@@ -159,9 +159,6 @@ NSString *const NoConnection            = @"The Internet connection appears to b
     @try {
         int status_code = [[[dict objectForKey:@"status"] objectForKey:@"code"] intValue];
         if (status_code == 0) { // Subscribe success
-            // Save subscribed success already.
-//            [EggMobilePushNotificationNSUserDefaultsManager setSubscribed:YES];
-            
             if (self.isDebug) {
                 NSLog(@"%@ Subscribe success", NSLogPrefix);
             }

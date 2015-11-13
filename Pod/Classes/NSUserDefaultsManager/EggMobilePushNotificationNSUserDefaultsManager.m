@@ -11,7 +11,6 @@
 // Key
 NSString *const EggPushNotificationDeviceTokenKey       = @"EggPushNotificationDeviceTokenKey";
 NSString *const EggPushNotificationMsisdnKey            = @"EggPushNotificationMsisdnKey";
-NSString *const EggPushNotificationSubscribedKey        = @"EggPushNotificationSubscribedKey";
 NSString *const EggPushNotificationNotificationKey      = @"EggPushNotificationNotificationKey";
 NSString *const EggPushNotificationSoundKey             = @"EggPushNotificationSoundKey";
 NSString *const EggPushNotificationBadgeKey             = @"EggPushNotificationBadgeKey";
@@ -44,15 +43,6 @@ NSString *const EggPushNotificationNotFirstLaunchKey    = @"EggPushNotificationN
 
 + (void)setMsisdn:(NSString *)msisdn {
     [self setString:msisdn forKey:EggPushNotificationMsisdnKey];
-}
-
-#pragma mark - Subscribed
-+ (BOOL)getSubscribed {
-    return [self getBoolForKey:EggPushNotificationSubscribedKey];
-}
-
-+ (void)setSubscribed:(BOOL)isSubscribe {
-    [self setBool:isSubscribe forKey:EggPushNotificationSubscribedKey];
 }
 
 #pragma mark - Notification state

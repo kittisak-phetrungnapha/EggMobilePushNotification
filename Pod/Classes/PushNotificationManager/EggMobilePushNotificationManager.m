@@ -197,7 +197,7 @@ NSString *const NoConnection            = @"The Internet connection appears to b
     
     // Add parameters
     UIDevice *device = [UIDevice currentDevice];
-    NSString *postString = [NSString stringWithFormat:@"device_token=%@&device_identifier=%@&device_version=%@&app_id=%@&app_version=%@&device_model=%@&msisdn=%@&push_alert=%d&push_sound=%d&push_badge=%d", self.deviceToken, device.identifierForVendor.UUIDString, device.systemVersion, self.app_id, [self currentVersion], device.localizedModel, msisdn, pushAlert, pushSound, pushBadge];
+    NSString *postString = [NSString stringWithFormat:@"device_token=%@&device_identifier=%@&device_version=%@&app_id=%@&app_version=%@&device_model=%@&msisdn=%@&push_alert=%d&push_sound=%d&push_badge=%d&app_pkg=%@", self.deviceToken, device.identifierForVendor.UUIDString, device.systemVersion, self.app_id, [self currentVersion], device.localizedModel, msisdn, pushAlert, pushSound, pushBadge, [self bundleId]];
     [request setHTTPBody:[postString dataUsingEncoding:NSUTF8StringEncoding]];
     
     // Create task for download.
@@ -439,9 +439,12 @@ NSString *const NoConnection            = @"The Internet connection appears to b
 }
 
 #pragma mark - NSBundle Strings
-- (NSString *)currentVersion
-{
+- (NSString *)currentVersion {
     return [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
+}
+
+- (NSString *)bundleId {
+    return [[NSBundle mainBundle] bundleIdentifier];
 }
 
 @end

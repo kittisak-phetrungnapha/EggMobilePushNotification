@@ -27,15 +27,6 @@ NSString *const EggPushNotificationNotFirstLaunchKey    = @"EggPushNotificationN
     [self setBool:isNotFirstLaunch forKey:EggPushNotificationNotFirstLaunchKey];
 }
 
-#pragma mark - Device token
-+ (NSString *)getDeviceToken {
-    return [self getStringForKey:EggPushNotificationDeviceTokenKey];
-}
-
-+ (void)setDeviceToken:(NSString *)device_token {
-    [self setString:device_token forKey:EggPushNotificationDeviceTokenKey];
-}
-
 #pragma mark - MSISDN
 + (NSString *)getMsisdn {
     return [self getStringForKey:EggPushNotificationMsisdnKey];

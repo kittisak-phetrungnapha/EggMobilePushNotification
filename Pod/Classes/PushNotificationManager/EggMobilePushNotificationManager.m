@@ -95,9 +95,6 @@ NSString *const NoConnection            = @"The Internet connection appears to b
     }
     
     self.deviceToken = token;
-    
-    // Save clean device token
-//    [EggMobilePushNotificationNSUserDefaultsManager setDeviceToken:token];
 }
 
 #pragma mark - Subscribe
@@ -120,6 +117,10 @@ NSString *const NoConnection            = @"The Internet connection appears to b
             // Use msisdn from local cache for being the ref id.
             NSString *msisdn = [EggMobilePushNotificationNSUserDefaultsManager getMsisdn];
             if (msisdn == nil) { // Ignore subscribe
+                if (self.isDebug) {
+                    NSLog(@"%@ %@", NSLogPrefix, GET_MSISDN_FAIL);
+                }
+                
                 onFailure(GET_MSISDN_FAIL);
             }
             else {
@@ -343,6 +344,8 @@ NSString *const NoConnection            = @"The Internet connection appears to b
             if (self.isDebug) {
                 NSLog(@"%@ Unsubscribe success", NSLogPrefix);
             }
+            
+            [EggMobilePushNotificationNSUserDefaultsManager setMsisdn:nil];
             
             ro.isSuccess = YES;
             ro.error_msg = @"";

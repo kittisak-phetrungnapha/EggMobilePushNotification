@@ -14,10 +14,6 @@
 + (BOOL)getNotFirstLaunch;
 + (void)setNotFirstLaunch:(BOOL)isNotFirstLaunch;
 
-// Device Token
-+ (NSString *)getDeviceToken;
-+ (void)setDeviceToken:(NSString *)device_token;
-
 // Msisdn
 + (NSString *)getMsisdn;
 + (void)setMsisdn:(NSString *)msisdn;

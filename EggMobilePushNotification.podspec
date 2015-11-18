@@ -1,5 +1,5 @@
 #
-# Be sure to run `pod lib lint EggMobilePushNotification.podspec' to ensure this is a
+# Be sure to run 'pod lib lint EggMobilePushNotification.podspec' to ensure this is a
 # valid spec before submitting.
 
 Pod::Spec.new do |s|

@@ -24,7 +24,6 @@
 		873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 873B8AEA1B1F5CCA007FD442 /* Main.storyboard */; };
 		EC0327DA98B5D9A74BD0F07D /* Pods_EggMobilePushNotification_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F53ABBC7CDC4CD415B4F2EBB /* Pods_EggMobilePushNotification_Tests.framework */; };
 		EE6AB9771BEB3FD40058E71B /* SettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE6AB9761BEB3FD40058E71B /* SettingViewController.m */; };
-		EE71700A1BFC62DB00809ED4 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EE7170091BFC62DB00809ED4 /* SystemConfiguration.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -77,7 +76,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EE71700A1BFC62DB00809ED4 /* SystemConfiguration.framework in Frameworks */,
 				6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */,
 				6003F592195388D20070C39A /* UIKit.framework in Frameworks */,
 				6003F58E195388D20070C39A /* Foundation.framework in Frameworks */,

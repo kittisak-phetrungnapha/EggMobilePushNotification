@@ -21,6 +21,6 @@ Pod::Spec.new do |s|
   }
 
   s.source_files = 'Pod/Classes/**/*'
-  s.public_header_files = 'Pod/Classes/EggMobilePushNotification.h'
+#s.public_header_files = 'Pod/Classes/EggMobilePushNotification.h'
   s.frameworks = 'SystemConfiguration'
 end

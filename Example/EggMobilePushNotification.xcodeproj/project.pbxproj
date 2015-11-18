@@ -24,6 +24,7 @@
 		873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 873B8AEA1B1F5CCA007FD442 /* Main.storyboard */; };
 		EC0327DA98B5D9A74BD0F07D /* Pods_EggMobilePushNotification_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F53ABBC7CDC4CD415B4F2EBB /* Pods_EggMobilePushNotification_Tests.framework */; };
 		EE6AB9771BEB3FD40058E71B /* SettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE6AB9761BEB3FD40058E71B /* SettingViewController.m */; };
+		EE71700A1BFC62DB00809ED4 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EE7170091BFC62DB00809ED4 /* SystemConfiguration.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,6 +68,7 @@
 		A9F4BD5832F356953D829191 /* Pods_EggMobilePushNotification_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_EggMobilePushNotification_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EE6AB9751BEB3FD40058E71B /* SettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingViewController.h; sourceTree = "<group>"; };
 		EE6AB9761BEB3FD40058E71B /* SettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingViewController.m; sourceTree = "<group>"; };
+		EE7170091BFC62DB00809ED4 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		F53ABBC7CDC4CD415B4F2EBB /* Pods_EggMobilePushNotification_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_EggMobilePushNotification_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -75,6 +77,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EE71700A1BFC62DB00809ED4 /* SystemConfiguration.framework in Frameworks */,
 				6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */,
 				6003F592195388D20070C39A /* UIKit.framework in Frameworks */,
 				6003F58E195388D20070C39A /* Foundation.framework in Frameworks */,
@@ -131,6 +134,7 @@
 		6003F58C195388D20070C39A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				EE7170091BFC62DB00809ED4 /* SystemConfiguration.framework */,
 				6003F58D195388D20070C39A /* Foundation.framework */,
 				6003F58F195388D20070C39A /* CoreGraphics.framework */,
 				6003F591195388D20070C39A /* UIKit.framework */,

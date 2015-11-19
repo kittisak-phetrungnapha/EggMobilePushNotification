@@ -1,24 +1,24 @@
 //
-//  TaskManager.m
+//  EPTaskManager.m
 //  Pods
 //
 //  Created by Kittisak Phetrungnapha on 11/6/2558 BE.
 //
 //
 
-#import "TaskManager.h"
+#import "EPTaskManager.h"
 
-NSString *const NSLogPrefixTaskClass                 = @"TaskManager log:";
+NSString *const NSLogPrefixTaskClass                 = @"EPTaskManager log:";
 NSString *const DefaultErrorMessage                  = @"The unknown error is occured.";
 
-@interface TaskManager ()
+@interface EPTaskManager ()
 
 @property (nonatomic, strong) NSURLRequest *request;
 @property (nonatomic) BOOL isDebug;
 
 @end
 
-@implementation TaskManager
+@implementation EPTaskManager
 
 - (id)initWithRequest:(NSURLRequest *)request isDebug:(BOOL)isDebug {
     self = [super init];

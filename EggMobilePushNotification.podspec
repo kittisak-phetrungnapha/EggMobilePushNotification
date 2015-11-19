@@ -4,7 +4,7 @@
 
 Pod::Spec.new do |s|
   s.name             = "EggMobilePushNotification"
-  s.version          = "0.9.3"
+  s.version          = "0.9.4"
   s.summary          = "The library that provides an application is integrated with True Push Notification service."
   s.description      = "This CocoaPod provides the ability to use a True Push Notification service that maybe subscribe, unsubscribe and accept incoming push notification in log."
   s.homepage         = "https://github.com/csnu17/EggMobilePushNotification"

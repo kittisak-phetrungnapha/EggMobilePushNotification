@@ -8,9 +8,9 @@
 
 #import "EggMobilePushNotificationManager.h"
 #import "EggMobilePushNotificationNSUserDefaultsManager.h"
-#import "TaskManager.h"
-#import "ResponseObject.h"
-#import "ConnectionManager.h"
+#import "EPTaskManager.h"
+#import "EPResponseObject.h"
+#import "EPConnectionManager.h"
 
 // API
 NSString *const MAIN_API_ANC            = @"http://api-truepush.eggdigital.com/api";
@@ -110,7 +110,7 @@ NSString *const NoConnection            = @"The Internet connection appears to b
 - (void)subscribeForPushAlert:(PushAlertType)push_alert pushSound:(PushSoundType)push_sound pushBadge:(PushBadgeType)push_badge onSuccess:(void (^)())onSuccess onFailure:(void (^)(NSString *error_msg))onFailure {
     
     // Check network status before perform task.
-    EPNetworkStatus networkStatus = [ConnectionManager checkNetworkStatus];
+    EPNetworkStatus networkStatus = [EPConnectionManager checkNetworkStatus];
     switch (networkStatus) {
         case EPReachableViaWiFi: // Wifi
         {
@@ -154,8 +154,8 @@ NSString *const NoConnection            = @"The Internet connection appears to b
     }
 }
 
-- (ResponseObject *)parseDataForSubscribeWithDict:(NSDictionary *)dict {
-    ResponseObject *ro = [[ResponseObject alloc] init];
+- (EPResponseObject *)parseDataForSubscribeWithDict:(NSDictionary *)dict {
+    EPResponseObject *ro = [[EPResponseObject alloc] init];
     
     @try {
         int status_code = [[[dict objectForKey:@"status"] objectForKey:@"code"] intValue];
@@ -202,11 +202,11 @@ NSString *const NoConnection            = @"The Internet connection appears to b
     [request setHTTPBody:[postString dataUsingEncoding:NSUTF8StringEncoding]];
     
     // Create task for download.
-    TaskManager *task = [[TaskManager alloc] initWithRequest:request isDebug:self.isDebug];
+    EPTaskManager *task = [[EPTaskManager alloc] initWithRequest:request isDebug:self.isDebug];
     [task performTaskWithCompletionHandlerOnSuccess:^(NSDictionary *responseDict) {
         
         // Parse data
-        ResponseObject *ro = [self parseDataForSubscribeWithDict:responseDict];
+        EPResponseObject *ro = [self parseDataForSubscribeWithDict:responseDict];
         if (ro.isSuccess) {
             onSuccess();
         }
@@ -226,7 +226,7 @@ NSString *const NoConnection            = @"The Internet connection appears to b
     [request setHTTPMethod:@"GET"];
     
     // Create task for download.
-    TaskManager *task = [[TaskManager alloc] initWithRequest:request isDebug:self.isDebug];
+    EPTaskManager *task = [[EPTaskManager alloc] initWithRequest:request isDebug:self.isDebug];
     [task performTaskWithCompletionHandlerOnSuccess:^(NSDictionary *responseDict) {
         
         @try {
@@ -319,11 +319,11 @@ NSString *const NoConnection            = @"The Internet connection appears to b
     [request setHTTPBody:[postString dataUsingEncoding:NSUTF8StringEncoding]];
     
     // Create task for download.
-    TaskManager *task = [[TaskManager alloc] initWithRequest:request isDebug:self.isDebug];
+    EPTaskManager *task = [[EPTaskManager alloc] initWithRequest:request isDebug:self.isDebug];
     [task performTaskWithCompletionHandlerOnSuccess:^(NSDictionary *responseDict) {
         
         // Parse data
-        ResponseObject *ro = [self parseDataForUnsubscribeWithDict:responseDict];
+        EPResponseObject *ro = [self parseDataForUnsubscribeWithDict:responseDict];
         if (ro.isSuccess) {
             onSuccess();
         }
@@ -335,8 +335,8 @@ NSString *const NoConnection            = @"The Internet connection appears to b
     }];
 }
 
-- (ResponseObject *)parseDataForUnsubscribeWithDict:(NSDictionary *)dict {
-    ResponseObject *ro = [[ResponseObject alloc] init];
+- (EPResponseObject *)parseDataForUnsubscribeWithDict:(NSDictionary *)dict {
+    EPResponseObject *ro = [[EPResponseObject alloc] init];
     
     @try {
         int status_code = [[[dict objectForKey:@"status"] objectForKey:@"code"] intValue];
@@ -390,11 +390,11 @@ NSString *const NoConnection            = @"The Internet connection appears to b
     [request setHTTPBody:[postString dataUsingEncoding:NSUTF8StringEncoding]];
     
     // Create task for download.
-    TaskManager *task = [[TaskManager alloc] initWithRequest:request isDebug:self.isDebug];
+    EPTaskManager *task = [[EPTaskManager alloc] initWithRequest:request isDebug:self.isDebug];
     [task performTaskWithCompletionHandlerOnSuccess:^(NSDictionary *responseDict) {
        
         // Parse data
-        ResponseObject *ro = [self parseDataForAcceptNotificationWithDict:responseDict];
+        EPResponseObject *ro = [self parseDataForAcceptNotificationWithDict:responseDict];
         if (ro.isSuccess) {
             onSuccess();
         }
@@ -406,8 +406,8 @@ NSString *const NoConnection            = @"The Internet connection appears to b
     }];
 }
 
-- (ResponseObject *)parseDataForAcceptNotificationWithDict:(NSDictionary *)dict {
-    ResponseObject *ro = [[ResponseObject alloc] init];
+- (EPResponseObject *)parseDataForAcceptNotificationWithDict:(NSDictionary *)dict {
+    EPResponseObject *ro = [[EPResponseObject alloc] init];
     
     @try {
         int status_code = [[[dict objectForKey:@"status"] objectForKey:@"code"] intValue];

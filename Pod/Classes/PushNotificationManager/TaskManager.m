@@ -38,7 +38,7 @@ NSString *const DefaultErrorMessage                  = @"The unknown error is oc
     }
     
     NSURLSession *session = [NSURLSession sharedSession];
-    NSURLSessionDataTask *task = [session dataTaskWithRequest:self.request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+    NSURLSessionDataTask *task = [session dataTaskWithRequest:self.request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         
         @try {
             if (error == nil && data.length > 0) { // Success

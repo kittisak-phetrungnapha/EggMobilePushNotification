@@ -11,6 +11,7 @@
 @interface EPAlertViewManager : NSObject
 
 @property (nonatomic) BOOL isDebug;
+@property (nonatomic) BOOL quitAppWhenClickClose;
 
 + (EPAlertViewManager *)sharedInstance;
 - (void)parseWithDict:(NSDictionary *)dict;

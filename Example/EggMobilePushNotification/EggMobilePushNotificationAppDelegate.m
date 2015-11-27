@@ -22,6 +22,7 @@
     NSDictionary *userInfo = [launchOptions objectForKey:@"UIApplicationLaunchOptionsRemoteNotificationKey"];
     if (userInfo) {
         [EPAlertViewManager sharedInstance].isDebug = YES;
+        [EPAlertViewManager sharedInstance].quitAppWhenClickClose = YES;
         [[EPAlertViewManager sharedInstance] parseWithDict:userInfo];
         [[EPAlertViewManager sharedInstance] showAlertView];
     }

@@ -96,6 +96,8 @@ NSString *const EPActionOpenWeb                 = @"url";
 
 #pragma mark - Handler AlertView action
 - (void)performAlertWithAction:(NSString *)action value:(NSString *)value {
+    action = [action lowercaseString];
+    
     if ([EPActionCall isEqualToString:action]) {
         [self openURLWithScheme:[NSString stringWithFormat:@"telprompt:%@", value]];
     }
@@ -116,6 +118,7 @@ NSString *const EPActionOpenWeb                 = @"url";
             [muStr appendString:appendStr];
         }
         NSString *message = [muStr copy];
+        message = [message stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
         
         NSString *smsScheme;
         if ([UIDevice currentDevice].systemVersion.floatValue >= 8.0) {
@@ -129,6 +132,12 @@ NSString *const EPActionOpenWeb                 = @"url";
     }
     else if ([EPActionOpenWeb isEqualToString:action]) {
         [self openURLWithScheme:value];
+    }
+    else { // Close ation if it first launch
+        if (self.quitAppWhenClickClose) {
+            self.quitAppWhenClickClose = NO;
+            exit(0);
+        }
     }
 }
 

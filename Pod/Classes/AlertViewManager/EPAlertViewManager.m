@@ -14,6 +14,10 @@ NSInteger const EPAlertViewTag                  = 15423;
 NSString *const EPActionCall                    = @"call";
 NSString *const EPActionSMS                     = @"sms";
 NSString *const EPActionOpenWeb                 = @"url";
+NSString *const EPActionClose                   = @"close";
+
+NSString *const EPTitleCall                     = @"Call";
+NSString *const EPTitleClose                    = @"Close";
 
 @interface EPAlertViewManager () <UIAlertViewDelegate>
 
@@ -163,22 +167,80 @@ NSString *const EPActionOpenWeb                 = @"url";
         alertView.delegate = self;
         alertView.tag = EPAlertViewTag;
         
+        BOOL hasClose = NO;
         /*** Check all of button in uialertview need to show or not. ***/
         
         // Negative button
         if (! ([@"" isEqualToString:self.noti_negative_button_title] || [@"" isEqualToString:self.noti_negative_button_action])) {
+            if ([self compareCaseInsensitiveWithString1:EPTitleCall string2:self.noti_negative_button_title]) {
+                if ([self checkPhoneNumberContainStarOrSharp:self.noti_negative_button_value]) {
+                    self.noti_negative_button_title = EPTitleClose;
+                    self.noti_negative_button_action = EPActionClose;
+                }
+            }
             [alertView addButtonWithTitle:self.noti_negative_button_title];
+            
+            // Check has close
+            if ([self compareCaseInsensitiveWithString1:EPTitleClose string2:self.noti_negative_button_title]) {
+                hasClose = YES;
+            }
         }
         
         // Positive button
         if (! ([@"" isEqualToString:self.noti_positive_button_title] || [@"" isEqualToString:self.noti_positive_button_action])) {
-            [alertView addButtonWithTitle:self.noti_positive_button_title];
+            if ([self compareCaseInsensitiveWithString1:EPTitleCall string2:self.noti_positive_button_title]) {
+                if ([self checkPhoneNumberContainStarOrSharp:self.noti_positive_button_value]) {
+                    if (!hasClose) {
+                        self.noti_positive_button_title = EPTitleClose;
+                        self.noti_positive_button_action = EPActionClose;
+                        [alertView addButtonWithTitle:self.noti_positive_button_title];
+                        hasClose = YES;
+                    }
+                }
+                else {
+                    [alertView addButtonWithTitle:self.noti_positive_button_title];
+                }
+            }
+            else {
+                if ([self compareCaseInsensitiveWithString1:EPTitleClose string2:self.noti_positive_button_title]) {
+                    if (!hasClose) {
+                        [alertView addButtonWithTitle:self.noti_positive_button_title];
+                        hasClose = YES;
+                    }
+                }
+                else {
+                    [alertView addButtonWithTitle:self.noti_positive_button_title];
+                }
+            }
         }
         
         // New button
         if (! ([@"" isEqualToString:self.noti_new_button_title] || [@"" isEqualToString:self.noti_new_button_action]))
         {
-            [alertView addButtonWithTitle:self.noti_new_button_title];
+            if ([self compareCaseInsensitiveWithString1:EPTitleCall string2:self.noti_new_button_title]) {
+                if ([self checkPhoneNumberContainStarOrSharp:self.noti_new_button_value]) {
+                    if (!hasClose) {
+                        self.noti_new_button_title = EPTitleClose;
+                        self.noti_new_button_action = EPActionClose;
+                        [alertView addButtonWithTitle:self.noti_new_button_title];
+                        hasClose = YES;
+                    }
+                }
+                else {
+                    [alertView addButtonWithTitle:self.noti_new_button_title];
+                }
+            }
+            else {
+                if ([self compareCaseInsensitiveWithString1:EPTitleClose string2:self.noti_new_button_title]) {
+                    if (!hasClose) {
+                        [alertView addButtonWithTitle:self.noti_new_button_title];
+                        hasClose = YES;
+                    }
+                }
+                else {
+                    [alertView addButtonWithTitle:self.noti_new_button_title];
+                }
+            }
         }
         
         // Show alert view
@@ -213,6 +275,15 @@ NSString *const EPActionOpenWeb                 = @"url";
             }
         }
     }
+}
+
+#pragma mark - Private method
+- (BOOL)checkPhoneNumberContainStarOrSharp:(NSString *)phoneValue {
+    return [phoneValue rangeOfString:@"*"].location != NSNotFound || [phoneValue rangeOfString:@"#"].location != NSNotFound;
+}
+
+- (BOOL)compareCaseInsensitiveWithString1:(NSString *)string1 string2:(NSString *)string2 {
+    return [string1 caseInsensitiveCompare:string2] == NSOrderedSame;
 }
 
 @end

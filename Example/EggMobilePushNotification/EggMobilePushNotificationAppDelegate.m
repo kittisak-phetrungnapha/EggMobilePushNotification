@@ -23,8 +23,8 @@
     if (userInfo) {
         [EPAlertViewManager sharedInstance].isDebug = YES;
         [EPAlertViewManager sharedInstance].quitAppWhenClickClose = YES;
+        [EPAlertViewManager sharedInstance].needToShowInApplicationDidBecomeActive = YES;
         [[EPAlertViewManager sharedInstance] parseWithDict:userInfo];
-        [[EPAlertViewManager sharedInstance] showAlertView];
     }
     
     return YES;
@@ -38,10 +38,28 @@
     NSLog(@"Error = %@", error.description);
 }
 
+/*
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
+    NSLog(@"Push notification data = %@", userInfo);
+    
+    [EPAlertViewManager sharedInstance].isDebug = YES;
+    [[EPAlertViewManager sharedInstance] parseWithDict:userInfo];
+    
+    if (! (application.applicationState == UIApplicationStateActive || application.applicationState == UIApplicationStateBackground)) {
+        [EPAlertViewManager sharedInstance].quitAppWhenClickClose = YES;
+    }
+    
+    [[EPAlertViewManager sharedInstance] showAlertView];
+    
+    completionHandler(UIBackgroundFetchResultNoData);
+}
+*/
+
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
     NSLog(@"Push notification data = %@", userInfo);
     
     [EPAlertViewManager sharedInstance].isDebug = YES;
+    [EPAlertViewManager sharedInstance].quitAppWhenClickClose = NO;
     [[EPAlertViewManager sharedInstance] parseWithDict:userInfo];
     [[EPAlertViewManager sharedInstance] showAlertView];
 }
@@ -67,6 +85,10 @@
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+    if ([EPAlertViewManager sharedInstance].needToShowInApplicationDidBecomeActive) {
+        [[EPAlertViewManager sharedInstance] showAlertView];
+        [EPAlertViewManager sharedInstance].needToShowInApplicationDidBecomeActive = NO;
+    }
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application

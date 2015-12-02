@@ -36,6 +36,8 @@ NSString *const EPTitleClose                    = @"Close";
 @property (nonatomic, strong) NSString *noti_positive_button_title;
 @property (nonatomic, strong) NSString *noti_positive_button_value;
 
+@property (nonatomic, strong) UIView *blackView;
+
 @end
 
 @implementation EPAlertViewManager
@@ -104,6 +106,7 @@ NSString *const EPTitleClose                    = @"Close";
     
     if ([EPActionCall isEqualToString:action]) {
         [self openURLWithScheme:[NSString stringWithFormat:@"telprompt:%@", value]];
+        [self removeBlackViewFromSuperView];
     }
     else if ([EPActionSMS isEqualToString:action]) {
         NSArray *values = [value componentsSeparatedByString:@","];
@@ -133,14 +136,18 @@ NSString *const EPTitleClose                    = @"Close";
         }
         
         [self openURLWithScheme:smsScheme];
+        [self removeBlackViewFromSuperView];
     }
     else if ([EPActionOpenWeb isEqualToString:action]) {
         [self openURLWithScheme:value];
+        [self removeBlackViewFromSuperView];
     }
     else { // Close ation if it first launch
         if (self.quitAppWhenClickClose) {
-            self.quitAppWhenClickClose = NO;
             exit(0);
+        }
+        else {
+            [self removeBlackViewFromSuperView];
         }
     }
 }
@@ -245,6 +252,8 @@ NSString *const EPTitleClose                    = @"Close";
         
         // Show alert view
         [alertView show];
+        
+        [self addBlackScreenViewToCurrentActiveWindow];
     }
     @catch (NSException *exception) {
         if (self.isDebug) {
@@ -284,6 +293,39 @@ NSString *const EPTitleClose                    = @"Close";
 
 - (BOOL)compareCaseInsensitiveWithString1:(NSString *)string1 string2:(NSString *)string2 {
     return [string1 caseInsensitiveCompare:string2] == NSOrderedSame;
+}
+
+- (void)addBlackScreenViewToCurrentActiveWindow {
+    UIWindow *currentActiveWindow = [self getCurrentActiveWindow];
+    
+    // Create black uiview
+    self.blackView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    self.blackView.backgroundColor = [UIColor blackColor];
+    [currentActiveWindow addSubview:self.blackView];
+}
+
+- (void)removeBlackViewFromSuperView {
+    if (self.blackView != nil) {
+        [self.blackView removeFromSuperview];
+        self.blackView = nil;
+    }
+}
+
+- (UIWindow *)getCurrentActiveWindow {
+    UIWindow *mainWindow = nil;
+    NSEnumerator *frontToBackWindows = [UIApplication.sharedApplication.windows reverseObjectEnumerator];
+    for (UIWindow *window in frontToBackWindows) {
+        BOOL windowOnMainScreen = window.screen == UIScreen.mainScreen;
+        BOOL windowIsVisible = !window.hidden && window.alpha > 0;
+        BOOL windowLevelNormal = window.windowLevel == UIWindowLevelNormal;
+        
+        if (windowOnMainScreen && windowIsVisible && windowLevelNormal) {
+            mainWindow = window;
+            break;
+        }
+    }
+    
+    return mainWindow;
 }
 
 @end

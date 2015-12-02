@@ -12,6 +12,7 @@
 
 @property (nonatomic) BOOL isDebug;
 @property (nonatomic) BOOL quitAppWhenClickClose;
+@property (nonatomic) BOOL needToShowInApplicationDidBecomeActive;
 
 + (EPAlertViewManager *)sharedInstance;
 - (void)parseWithDict:(NSDictionary *)dict;

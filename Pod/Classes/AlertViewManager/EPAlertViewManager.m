@@ -105,7 +105,7 @@ NSString *const EPTitleClose                    = @"Close";
     action = [action lowercaseString];
     
     if ([EPActionCall isEqualToString:action]) {
-        [self openURLWithScheme:[NSString stringWithFormat:@"telprompt:%@", value]];
+        [self openURLWithScheme:[NSString stringWithFormat:@"tel:%@", value]];
         [self removeBlackViewFromSuperView];
     }
     else if ([EPActionSMS isEqualToString:action]) {

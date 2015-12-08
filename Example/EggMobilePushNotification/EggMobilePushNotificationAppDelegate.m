@@ -23,8 +23,8 @@
     if (userInfo) {
         [EPAlertViewManager sharedInstance].isDebug = YES;
         [EPAlertViewManager sharedInstance].quitAppWhenClickClose = YES;
-        [EPAlertViewManager sharedInstance].needToShowInApplicationDidBecomeActive = YES;
         [[EPAlertViewManager sharedInstance] parseWithDict:userInfo];
+        [[EPAlertViewManager sharedInstance] showAlertView];        
     }
     
     return YES;
@@ -85,10 +85,6 @@
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-    if ([EPAlertViewManager sharedInstance].needToShowInApplicationDidBecomeActive) {
-        [[EPAlertViewManager sharedInstance] showAlertView];
-        [EPAlertViewManager sharedInstance].needToShowInApplicationDidBecomeActive = NO;
-    }
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application

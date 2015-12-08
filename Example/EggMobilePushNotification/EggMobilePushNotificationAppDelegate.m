@@ -59,7 +59,6 @@
     NSLog(@"Push notification data = %@", userInfo);
     
     [EPAlertViewManager sharedInstance].isDebug = YES;
-    [EPAlertViewManager sharedInstance].quitAppWhenClickClose = NO;
     [[EPAlertViewManager sharedInstance] parseWithDict:userInfo];
     [[EPAlertViewManager sharedInstance] showAlertView];
 }

@@ -150,6 +150,8 @@ NSString *const EPTitleClose                    = @"Close";
             [self removeBlackWindow];
         }
     }
+    
+    self.quitAppWhenClickClose = NO;
 }
 
 - (void)openURLWithScheme:(NSString *)scheme {

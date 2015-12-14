@@ -7,6 +7,7 @@
 //
 
 #import "EPAlertViewManager.h"
+#import "EggMobilePushNotificationManager.h"
 
 NSString *const NSLogPrefixEPAlertViewManager   = @"EPAlertViewManager log:";
 NSInteger const EPAlertViewTag                  = 15423;
@@ -35,6 +36,8 @@ NSString *const EPTitleClose                    = @"Close";
 @property (nonatomic, strong) NSString *noti_positive_button_action;
 @property (nonatomic, strong) NSString *noti_positive_button_title;
 @property (nonatomic, strong) NSString *noti_positive_button_value;
+
+@property (nonatomic, strong) NSString *noti_ref;
 
 @property (nonatomic, strong) UIWindow *blackWindow;
 
@@ -86,6 +89,9 @@ NSString *const EPTitleClose                    = @"Close";
         self.noti_new_button_action = [newDict objectForKey:@"action"];
         self.noti_new_button_title = [newDict objectForKey:@"title"];
         self.noti_new_button_value = [newDict objectForKey:@"value"];
+        
+        // Noti ref
+        self.noti_ref = [dict objectForKey:@"noti_ref"];
     }
     @catch (NSException *exception) {
         if (self.isDebug) {
@@ -255,7 +261,15 @@ NSString *const EPTitleClose                    = @"Close";
         // Show alert view
         [alertView show];
         
+        // Add Black window
         [self addBlackWindow];
+        
+        // Accept notification log
+        [[EggMobilePushNotificationManager sharedInstance] acceptNotificationForNotiRef:self.noti_ref onSuccess:^{
+            
+        } onFailure:^(NSString *error_msg) {
+            
+        }];
     }
     @catch (NSException *exception) {
         if (self.isDebug) {

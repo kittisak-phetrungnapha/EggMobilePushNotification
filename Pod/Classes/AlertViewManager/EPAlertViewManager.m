@@ -145,6 +145,14 @@ NSString *const EPTitleClose                    = @"Close";
         [self removeBlackWindow];
     }
     else if ([EPActionOpenWeb isEqualToString:action]) {
+        NSRange range = [value rangeOfString:@"?"];
+        if (range.location != NSNotFound) { // already has ?
+            value = [NSString stringWithFormat:@"%@&redirect=push", value];
+        }
+        else { // add ?
+            value = [NSString stringWithFormat:@"%@?redirect=push", value];
+        }
+        
         [self openURLWithScheme:value];
         [self removeBlackWindow];
     }

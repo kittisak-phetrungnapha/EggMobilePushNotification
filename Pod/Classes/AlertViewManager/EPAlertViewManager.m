@@ -147,10 +147,10 @@ NSString *const EPTitleClose                    = @"Close";
     else if ([EPActionOpenWeb isEqualToString:action]) {
         NSRange range = [value rangeOfString:@"?"];
         if (range.location != NSNotFound) { // already has ?
-            value = [NSString stringWithFormat:@"%@&redirect=push", value];
+            value = [NSString stringWithFormat:@"%@&redirected=push", value];
         }
         else { // add ?
-            value = [NSString stringWithFormat:@"%@?redirect=push", value];
+            value = [NSString stringWithFormat:@"%@?redirected=push", value];
         }
         
         [self openURLWithScheme:value];

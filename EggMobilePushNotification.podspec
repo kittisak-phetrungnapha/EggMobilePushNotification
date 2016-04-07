@@ -4,7 +4,7 @@
 
 Pod::Spec.new do |s|
   s.name             = "EggMobilePushNotification"
-  s.version          = "1.0.1"
+  s.version          = "1.0.2"
   s.summary          = "The library that provides an application is integrated with True Push Notification service."
   s.description      = "This CocoaPod provides the ability to use a True Push Notification service that maybe subscribe, unsubscribe and accept incoming push notification in log."
   s.homepage         = "https://github.com/csnu17/EggMobilePushNotification"
@@ -16,9 +16,9 @@ Pod::Spec.new do |s|
   s.platform     = :ios, '7.0'
   s.requires_arc = true
 
-  s.resource_bundles = {
-    'EggMobilePushNotification' => ['Pod/Assets/*.png']
-  }
+#  s.resource_bundles = {
+#    'EggMobilePushNotification' => ['Pod/Assets/*.png']
+#  }
 
   s.source_files = 'Pod/Classes/**/*'
 #s.public_header_files = 'Pod/Classes/EggMobilePushNotification.h'

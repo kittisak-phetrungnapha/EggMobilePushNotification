@@ -69,35 +69,45 @@ NSString *const EPTitleClose                    = @"Close";
 #pragma mark - Parse data
 - (void)parseWithDict:(NSDictionary *)dict {
     @try {
-        self.noti_sender_name = [dict objectForKey:@"noti_sender_name"];
-        self.noti_full_title = [dict objectForKey:@"noti_full_title"];
+        self.noti_sender_name = [self getAppropiateValueFromParameterKey:@"sender_name" json:dict];
+        self.noti_full_title = [self getAppropiateValueFromParameterKey:@"full_title" json:dict];
         
         // Negative button
-        NSDictionary *negativeDict = [self parseJsonString:[dict objectForKey:@"noti_negative_button"]];
+        NSDictionary *negativeDict = [self parseJsonString:[self getAppropiateValueFromParameterKey:@"negative_button" json:dict]];
         self.noti_negative_button_action = [negativeDict objectForKey:@"action"];
         self.noti_negative_button_title = [negativeDict objectForKey:@"title"];
         self.noti_negative_button_value = [negativeDict objectForKey:@"value"];
         
         // Positive button
-        NSDictionary *positiveDict = [self parseJsonString:[dict objectForKey:@"noti_positive_button"]];
+        NSDictionary *positiveDict = [self parseJsonString:[self getAppropiateValueFromParameterKey:@"positive_button" json:dict]];
         self.noti_positive_button_action = [positiveDict objectForKey:@"action"];
         self.noti_positive_button_title = [positiveDict objectForKey:@"title"];
         self.noti_positive_button_value = [positiveDict objectForKey:@"value"];
         
         // New button
-        NSDictionary *newDict = [self parseJsonString:[dict objectForKey:@"noti_new_button"]];
+        NSDictionary *newDict = [self parseJsonString:[self getAppropiateValueFromParameterKey:@"new_button" json:dict]];
         self.noti_new_button_action = [newDict objectForKey:@"action"];
         self.noti_new_button_title = [newDict objectForKey:@"title"];
         self.noti_new_button_value = [newDict objectForKey:@"value"];
         
         // Noti ref
-        self.noti_ref = [dict objectForKey:@"noti_ref"];
+        self.noti_ref = [self getAppropiateValueFromParameterKey:@"ref" json:dict];
     }
     @catch (NSException *exception) {
         if (self.isDebug) {
             NSLog(@"%@ %@", NSLogPrefixEPAlertViewManager, exception.description);
         }
     }
+}
+
+- (NSString *)getAppropiateValueFromParameterKey:(NSString *)key json:(NSDictionary *)json {
+    NSString *value = [json objectForKey:key];
+    if (value == nil) { // support old parameter's name e.g. noti_{key}
+        key = [NSString stringWithFormat:@"noti_%@", key];
+        return [json objectForKey:key];
+    }
+    
+    return value; // support new parameter's name e.g. {key}
 }
 
 - (NSDictionary *)parseJsonString:(NSString *)jsonString {

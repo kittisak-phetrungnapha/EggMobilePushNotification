@@ -1,6 +1,6 @@
 #import <UIKit/UIKit.h>
 
-#import "AlertViewManager.h"
+#import "EPAlertViewManager.h"
 #import "EggMobilePushNotification.h"
 #import "EggMobilePushNotificationNSUserDefaultsManager.h"
 #import "EggMobilePushNotificationManager.h"

@@ -1,14 +1,16 @@
 PODS:
-  - EggMobilePushNotification (0.1.0)
+  - EggMobilePushNotification (1.0.2)
 
 DEPENDENCIES:
   - EggMobilePushNotification (from `../`)
 
 EXTERNAL SOURCES:
   EggMobilePushNotification:
-    :path: ../
+    :path: "../"
 
 SPEC CHECKSUMS:
-  EggMobilePushNotification: d727396fad99428a6e45d91a5adf2c6762c3bc2c
+  EggMobilePushNotification: ebaf3ae8872e0de0b2a91560ec27d5cc0b5453ad
 
-COCOAPODS: 0.39.0
+PODFILE CHECKSUM: 7dde01c4003f5e7a9643865a4a9fe77566a794e5
+
+COCOAPODS: 1.0.1

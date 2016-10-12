@@ -1,10 +1,6 @@
 source 'https://github.com/CocoaPods/Specs.git'
 use_frameworks!
 
-target 'EggMobilePushNotification_Example', :exclusive => true do
+target 'EggMobilePushNotification_Example' do
   pod "EggMobilePushNotification", :path => "../"
-end
-
-target 'EggMobilePushNotification_Tests', :exclusive => true do
-
 end

@@ -14,10 +14,9 @@
 
 // API
 NSString *const MAIN_API_ANC            = @"http://apifn-truepush.eggdigital.com/api";
-NSString *const OTHER_API_ANC           = @"http://anc-truepush.eggdigital.com/";
 #define API_SUBSCRIPTION                [NSString stringWithFormat:@"%@/subscription/ios", MAIN_API_ANC]
 #define API_UNSUBSCRIPTION              [NSString stringWithFormat:@"%@/unsubscription/ios", MAIN_API_ANC]
-#define API_ACCEPT_NOTIFICATION         [NSString stringWithFormat:@"%@/notificationlog/acceptNotification", OTHER_API_ANC]
+#define API_ACCEPT_NOTIFICATION         [NSString stringWithFormat:@"%@/notificationlog/acceptNotification", MAIN_API_ANC]
 NSString *const GET_MSISDN_API          = @"http://www3.truecorp.co.th/api/services/get_header";
 
 // Message
@@ -379,6 +378,9 @@ NSString *const NoConnection            = @"The Internet connection appears to b
         noti_ref = @"";
     }
     
+    // Get msisdn
+    NSString *msisdn = [EggMobilePushNotificationNSUserDefaultsManager getMsisdn] ?: @"";
+    
     // Initialize apiURL, and create request object.
     NSURL *apiURL = [NSURL URLWithString:API_ACCEPT_NOTIFICATION];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:apiURL];
@@ -386,7 +388,7 @@ NSString *const NoConnection            = @"The Internet connection appears to b
     
     // Add parameters
     UIDevice *device = [UIDevice currentDevice];
-    NSString *postString = [NSString stringWithFormat:@"device_identifier=%@&noti_ref=%@", device.identifierForVendor.UUIDString, noti_ref];
+    NSString *postString = [NSString stringWithFormat:@"device_identifier=%@&noti_ref=%@&msisdn=%@&app_id=%@", device.identifierForVendor.UUIDString, noti_ref, msisdn, self.app_id];
     [request setHTTPBody:[postString dataUsingEncoding:NSUTF8StringEncoding]];
     
     // Create task for download.

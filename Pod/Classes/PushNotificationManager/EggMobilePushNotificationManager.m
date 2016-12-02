@@ -13,8 +13,8 @@
 #import "EPConnectionManager.h"
 
 // API
-NSString *const MAIN_API_ANC            = @"http://api-truepush.eggdigital.com/api";
-NSString *const OTHER_API_ANC           = @"http://api-anc.eggdigital.com";
+NSString *const MAIN_API_ANC            = @"http://apifn-truepush.eggdigital.com/api";
+NSString *const OTHER_API_ANC           = @"http://anc-truepush.eggdigital.com/";
 #define API_SUBSCRIPTION                [NSString stringWithFormat:@"%@/subscription/ios", MAIN_API_ANC]
 #define API_UNSUBSCRIPTION              [NSString stringWithFormat:@"%@/unsubscription/ios", MAIN_API_ANC]
 #define API_ACCEPT_NOTIFICATION         [NSString stringWithFormat:@"%@/notificationlog/acceptNotification", OTHER_API_ANC]

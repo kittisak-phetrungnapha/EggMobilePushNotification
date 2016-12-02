@@ -175,7 +175,7 @@
 				ORGANIZATIONNAME = "Kittisak Phetrungnapha";
 				TargetAttributes = {
 					6003F589195388D20070C39A = {
-						DevelopmentTeam = CHS9UCHMZA;
+						DevelopmentTeam = DA6Y7F3RCQ;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 0;
@@ -382,15 +382,17 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = EggMobilePushNotification_Example.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Kittisak Phetrungnapha (3VSDW988B8)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Kittisak Phetrungnapha (5W5S2HKRX9)";
+				DEVELOPMENT_TEAM = DA6Y7F3RCQ;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "EggMobilePushNotification/EggMobilePushNotification-Prefix.pch";
 				INFOPLIST_FILE = "EggMobilePushNotification/EggMobilePushNotification-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				MODULE_NAME = ExampleApp;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.tdcm.EggMobilePushNotification-Demo";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.eggent.EggMobilePushNotification-Demo";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "a66c0607-3b6b-4c60-ac11-b3fafe0f846f";
+				PROVISIONING_PROFILE = "223ec418-feae-4eb3-91c0-d6d11c3d14dc";
+				PROVISIONING_PROFILE_SPECIFIER = "EggMobilePushNotification Dev Profile";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
@@ -404,13 +406,16 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = EggMobilePushNotification_Example.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = DA6Y7F3RCQ;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "EggMobilePushNotification/EggMobilePushNotification-Prefix.pch";
 				INFOPLIST_FILE = "EggMobilePushNotification/EggMobilePushNotification-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				MODULE_NAME = ExampleApp;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.tdcm.EggMobilePushNotification-Demo";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.eggent.EggMobilePushNotification-Demo";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "223ec418-feae-4eb3-91c0-d6d11c3d14dc";
+				PROVISIONING_PROFILE_SPECIFIER = "EggMobilePushNotification Dev Profile";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};

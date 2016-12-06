@@ -378,9 +378,6 @@ NSString *const NoConnection            = @"The Internet connection appears to b
         noti_ref = @"";
     }
     
-    // Get msisdn
-    NSString *msisdn = [EggMobilePushNotificationNSUserDefaultsManager getMsisdn] ?: @"";
-    
     // Initialize apiURL, and create request object.
     NSURL *apiURL = [NSURL URLWithString:API_ACCEPT_NOTIFICATION];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:apiURL];
@@ -388,7 +385,7 @@ NSString *const NoConnection            = @"The Internet connection appears to b
     
     // Add parameters
     UIDevice *device = [UIDevice currentDevice];
-    NSString *postString = [NSString stringWithFormat:@"device_identifier=%@&noti_ref=%@&msisdn=%@&app_id=%@", device.identifierForVendor.UUIDString, noti_ref, msisdn, self.app_id];
+    NSString *postString = [NSString stringWithFormat:@"device_identifier=%@&noti_ref=%@", device.identifierForVendor.UUIDString, noti_ref];
     [request setHTTPBody:[postString dataUsingEncoding:NSUTF8StringEncoding]];
     
     // Create task for download.

@@ -74,21 +74,36 @@ NSString *const EPTitleClose                    = @"Close";
         
         // Negative button
         NSDictionary *negativeDict = [self parseJsonString:[self getAppropiateValueFromParameterKey:@"negative_button" json:dict]];
-        self.noti_negative_button_action = [negativeDict objectForKey:@"action"];
-        self.noti_negative_button_title = [negativeDict objectForKey:@"title"];
-        self.noti_negative_button_value = [negativeDict objectForKey:@"value"];
+        if (! (negativeDict == nil || negativeDict == NULL || [negativeDict isKindOfClass:[NSNull class]])) {
+            self.noti_negative_button_action = [negativeDict objectForKey:@"action"];
+            self.noti_negative_button_title = [negativeDict objectForKey:@"title"];
+            self.noti_negative_button_value = [negativeDict objectForKey:@"value"];
+        }
+        else {
+            self.noti_negative_button_title = @"";
+        }
         
         // Positive button
         NSDictionary *positiveDict = [self parseJsonString:[self getAppropiateValueFromParameterKey:@"positive_button" json:dict]];
-        self.noti_positive_button_action = [positiveDict objectForKey:@"action"];
-        self.noti_positive_button_title = [positiveDict objectForKey:@"title"];
-        self.noti_positive_button_value = [positiveDict objectForKey:@"value"];
+        if (! (positiveDict == nil || positiveDict == NULL || [positiveDict isKindOfClass:[NSNull class]])) {
+            self.noti_positive_button_action = [positiveDict objectForKey:@"action"];
+            self.noti_positive_button_title = [positiveDict objectForKey:@"title"];
+            self.noti_positive_button_value = [positiveDict objectForKey:@"value"];
+        }
+        else {
+            self.noti_positive_button_title = @"";
+        }
         
         // New button
         NSDictionary *newDict = [self parseJsonString:[self getAppropiateValueFromParameterKey:@"new_button" json:dict]];
-        self.noti_new_button_action = [newDict objectForKey:@"action"];
-        self.noti_new_button_title = [newDict objectForKey:@"title"];
-        self.noti_new_button_value = [newDict objectForKey:@"value"];
+        if (! (newDict == nil || newDict == NULL || [newDict isKindOfClass:[NSNull class]])) {
+            self.noti_new_button_action = [newDict objectForKey:@"action"];
+            self.noti_new_button_title = [newDict objectForKey:@"title"];
+            self.noti_new_button_value = [newDict objectForKey:@"value"];
+        }
+        else {
+            self.noti_new_button_title = @"";
+        }
         
         // Noti ref
         self.noti_ref = [self getAppropiateValueFromParameterKey:@"ref" json:dict];

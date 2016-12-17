@@ -127,6 +127,10 @@ NSString *const EPTitleClose                    = @"Close";
 
 - (NSDictionary *)parseJsonString:(NSString *)jsonString {
     NSData *data = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
+    if (!data) {
+        return nil;
+    }
+    
     NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
     return jsonDict;
 }

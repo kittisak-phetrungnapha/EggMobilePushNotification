@@ -291,6 +291,11 @@ NSString *const EPTitleClose                    = @"Close";
             }
         }
         
+        if (alertView.numberOfButtons == 0) {
+            [alertView addButtonWithTitle:EPTitleClose];
+            hasClose = YES;
+        }
+        
         // Show alert view
         [alertView show];
         
@@ -325,6 +330,9 @@ NSString *const EPTitleClose                    = @"Close";
             }
             else if ([buttonTitle isEqualToString:self.noti_new_button_title]) {
                 [self performAlertWithAction:self.noti_new_button_action value:self.noti_new_button_value];
+            }
+            else if ([buttonTitle isEqualToString:EPTitleClose]) {
+                [self performAlertWithAction:EPActionClose value:EPActionClose];
             }
         }
         @catch (NSException *exception) {
